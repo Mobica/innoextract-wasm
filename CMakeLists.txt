@@ -591,12 +591,6 @@ if(WASM)
 		list(APPEND LIBRARIES ${LZMALIBS})
 	endif()
 
-	# libzip
-	set(ZIPHEADERS $ENV{ZIPDIR}/lib/)
-	set(ZIPLIBS	$ENV{ZIPDIR}/lib/libzip.a )
-
-	list(APPEND LIBRARIES ${ZIPLIBS})
-
 	# Prepare generated files
 
 	include_directories(src ${CMAKE_CURRENT_BINARY_DIR} ${EMHEADERS} ${LZMAHEADERS} ${ZIPHEADERS})
