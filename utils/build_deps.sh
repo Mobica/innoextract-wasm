@@ -28,9 +28,9 @@ function test_json() {
 }
 
 function test_deps_or_build() {
+    test_json && info "nlohmann::json already built, skipping" || make_json
     test_lzma && info "libLZMA already built, skipping" || make_lzma
     test_boost && info "libboost already built, skipping" || make_boost
-    test_json && info "nlohmann::json already built, skipping" || make_json
 }
 
 if ! env | grep -q EMSDK; then die "EMSDK not found in env, exiting" ; fi
