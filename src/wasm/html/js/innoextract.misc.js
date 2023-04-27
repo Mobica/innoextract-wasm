@@ -89,6 +89,7 @@ function extractFiles() {
         if (element.fileId !== undefined)
             ids.push(element.fileId);
     }
+    ids.push("en");
     Module.ccall('extract', 'string', ['string'], [JSON.stringify(ids)], {async: true}).then(result =>{
         extractBtn.disabled = false;
         showError(JSON.parse(result));

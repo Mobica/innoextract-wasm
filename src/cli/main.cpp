@@ -197,7 +197,6 @@ int main(int argc, char * argv[]) {
 	p.add("setup-files", -1);
 	
 	po::variables_map options;
-	
 	// Parse the command-line.
 	try {
 		po::store(po::command_line_parser(argc, argv).options(options_desc).positional(p).run(),
