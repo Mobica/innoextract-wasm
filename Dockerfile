@@ -6,12 +6,11 @@ RUN \
   apt-get -y upgrade && \
   apt-get install -y build-essential && \
   apt-get install -y software-properties-common && \
-  apt-get install -y byobu curl git htop man unzip vim wget && \
-  apt-get install -y gcc g++ cmake lbzip2 python3 && \
+  apt-get install -y git htop man unzip vim wget nano && \
+  apt-get install -y cmake lbzip2 python3 && \
   apt-get -y clean && \
   apt-get -y autoclean && \
-  apt-get -y autoremove && \
-  rm -rf /var/lib/apt/lists/*
+  apt-get -y autoremove
 
 # Set environment variables.
 ENV HOME /root
@@ -65,10 +64,11 @@ RUN \
 
 # Install innoextract
 RUN \
-  git clone https://github.com/Oskar-Plaska-Mobica/innoextract-wasm.git -b 'RND201-20' innoextract && \
+  git clone https://github.com/Oskar-Plaska-Mobica/innoextract-wasm.git -b 'wasm-main' innoextract && \
   cd innoextract && \
   ./build.sh
 
-# Define default command and working directory.
-WORKDIR /root/emsdk
-CMD ["tail", "-f", "/dev/null"]
+# Define default command, working directory and expose port.
+WORKDIR /root/innoextract/build
+EXPOSE 6931
+CMD [ "python3", "-m", "http.server", "6931" ]
