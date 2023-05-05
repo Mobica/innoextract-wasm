@@ -9,6 +9,7 @@ extractBtn.disabled = true;
 const emptyListInfo = document.getElementById("emptyListInfo");
 const fileTemplate = document.getElementById("fileTemplate");
 const fileList = document.getElementById("fileList");
+const langSelect = document.getElementById("langSelect");
 
 //Error dialog
 const errorModal = new bootstrap.Modal(document.getElementById("errorModal"));
@@ -70,6 +71,12 @@ function startInnoExtract() {
                 desc.innerHTML = obj.copyrights
                 sizeInfo.innerHTML = obj.size
                 filesNum.innerHTML = obj.files_num;
+                if(obj.langs) {
+                    obj.langs.forEach(lang => {
+                        langSelect.insertAdjacentHTML('beforeend', `<option value="${lang.name}">${lang.lang_name}</option>`);
+                    });
+                    langSelect.hidden = false;
+                }
                 Module.ccall('list_files', 'string', [], [], {async: true}).then(result =>{
                     createTree(JSON.parse(result));
                     extractBtn.disabled = false;
@@ -84,13 +91,15 @@ function extractFiles() {
     var startDate = new Date();
     extractBtn.disabled = true;
     checked = tree.treeview('getChecked');
-    ids = []
+    info = { ids: []};
     for (const element of checked) {
         if (element.fileId !== undefined)
-            ids.push(element.fileId);
+            info.ids.push(element.fileId);
     }
-    ids.push("en");
-    Module.ccall('extract', 'string', ['string'], [JSON.stringify(ids)], {async: true}).then(result =>{
+    if(!langSelect.hidden)
+        info.lang = langSelect.value;
+
+    Module.ccall('extract', 'string', ['string'], [JSON.stringify(info)], {async: true}).then(result =>{
         extractBtn.disabled = false;
         showError(JSON.parse(result));
         var endDate   = new Date();

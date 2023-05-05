@@ -3,7 +3,6 @@
 // #include <zip.h>
 
 #include <iostream>
-#include <list>
 #include <nlohmann/json.hpp>
 
 #include "cli/goggalaxy.hpp"
@@ -275,15 +274,15 @@ std::string Context::ListFiles() {
 std::string Context::Extract(std::string list_json) {
   const std::string& output_dir = info_.header.app_name;
   auto input = json::parse(list_json);
+  auto ids = input["ids"];
   std::vector<const processed_file*> selected_files;
   selected_files.reserve(all_files_.size());
 
-  const std::string lang = input.back();
-  input.erase(input.size()-1);
+  const std::string lang = input["lang"];
 
-  std::sort(input.begin(), input.end());
-  log_info << "Unpacking " << input.size() << " files have been started.";
-  for (const auto& i : input) {
+  std::sort(ids.begin(), ids.end());
+  log_info << "Unpacking " << ids.size() << " files have been started.";
+  for (const auto& i : ids) {
     selected_files.push_back(&all_files_[i]);
   }
 
