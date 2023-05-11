@@ -341,12 +341,12 @@ void progress::show_unbounded(float value, const std::string & label) {
 	progress_cleared = false;
 }
 
-progress::progress(boost::uint64_t max_value, bool show_value_rate)
+progress::progress(uint64_t max_value, bool show_value_rate)
 	: max(max_value), value(0), show_rate(show_value_rate),
 	  start_time(boost::posix_time::microsec_clock::universal_time()),
 	  last_status(-1.f), last_time(0), last_rate(0.f) { }
 
-bool progress::update(boost::uint64_t delta, bool force) {
+bool progress::update(uint64_t delta, bool force) {
 	
 	if(!show_progress) {
 		return false;
@@ -365,19 +365,19 @@ bool progress::update(boost::uint64_t delta, bool force) {
 		}
 	}
 	
-	boost::uint64_t time;
+	uint64_t time;
 	try {
 		boost::posix_time::ptime now(boost::posix_time::microsec_clock::universal_time());
-		time = boost::uint64_t((now - start_time).total_microseconds());
+		time = uint64_t((now - start_time).total_microseconds());
 	} catch(...) {
 		// this shouldn't happen, assume no time has passed
 		time = last_time;
 	}
 	
 	#if defined(_WIN32)
-	const boost::uint64_t update_interval = 100000;
+	const uint64_t update_interval = 100000;
 	#else
-	const boost::uint64_t update_interval = 50000;
+	const uint64_t update_interval = 50000;
 	#endif
 	if(!force && time - last_time < update_interval) {
 		return false;

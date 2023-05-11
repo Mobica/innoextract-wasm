@@ -40,7 +40,7 @@ STORED_ENUM_MAP(delete_target_type_map, delete_entry::Files,
 void delete_entry::load(std::istream & is, const info & i) {
 	
 	if(i.version < INNO_VERSION(1, 3, 0)) {
-		(void)util::load<boost::uint32_t>(is); // uncompressed size of the entry
+		(void)util::load<uint32_t>(is); // uncompressed size of the entry
 	}
 	
 	is >> util::encoded_string(name, i.codepage, i.header.lead_bytes);

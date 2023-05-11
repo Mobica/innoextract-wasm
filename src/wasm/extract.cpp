@@ -25,7 +25,7 @@ file_output::file_output(const fs::path& dir, const processed_file* f, bool writ
     : path_(dir / f->path()),
       file_(f),
       checksum_(f->entry().checksum.type),
-      checksum_position_(f->entry().checksum.type == crypto::None ? boost::uint64_t(-1) : 0),
+      checksum_position_(f->entry().checksum.type == crypto::None ? uint64_t(-1) : 0),
       position_(0),
       total_written_(0),
       write_(write),
@@ -67,7 +67,7 @@ bool file_output::write(const char* data, size_t n) {
   return r==n;
 }
 
-void file_output::seek(boost::uint64_t new_position) {
+void file_output::seek(uint64_t new_position) {
   if (new_position == position_) {
     return;
   }
@@ -98,10 +98,10 @@ bool file_output::calculate_checksum() {
     return false;
   }
 
-  const boost::uint64_t max =
-      boost::uint64_t(std::numeric_limits<util::fstream::off_type>::max() / 4);
+  const uint64_t max =
+      uint64_t(std::numeric_limits<util::fstream::off_type>::max() / 4);
 
-  boost::uint64_t diff = checksum_position_;
+  uint64_t diff = checksum_position_;
   stream_.seekg(util::fstream::off_type(std::min(diff, max)), std::ios_base::beg);
   diff -= std::min(diff, max);
   while (diff > 0) {
@@ -113,7 +113,7 @@ bool file_output::calculate_checksum() {
     char buffer[8192];
     std::streamsize n = stream_.read(buffer, sizeof(buffer)).gcount();
     checksum_.update(buffer, size_t(n));
-    checksum_position_ += boost::uint64_t(n);
+    checksum_position_ += uint64_t(n);
   }
 
   if (!has_checksum()) {

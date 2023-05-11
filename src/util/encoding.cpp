@@ -259,7 +259,7 @@ bool is_utf8(const std::string & data, codepage_id codepage) {
 	return false;
 }
 
-typedef boost::uint32_t unicode_char;
+typedef uint32_t unicode_char;
 
 const unicode_char replacement_char = '_';
 
@@ -601,7 +601,7 @@ converter_map converters;
 
 iconv_t get_converter(codepage_id codepage, bool reverse) {
 	
-	boost::uint32_t key = codepage | (reverse ? 0x80000000 : 0);
+	uint32_t key = codepage | (reverse ? 0x80000000 : 0);
 	
 	// Try to reuse an existing converter if possible
 	converter_map::const_iterator i = converters.find(key);

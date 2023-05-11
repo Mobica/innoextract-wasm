@@ -506,7 +506,7 @@ void probe_bin_files(const extract_options & o, const setup::info & info,
 	bin_count += probe_bin_file_series(o, info, dir, basename + "-0" + ".bin");
 	
 
-	boost::uint32_t max_slice = 0;
+	uint32_t max_slice = 0;
 	if(external) {
 		BOOST_FOREACH(const setup::data_entry & location, info.data_entries) {
 			max_slice = std::max(max_slice, location.chunk.first_slice);

@@ -235,7 +235,7 @@ static void print_entry(const setup::info & info, size_t i,
 	} else {
 		std::cout << " - " << quoted(entry.destination);
 	}
-	if(entry.location != boost::uint32_t(-1)) {
+	if(entry.location != uint32_t(-1)) {
 		std::cout << " (location: " << color::cyan << entry.location << color::reset << ')';
 	}
 	std::cout  << '\n';

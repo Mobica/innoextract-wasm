@@ -104,11 +104,11 @@ bool inno_lzma1_decompressor_impl::filter(const char * & begin_in, const char * 
 		if(properties > (9 * 5 * 5)) {
 			throw lzma_error("inno lzma1 property error", LZMA_FORMAT_ERROR);
 		}
-		options.pb = boost::uint32_t(properties / (9 * 5));
-		options.lp = boost::uint32_t((properties % (9 * 5)) / 9);
-		options.lc = boost::uint32_t(properties % 9);
+		options.pb = uint32_t(properties / (9 * 5));
+		options.lp = uint32_t((properties % (9 * 5)) / 9);
+		options.lc = uint32_t(properties % 9);
 		
-		options.dict_size = util::little_endian::load<boost::uint32_t>(header + 1);
+		options.dict_size = util::little_endian::load<uint32_t>(header + 1);
 		
 		stream = init_raw_lzma_stream(LZMA_FILTER_LZMA1, options);
 	}
@@ -136,7 +136,7 @@ bool inno_lzma2_decompressor_impl::filter(const char * & begin_in, const char * 
 		if(prop == 40) {
 			options.dict_size = 0xffffffff;
 		} else {
-			options.dict_size = ((boost::uint32_t(2) | boost::uint32_t((prop) & 1)) << ((prop) / 2 + 11));
+			options.dict_size = ((uint32_t(2) | uint32_t((prop) & 1)) << ((prop) / 2 + 11));
 		}
 		
 		stream = init_raw_lzma_stream(LZMA_FILTER_LZMA2, options);

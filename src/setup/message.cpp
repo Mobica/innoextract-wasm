@@ -38,7 +38,7 @@ void message_entry::load(std::istream & is, const info & i) {
 	
 	language = util::load<boost::int32_t>(is);
 	
-	boost::uint32_t codepage;
+	uint32_t codepage;
 	if(language < 0) {
 		codepage = i.codepage;
 	} else if(size_t(language) >= i.languages.size()) {

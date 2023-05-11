@@ -66,7 +66,7 @@ static time from_filetime(FILETIME ft) {
 	return filetime / 10000000;
 }
 
-static FILETIME to_filetime(time t, boost::uint32_t nsec = 0) {
+static FILETIME to_filetime(time t, uint32_t nsec = 0) {
 	
 	boost::int64_t filetime64 = boost::int64_t(t) * 10000000 + boost::int64_t(nsec) / 100 + FiletimeOffset;
 	
@@ -259,7 +259,7 @@ extern "C" typedef int (*utimensat_proc)
 	(int fd, const char *path, const struct timespec times[2], int flag);
 #endif
 
-bool set_file_time(const boost::filesystem::path & path, time sec, boost::uint32_t nsec) {
+bool set_file_time(const boost::filesystem::path & path, time sec, uint32_t nsec) {
 	
 	#if (INNOEXTRACT_HAVE_DYNAMIC_UTIMENSAT || INNOEXTRACT_HAVE_UTIMENSAT) \
 	    && INNOEXTRACT_HAVE_AT_FDCWD

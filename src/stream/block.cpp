@@ -81,7 +81,7 @@ public:
 	template <typename Source>
 	bool read_chunk(Source & src) {
 		
-		char temp[sizeof(boost::uint32_t)];
+		char temp[sizeof(uint32_t)];
 		std::streamsize temp_size = std::streamsize(sizeof(temp));
 		std::streamsize nread = boost::iostreams::read(src, temp, temp_size);
 		if(nread == EOF) {
@@ -89,7 +89,7 @@ public:
 		} else if(size_t(nread) != sizeof(temp)) {
 			throw block_error("unexpected block end");
 		}
-		boost::uint32_t block_crc32 = util::little_endian::load<boost::uint32_t>(temp);
+		uint32_t block_crc32 = util::little_endian::load<uint32_t>(temp);
 		
 		length = size_t(boost::iostreams::read(src, buffer, std::streamsize(sizeof(buffer))));
 		if(length == size_t(EOF)) {
@@ -154,33 +154,33 @@ block_reader::pointer block_reader::get(std::istream & base, const setup::versio
 	
 	USE_ENUM_NAMES(block_compression)
 	
-	boost::uint32_t expected_checksum = util::load<boost::uint32_t>(base);
+	uint32_t expected_checksum = util::load<uint32_t>(base);
 	crypto::crc32 actual_checksum;
 	actual_checksum.init();
 	
-	boost::uint32_t stored_size;
+	uint32_t stored_size;
 	block_compression compression;
 	
 	if(version >= INNO_VERSION(4, 0, 9)) {
 		
-		stored_size = actual_checksum.load<boost::uint32_t>(base);
+		stored_size = actual_checksum.load<uint32_t>(base);
 		boost::uint8_t compressed = actual_checksum.load<boost::uint8_t>(base);
 		
 		compression = compressed ? (version >= INNO_VERSION(4, 1, 6) ? LZMA1 : Zlib) : Stored;
 		
 	} else {
 		
-		boost::uint32_t compressed_size = actual_checksum.load<boost::uint32_t>(base);
-		boost::uint32_t uncompressed_size = actual_checksum.load<boost::uint32_t>(base);
+		uint32_t compressed_size = actual_checksum.load<uint32_t>(base);
+		uint32_t uncompressed_size = actual_checksum.load<uint32_t>(base);
 		
-		if(compressed_size == boost::uint32_t(-1)) {
+		if(compressed_size == uint32_t(-1)) {
 			stored_size = uncompressed_size, compression = Stored;
 		} else {
 			stored_size = compressed_size, compression = Zlib;
 		}
 		
 		// Add the size of a CRC32 checksum for each 4KiB subblock.
-		stored_size += boost::uint32_t(util::ceildiv<boost::uint64_t>(stored_size, 4096) * 4);
+		stored_size += uint32_t(util::ceildiv<uint64_t>(stored_size, 4096) * 4);
 	}
 	
 	if(actual_checksum.finalize() != expected_checksum) {

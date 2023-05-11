@@ -47,7 +47,7 @@ const char slice_ids[][8] = {
 
 } // anonymous namespace
 
-slice_reader::slice_reader(std::istream * istream, boost::uint32_t offset)
+slice_reader::slice_reader(std::istream * istream, uint32_t offset)
 	: data_offset(offset),
 	  slices_per_disk(1), current_slice(0), slice_size(0),
 	  is(istream) {
@@ -56,7 +56,7 @@ slice_reader::slice_reader(std::istream * istream, boost::uint32_t offset)
 	
 	std::streampos file_size = is->seekg(0, std::ios_base::end).tellg();
 	
-	slice_size = boost::uint32_t(std::min(file_size, max_size));
+	slice_size = uint32_t(std::min(file_size, max_size));
 	if(is->seekg(data_offset).fail()) {
 		throw slice_error("could not seek to data");
 	}
@@ -120,7 +120,7 @@ bool slice_reader::open_file(const path_type & file) {
 		throw slice_error("bad slice magic number in \"" + file.string() + "\"");
 	}
 	
-	slice_size = util::load<boost::uint32_t>(ifs);
+	slice_size = util::load<uint32_t>(ifs);
 	if(ifs.fail()) {
 		ifs.close();
 		throw slice_error("could not read slice size in \"" + file.string() + "\"");
@@ -207,7 +207,7 @@ void slice_reader::open(size_t slice) {
 	throw slice_error(oss.str());
 }
 
-bool slice_reader::seek(size_t slice, boost::uint32_t offset) {
+bool slice_reader::seek(size_t slice, uint32_t offset) {
 	
 	seek(slice);
 	
@@ -232,22 +232,22 @@ std::streamsize slice_reader::read(char * buffer, std::streamsize bytes) {
 	
 	while(bytes > 0) {
 		
-		boost::uint32_t read_pos = boost::uint32_t(is->tellg());
+		uint32_t read_pos = uint32_t(is->tellg());
 		if(read_pos > slice_size) {
 			break;
 		}
-		boost::uint32_t remaining = slice_size - read_pos;
+		uint32_t remaining = slice_size - read_pos;
 		if(!remaining) {
 			seek(current_slice + 1);
-			read_pos = boost::uint32_t(is->tellg());
+			read_pos = uint32_t(is->tellg());
 			if(read_pos > slice_size) {
 				break;
 			}
 			remaining = slice_size - read_pos;
 		}
 		
-		boost::uint64_t toread = std::min(boost::uint64_t(remaining), boost::uint64_t(bytes));
-		toread = std::min(toread, boost::uint64_t(std::numeric_limits<std::streamsize>::max()));
+		uint64_t toread = std::min(uint64_t(remaining), uint64_t(bytes));
+		toread = std::min(toread, uint64_t(std::numeric_limits<std::streamsize>::max()));
 		if(is->read(buffer, std::streamsize(toread)).fail()) {
 			break;
 		}

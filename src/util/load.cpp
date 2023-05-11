@@ -28,7 +28,7 @@ namespace util {
 
 void binary_string::load(std::istream & is, std::string & target) {
 	
-	boost::uint32_t length = util::load<boost::uint32_t>(is);
+	uint32_t length = util::load<uint32_t>(is);
 	if(is.fail()) {
 		return;
 	}
@@ -37,7 +37,7 @@ void binary_string::load(std::istream & is, std::string & target) {
 	
 	while(length) {
 		char buffer[10 * 1024];
-		boost::uint32_t buf_size = std::min(length, boost::uint32_t(sizeof(buffer)));
+		uint32_t buf_size = std::min(length, uint32_t(sizeof(buffer)));
 		is.read(buffer, std::streamsize(buf_size));
 		target.append(buffer, buf_size);
 		length -= buf_size;
@@ -46,7 +46,7 @@ void binary_string::load(std::istream & is, std::string & target) {
 
 void binary_string::skip(std::istream & is) {
 	
-	boost::uint32_t length = util::load<boost::uint32_t>(is);
+	uint32_t length = util::load<uint32_t>(is);
 	if(is.fail()) {
 		return;
 	}

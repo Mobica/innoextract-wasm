@@ -74,7 +74,7 @@ void load_wizard_images(std::istream & is, const setup::version & version,
 	
 	size_t count = 1;
 	if(version >= INNO_VERSION(5, 6, 0)) {
-		count = util::load<boost::uint32_t>(is);
+		count = util::load<uint32_t>(is);
 	}
 	
 	if(entries & (info::WizardImages | info::NoSkip)) {

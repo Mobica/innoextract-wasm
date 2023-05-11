@@ -130,10 +130,10 @@ class file_output : private boost::noncopyable {
 	util::fstream stream_;
 	
 	crypto::hasher checksum_;
-	boost::uint64_t checksum_position_;
+	uint64_t checksum_position_;
 	
-	boost::uint64_t position_;
-	boost::uint64_t total_written_;
+	uint64_t position_;
+	uint64_t total_written_;
 	
 	bool write_;
 	
@@ -143,7 +143,7 @@ public:
 		: path_(dir / f->path())
 		, file_(f)
 		, checksum_(f->entry().checksum.type)
-		, checksum_position_(f->entry().checksum.type == crypto::None ? boost::uint64_t(-1) : 0)
+		, checksum_position_(f->entry().checksum.type == crypto::None ? uint64_t(-1) : 0)
 		, position_(0)
 		, total_written_(0)
 		, write_(write)
@@ -181,7 +181,7 @@ public:
 		return !write_ || !stream_.fail();
 	}
 	
-	void seek(boost::uint64_t new_position) {
+	void seek(uint64_t new_position) {
 		
 		if(new_position == position_) {
 			return;
@@ -194,13 +194,13 @@ public:
 			return;
 		}
 		
-		const boost::uint64_t max = boost::uint64_t(std::numeric_limits<util::fstream::off_type>::max() / 4);
+		const uint64_t max = uint64_t(std::numeric_limits<util::fstream::off_type>::max() / 4);
 		
 		if(new_position <= max) {
 			stream_.seekp(util::fstream::off_type(new_position), std::ios_base::beg);
 		} else {
 			util::fstream::off_type sign = (new_position > position_) ? 1 : -1;
-			boost::uint64_t diff = (new_position > position_) ? new_position - position_ : position_ - new_position;
+			uint64_t diff = (new_position > position_) ? new_position - position_ : position_ - new_position;
 			while(diff > 0) {
 				stream_.seekp(sign * util::fstream::off_type(std::min(diff, max)), std::ios_base::cur);
 				diff -= std::min(diff, max);
@@ -242,9 +242,9 @@ public:
 		
 		debug("calculating output checksum for " << path_);
 		
-		const boost::uint64_t max = boost::uint64_t(std::numeric_limits<util::fstream::off_type>::max() / 4);
+		const uint64_t max = uint64_t(std::numeric_limits<util::fstream::off_type>::max() / 4);
 		
-		boost::uint64_t diff = checksum_position_;
+		uint64_t diff = checksum_position_;
 		stream_.seekg(util::fstream::off_type(std::min(diff, max)), std::ios_base::beg);
 		diff -= std::min(diff, max);
 		while(diff > 0) {
@@ -256,7 +256,7 @@ public:
 			char buffer[8192];
 			std::streamsize n = stream_.read(buffer, sizeof(buffer)).gcount();
 			checksum_.update(buffer, size_t(n));
-			checksum_position_ += boost::uint64_t(n);
+			checksum_position_ += uint64_t(n);
 		}
 		
 		if(!has_checksum()) {
@@ -348,7 +348,7 @@ void print_filter_info(const setup::directory_entry & dir) {
 	print_filter_info(dir, is_temp);
 }
 
-void print_size_info(const stream::file & file, boost::uint64_t size) {
+void print_size_info(const stream::file & file, uint64_t size) {
 	
 	if(logger::debug) {
 		std::cout << " @ " << print_hex(file.offset);
@@ -429,7 +429,7 @@ const char * handle_collision(const setup::file_entry & oldfile, const setup::da
 		return "user chose not to overwrite";
 	}
 	
-	if(oldfile.attributes != boost::uint32_t(-1)
+	if(oldfile.attributes != uint32_t(-1)
 	   && (oldfile.attributes & setup::file_entry::ReadOnly) != 0) {
 		if(!(newfile.options & setup::file_entry::OverwriteReadOnly) && !prompt_overwrite()) {
 			return "user chose not to overwrite read-only file";
@@ -1075,17 +1075,17 @@ void process_file(const fs::path & installer, const extract_options & o) {
 		
 	}
 	
-	typedef std::pair<const processed_file *, boost::uint64_t> output_location;
+	typedef std::pair<const processed_file *, uint64_t> output_location;
 	std::vector< std::vector<output_location> > files_for_location;
 	files_for_location.resize(info.data_entries.size());
 	BOOST_FOREACH(const FilesMap::value_type & i, processed.files) {
 		const processed_file & file = i.second;
 		files_for_location[file.entry().location].push_back(output_location(&file, 0));
 		if(o.test || o.extract) {
-			boost::uint64_t offset = info.data_entries[file.entry().location].uncompressed_size;
-			boost::uint32_t sort_slice = info.data_entries[file.entry().location].chunk.first_slice;
-			boost::uint32_t sort_offset = info.data_entries[file.entry().location].chunk.sort_offset;
-			BOOST_FOREACH(boost::uint32_t location, file.entry().additional_locations) {
+			uint64_t offset = info.data_entries[file.entry().location].uncompressed_size;
+			uint32_t sort_slice = info.data_entries[file.entry().location].chunk.first_slice;
+			uint32_t sort_offset = info.data_entries[file.entry().location].chunk.sort_offset;
+			BOOST_FOREACH(uint32_t location, file.entry().additional_locations) {
 				setup::data_entry & data = info.data_entries[location];
 				files_for_location[location].push_back(output_location(&file, offset));
 				offset += data.uncompressed_size;
@@ -1097,13 +1097,13 @@ void process_file(const fs::path & installer, const extract_options & o) {
 					data.chunk.sort_offset = ++sort_offset;
 				} else {
 					// Could not reorder chunk - no point in trying to reordder the remaining chunks
-					sort_slice = boost::uint32_t(-1);
+					sort_slice = uint32_t(-1);
 				}
 			}
 		}
 	}
 	
-	boost::uint64_t total_size = 0;
+	uint64_t total_size = 0;
 	
 	typedef std::map<stream::file, size_t> Files;
 	typedef std::map<stream::chunk, Files> Chunks;
@@ -1150,7 +1150,7 @@ void process_file(const fs::path & installer, const extract_options & o) {
 		if((o.extract || o.test) && (chunk.first.encryption == stream::Plaintext || !password.empty())) {
 			chunk_source = stream::chunk_reader::get(*slice_reader, chunk.first, password);
 		}
-		boost::uint64_t offset = 0;
+		uint64_t offset = 0;
 		
 		BOOST_FOREACH(const Files::value_type & location, chunk.second) {
 			const stream::file & file = location.first;
@@ -1172,7 +1172,7 @@ void process_file(const fs::path & installer, const extract_options & o) {
 				if(!o.silent) {
 					
 					bool named = false;
-					boost::uint64_t size = 0;
+					uint64_t size = 0;
 					const crypto::checksum * checksum = NULL;
 					BOOST_FOREACH(const output_location & output, output_locations) {
 						if(output.second != 0) {
@@ -1227,7 +1227,7 @@ void process_file(const fs::path & installer, const extract_options & o) {
 						if(output.second == 0) {
 							const processed_file * fileinfo = output.first;
 							if(o.list_sizes) {
-								boost::uint64_t size = fileinfo->entry().size;
+								uint64_t size = fileinfo->entry().size;
 								std::cout << color::dim_cyan << (size != 0 ? size : file.size) << color::reset << ' ';
 							}
 							if(o.list_checksums) {
@@ -1305,7 +1305,7 @@ void process_file(const fs::path & installer, const extract_options & o) {
 			}
 			
 			// Copy data
-			boost::uint64_t output_size = 0;
+			uint64_t output_size = 0;
 			while(!file_source->eof()) {
 				char buffer[8192 * 10];
 				std::streamsize buffer_size = std::streamsize(boost::size(buffer));
@@ -1317,8 +1317,8 @@ void process_file(const fs::path & installer, const extract_options & o) {
 							throw std::runtime_error("Error writing file \"" + output->path().string() + '"');
 						}
 					}
-					extract_progress.update(boost::uint64_t(n));
-					output_size += boost::uint64_t(n);
+					extract_progress.update(uint64_t(n));
+					output_size += uint64_t(n);
 				}
 			}
 			

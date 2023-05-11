@@ -81,9 +81,9 @@ void type_entry::load(std::istream & is, const info & i) {
 	}
 	
 	if(i.version >= INNO_VERSION(4, 0, 0)) {
-		size = util::load<boost::uint64_t>(is);
+		size = util::load<uint64_t>(is);
 	} else {
-		size = util::load<boost::uint32_t>(is);
+		size = util::load<uint32_t>(is);
 	}
 }
 

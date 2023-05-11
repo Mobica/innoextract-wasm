@@ -333,7 +333,7 @@ void parse_galaxy_files(setup::info & info, bool force) {
 				// Ignore file part MD5 checksum, setup already contains a better one for the deflated data
 				
 				try {
-					boost::uint64_t compressed_size = boost::lexical_cast<boost::uint64_t>(part_info[1]);
+					uint64_t compressed_size = boost::lexical_cast<uint64_t>(part_info[1]);
 					if(data.file.size != compressed_size) {
 						log_warning << "Unexpected compressed size for GOG Galaxy file part " << file.destination
 						            << ": " << compressed_size << " != " << data.file.size;
@@ -346,7 +346,7 @@ void parse_galaxy_files(setup::info & info, bool force) {
 				try {
 					
 					// GOG Galaxy file parts are deflated, inflate them while extracting
-					data.uncompressed_size = boost::lexical_cast<boost::uint64_t>(part_info[2]);
+					data.uncompressed_size = boost::lexical_cast<uint64_t>(part_info[2]);
 					data.file.filter = stream::ZlibFilter;
 					
 					file_start->size += data.uncompressed_size;

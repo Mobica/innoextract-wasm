@@ -70,7 +70,7 @@ void adler32::update(const char * data, size_t length) {
 		}
 	}
 	
-	state  = (boost::uint32_t(s2) << 16) | boost::uint16_t(s1);
+	state  = (uint32_t(s2) << 16) | boost::uint16_t(s1);
 	
 }
 

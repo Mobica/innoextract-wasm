@@ -148,7 +148,7 @@ int main(int argc, char * argv[]) {
 	
 	po::options_description modifiers("Modifiers");
 	modifiers.add_options()
-		("codepage", po::value<boost::uint32_t>(), "Encoding for ANSI strings")
+		("codepage", po::value<uint32_t>(), "Encoding for ANSI strings")
 		("collisions", po::value<std::string>(), "How to handle duplicate files")
 		("default-language", po::value<std::string>(), "Default language for renaming")
 		("dump", "Dump contents without converting filenames")
@@ -315,7 +315,7 @@ int main(int argc, char * argv[]) {
 	
 	{
 		po::variables_map::const_iterator i = options.find("codepage");
-		o.codepage = (i != options.end()) ? i->second.as<boost::uint32_t>() : 0;
+		o.codepage = (i != options.end()) ? i->second.as<uint32_t>() : 0;
 	}
 	{
 		o.collisions = OverwriteCollisions;
