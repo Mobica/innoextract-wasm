@@ -35,8 +35,8 @@ namespace {
 
 struct windows_language {
 	
-	boost::uint16_t language_id;
-	boost::uint16_t codepage;
+	uint16_t language_id;
+	uint16_t codepage;
 	
 	bool operator<(uint32_t language) const {
 		return language_id < language;

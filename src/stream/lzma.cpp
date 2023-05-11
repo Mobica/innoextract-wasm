@@ -53,10 +53,10 @@ bool lzma_decompressor_impl_base::filter(const char * & begin_in, const char * e
 	
 	lzma_stream * strm = static_cast<lzma_stream *>(stream);
 	
-	strm->next_in = reinterpret_cast<const boost::uint8_t *>(begin_in);
+	strm->next_in = reinterpret_cast<const uint8_t *>(begin_in);
 	strm->avail_in = size_t(end_in - begin_in);
 	
-	strm->next_out = reinterpret_cast<boost::uint8_t *>(begin_out);
+	strm->next_out = reinterpret_cast<uint8_t *>(begin_out);
 	strm->avail_out = size_t(end_out - begin_out);
 	
 	lzma_ret ret = lzma_code(strm, LZMA_RUN);
@@ -100,7 +100,7 @@ bool inno_lzma1_decompressor_impl::filter(const char * & begin_in, const char * 
 		
 		lzma_options_lzma options;
 		
-		boost::uint8_t properties = boost::uint8_t(header[0]);
+		uint8_t properties = uint8_t(header[0]);
 		if(properties > (9 * 5 * 5)) {
 			throw lzma_error("inno lzma1 property error", LZMA_FORMAT_ERROR);
 		}
@@ -128,7 +128,7 @@ bool inno_lzma2_decompressor_impl::filter(const char * & begin_in, const char * 
 		
 		lzma_options_lzma options;
 		
-		boost::uint8_t prop = boost::uint8_t(*begin_in++);
+		uint8_t prop = uint8_t(*begin_in++);
 		if(prop > 40) {
 			throw lzma_error("inno lzma2 property error", LZMA_FORMAT_ERROR);
 		}

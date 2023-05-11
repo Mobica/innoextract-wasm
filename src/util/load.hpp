@@ -157,7 +157,7 @@ T load(std::istream & is) { return load<T, little_endian>(is); }
 
 //! Load a bool value
 inline bool load_bool(std::istream & is) {
-	return !!load<boost::uint8_t>(is);
+	return !!load<uint8_t>(is);
 }
 
 /*!
@@ -191,12 +191,12 @@ T load(std::istream & is, size_t bits) { return load<T, little_endian>(is, bits)
  * \param bytes Number of bytes to skip ahead
  */
 template <class T>
-void discard(T & is, boost::uint64_t bytes) {
+void discard(T & is, uint64_t bytes) {
 	char buf[1024];
 	while(bytes) {
-		std::streamsize n = std::streamsize(std::min<boost::uint64_t>(bytes, sizeof(buf)));
+		std::streamsize n = std::streamsize(std::min<uint64_t>(bytes, sizeof(buf)));
 		is.read(buf, n);
-		bytes -= boost::uint64_t(n);
+		bytes -= uint64_t(n);
 	}
 }
 

@@ -90,7 +90,7 @@ void registry_entry::load(std::istream & is, const info & i) {
 	}
 	
 	if(i.version >= INNO_VERSION(4, 1, 0)) {
-		permission = util::load<boost::int16_t>(is);
+		permission = util::load<int16_t>(is);
 	} else {
 		permission = -1;
 	}

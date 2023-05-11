@@ -42,10 +42,10 @@ class file_output : private boost::noncopyable {
   util::fstream stream_;
 
   crypto::hasher checksum_;
-  boost::uint64_t checksum_position_;
+  uint64_t checksum_position_;
 
-  boost::uint64_t position_;
-  boost::uint64_t total_written_;
+  uint64_t position_;
+  uint64_t total_written_;
 
   bool write_;
   Nonzip &zip_;
@@ -55,7 +55,7 @@ class file_output : private boost::noncopyable {
  public:
   explicit file_output(const fs::path& dir, const processed_file* f, bool write, Nonzip &zip);
   bool write(const char* data, size_t n);
-  void seek(boost::uint64_t new_position);
+  void seek(uint64_t new_position);
   void close();
   const fs::path& path() const { return path_; }
   const processed_file* file() const { return file_; }

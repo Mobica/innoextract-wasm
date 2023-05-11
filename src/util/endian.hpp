@@ -41,15 +41,15 @@ namespace util {
 
 namespace detail {
 
-inline boost::uint8_t byteswap(boost::uint8_t value) {
+inline uint8_t byteswap(uint8_t value) {
 	return value;
 }
 
-inline boost::int8_t byteswap(boost::int8_t value) {
-	return boost::int8_t(byteswap(boost::uint8_t(value)));
+inline int8_t byteswap(int8_t value) {
+	return int8_t(byteswap(uint8_t(value)));
 }
 
-inline boost::uint16_t byteswap(boost::uint16_t value) {
+inline uint16_t byteswap(uint16_t value) {
 #if INNOEXTRACT_HAVE_BUILTIN_BSWAP16
 	return __builtin_bswap16(value);
 #elif defined(_MSC_VER) && _MSC_VER >= 1300
@@ -60,16 +60,16 @@ inline boost::uint16_t byteswap(boost::uint16_t value) {
 	    // prevent conversion warnings
 	return bswap_16(value);
 #else
-	return boost::uint16_t((boost::uint16_t(boost::uint8_t(value)) << 8)
-	                       | boost::uint8_t(value >> 8));
+	return uint16_t((uint16_t(uint8_t(value)) << 8)
+	                       | uint8_t(value >> 8));
 #endif
 }
 
-inline boost::int16_t byteswap(boost::int16_t value) {
-	return boost::int16_t(byteswap(boost::uint16_t(value)));
+inline int16_t byteswap(int16_t value) {
+	return int16_t(byteswap(uint16_t(value)));
 }
 
-inline boost::uint32_t byteswap(boost::uint32_t value) {
+inline uint32_t byteswap(uint32_t value) {
 #if INNOEXTRACT_HAVE_BUILTIN_BSWAP32
 	return __builtin_bswap32(value);
 #elif defined(_MSC_VER) && (_MSC_VER >= 1400 || (_MSC_VER >= 1300 && !defined(_DLL)))
@@ -77,16 +77,16 @@ inline boost::uint32_t byteswap(boost::uint32_t value) {
 #elif INNOEXTRACT_HAVE_BSWAP_32
 	return bswap_32(value);
 #else
-	return (boost::uint32_t(byteswap(boost::uint16_t(value))) << 16)
-	       | byteswap(boost::uint16_t(value >> 16));
+	return (uint32_t(byteswap(uint16_t(value))) << 16)
+	       | byteswap(uint16_t(value >> 16));
 #endif
 }
 
-inline boost::int32_t byteswap(boost::int32_t value) {
-	return boost::int32_t(byteswap(boost::uint32_t(value)));
+inline int32_t byteswap(int32_t value) {
+	return int32_t(byteswap(uint32_t(value)));
 }
 
-inline boost::uint64_t byteswap(boost::uint64_t value) {
+inline uint64_t byteswap(uint64_t value) {
 #if INNOEXTRACT_HAVE_BUILTIN_BSWAP64
 	return __builtin_bswap64(value);
 #elif defined(_MSC_VER) && _MSC_VER >= 1300
@@ -94,13 +94,13 @@ inline boost::uint64_t byteswap(boost::uint64_t value) {
 #elif INNOEXTRACT_HAVE_BSWAP_64
 	return bswap_64(value);
 #else
-	return (boost::uint64_t(byteswap(boost::uint32_t(value))) << 32)
-	       | byteswap(boost::uint32_t(value >> 32));
+	return (uint64_t(byteswap(uint32_t(value))) << 32)
+	       | byteswap(uint32_t(value >> 32));
 #endif
 }
 
-inline boost::int64_t byteswap(boost::int64_t value) {
-	return boost::int64_t(byteswap(boost::uint64_t(value)));
+inline int64_t byteswap(int64_t value) {
+	return int64_t(byteswap(uint64_t(value)));
 }
 
 } // namespace detail
@@ -209,12 +209,12 @@ private:
 namespace detail {
 
 inline bool is_little_endian() {
-	boost::uint32_t signature = 0x04030201;
+	uint32_t signature = 0x04030201;
 	return (*reinterpret_cast<char *>(&signature) == 1);
 }
 
 inline bool is_big_endian() {
-	boost::uint32_t signature = 0x04030201;
+	uint32_t signature = 0x04030201;
 	return (*reinterpret_cast<char *>(&signature) == 4);
 }
 

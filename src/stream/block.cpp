@@ -164,7 +164,7 @@ block_reader::pointer block_reader::get(std::istream & base, const setup::versio
 	if(version >= INNO_VERSION(4, 0, 9)) {
 		
 		stored_size = actual_checksum.load<uint32_t>(base);
-		boost::uint8_t compressed = actual_checksum.load<boost::uint8_t>(base);
+		uint8_t compressed = actual_checksum.load<uint8_t>(base);
 		
 		compression = compressed ? (version >= INNO_VERSION(4, 1, 6) ? LZMA1 : Zlib) : Stored;
 		

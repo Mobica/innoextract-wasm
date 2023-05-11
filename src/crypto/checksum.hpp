@@ -49,8 +49,8 @@ enum checksum_type {
 struct checksum {
 	
 	union {
-		boost::uint32_t adler32;
-		boost::uint32_t crc32;
+		uint32_t adler32;
+		uint32_t crc32;
 		char md5[16];
 		char sha1[20];
 	};

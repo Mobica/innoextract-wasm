@@ -76,7 +76,7 @@ public:
 	
 	explicit stored_enum(std::istream & is) {
 		BOOST_STATIC_ASSERT(size <= (1 << 8));
-		value = util::load<boost::uint8_t>(is);
+		value = util::load<uint8_t>(is);
 	}
 	
 	enum_type get() {
@@ -99,7 +99,7 @@ public:
 template <size_t Bits, size_t PadBits = 32>
 class stored_bitfield {
 	
-	typedef boost::uint8_t base_type;
+	typedef uint8_t base_type;
 	
 	static const size_t base_size = sizeof(base_type) * 8;
 	static const size_t count = (Bits + (base_size - 1)) / base_size; // ceildiv
@@ -120,14 +120,14 @@ public:
 		}
 	}
 	
-	boost::uint64_t lower_bits() const {
+	uint64_t lower_bits() const {
 		
-		BOOST_STATIC_ASSERT(sizeof(boost::uint64_t) % sizeof(base_type) == 0);
+		BOOST_STATIC_ASSERT(sizeof(uint64_t) % sizeof(base_type) == 0);
 		
-		boost::uint64_t result = 0;
+		uint64_t result = 0;
 		
-		for(size_t i = 0; i < std::min(sizeof(boost::uint64_t) / sizeof(base_type), size_t(count)); i++) {
-			result |= (boost::uint64_t(bits[i]) << (i * base_size));
+		for(size_t i = 0; i < std::min(sizeof(uint64_t) / sizeof(base_type), size_t(count)); i++) {
+			result |= (uint64_t(bits[i]) << (i * base_size));
 		}
 		
 		return result;
@@ -167,13 +167,13 @@ public:
 	
 	flag_type get() {
 		
-		boost::uint64_t set_bits = this->lower_bits();
+		uint64_t set_bits = this->lower_bits();
 		flag_type result = 0;
 		
 		for(size_t i = 0; i < this->size; i++) {
-			if(set_bits & (boost::uint64_t(1) << i)) {
+			if(set_bits & (uint64_t(1) << i)) {
 				result |= Mapping::values[i];
-				set_bits &= ~(boost::uint64_t(1) << i);
+				set_bits &= ~(uint64_t(1) << i);
 			}
 		}
 		
@@ -206,7 +206,7 @@ private:
 	
 	std::istream & stream;
 	
-	typedef boost::uint8_t stored_type;
+	typedef uint8_t stored_type;
 	static const size_t stored_bits = sizeof(stored_type) * 8;
 	
 	size_t pos;

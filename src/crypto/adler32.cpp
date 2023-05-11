@@ -27,15 +27,15 @@ namespace crypto {
 
 void adler32::update(const char * data, size_t length) {
 	
-	const boost::uint_fast32_t base = 65521;
+	const uint_fast32_t base = 65521;
 	
-	boost::uint_fast32_t s1 = boost::uint16_t(state);
-	boost::uint_fast32_t s2 = boost::uint16_t(state >> 16);
+	uint_fast32_t s1 = uint16_t(state);
+	uint_fast32_t s2 = uint16_t(state >> 16);
 	
 	if(length % 8 != 0) {
 		
 		do {
-			s1 += boost::uint8_t(*data++);
+			s1 += uint8_t(*data++);
 			s2 += s1;
 			length--;
 		} while(length % 8 != 0);
@@ -49,14 +49,14 @@ void adler32::update(const char * data, size_t length) {
 	
 	while(length > 0) {
 		
-		s1 += boost::uint8_t(data[0]), s2 += s1;
-		s1 += boost::uint8_t(data[1]), s2 += s1;
-		s1 += boost::uint8_t(data[2]), s2 += s1;
-		s1 += boost::uint8_t(data[3]), s2 += s1;
-		s1 += boost::uint8_t(data[4]), s2 += s1;
-		s1 += boost::uint8_t(data[5]), s2 += s1;
-		s1 += boost::uint8_t(data[6]), s2 += s1;
-		s1 += boost::uint8_t(data[7]), s2 += s1;
+		s1 += uint8_t(data[0]), s2 += s1;
+		s1 += uint8_t(data[1]), s2 += s1;
+		s1 += uint8_t(data[2]), s2 += s1;
+		s1 += uint8_t(data[3]), s2 += s1;
+		s1 += uint8_t(data[4]), s2 += s1;
+		s1 += uint8_t(data[5]), s2 += s1;
+		s1 += uint8_t(data[6]), s2 += s1;
+		s1 += uint8_t(data[7]), s2 += s1;
 		
 		length -= 8;
 		data += 8;
@@ -70,7 +70,7 @@ void adler32::update(const char * data, size_t length) {
 		}
 	}
 	
-	state  = (uint32_t(s2) << 16) | boost::uint16_t(s1);
+	state  = (uint32_t(s2) << 16) | uint16_t(s1);
 	
 }
 

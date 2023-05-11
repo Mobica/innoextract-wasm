@@ -34,7 +34,7 @@
 
 namespace util {
 
-typedef boost::int64_t time;
+typedef int64_t time;
 
 /*!
  * Convert UTC clock time to a timestamp
@@ -80,7 +80,7 @@ void set_local_timezone(std::string timezone);
  *
  * \return \c true if the file time was changed, \c false otherwise.
  */
-bool set_file_time(const boost::filesystem::path & path, time sec, boost::uint32_t nsec);
+bool set_file_time(const boost::filesystem::path & path, time sec, uint32_t nsec);
 
 } // namespace util
 

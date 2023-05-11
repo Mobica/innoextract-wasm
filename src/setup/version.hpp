@@ -37,7 +37,7 @@ namespace setup {
 
 struct version_error : public std::exception { };
 
-typedef boost::uint32_t version_constant;
+typedef uint32_t version_constant;
 #define INNO_VERSION_EXT(a, b, c, d) ( \
 	  (::setup::version_constant(a) << 24) \
 	| (::setup::version_constant(b) << 16) \
@@ -66,7 +66,7 @@ struct version {
 		: value(v), variant(type), known(is_known) { }
 	
 	
-	version(boost::uint8_t a, boost::uint8_t b, boost::uint8_t c, boost::uint8_t d = 0,
+	version(uint8_t a, uint8_t b, uint8_t c, uint8_t d = 0,
 	        flags type = 0, bool is_known = false)
 		: value(INNO_VERSION_EXT(a, b, c, d)), variant(type), known(is_known) { }
 	
@@ -77,7 +77,7 @@ struct version {
 	
 	void load(std::istream & is);
 	
-	boost::uint16_t bits() const { return (variant & Bits16) ? 16 : 32; }
+	uint16_t bits() const { return (variant & Bits16) ? 16 : 32; }
 	bool is_unicode() const { return (variant & Unicode) != 0; }
 	bool is_isx() const { return (variant & ISX) != 0; }
 	

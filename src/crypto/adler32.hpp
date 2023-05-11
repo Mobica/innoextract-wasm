@@ -41,11 +41,11 @@ struct adler32 : public checksum_base<adler32> {
 	
 	void update(const char * data, size_t length);
 	
-	boost::uint32_t finalize() const { return state; }
+	uint32_t finalize() const { return state; }
 	
 private:
 	
-	boost::uint32_t state;
+	uint32_t state;
 	
 };
 

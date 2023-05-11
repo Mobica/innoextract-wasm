@@ -52,9 +52,9 @@ struct directory_entry : public item {
 	std::string name;
 	std::string permissions;
 	
-	boost::uint32_t attributes;
+	uint32_t attributes;
 	
-	boost::int16_t permission; //!< index into the permission entry list
+	int16_t permission; //!< index into the permission entry list
 	
 	flags options;
 	

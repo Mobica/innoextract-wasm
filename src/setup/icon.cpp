@@ -68,10 +68,10 @@ void icon_entry::load(std::istream & is, const info & i) {
 	
 	load_version_data(is, i.version);
 	
-	icon_index = util::load<boost::int32_t>(is, i.version.bits());
+	icon_index = util::load<int32_t>(is, i.version.bits());
 	
 	if(i.version >= INNO_VERSION(1, 3, 24)) {
-		show_command = util::load<boost::int32_t>(is);
+		show_command = util::load<int32_t>(is);
 	} else {
 		show_command = 1;
 	}
@@ -82,7 +82,7 @@ void icon_entry::load(std::istream & is, const info & i) {
 	}
 	
 	if(i.version >= INNO_VERSION(2, 0, 7)) {
-		hotkey = util::load<boost::uint16_t>(is);
+		hotkey = util::load<uint16_t>(is);
 	} else {
 		hotkey = 0;
 	}

@@ -39,13 +39,13 @@ struct crc32 : public checksum_base<crc32> {
 	
 	void update(const char * data, size_t length);
 	
-	boost::uint32_t finalize() const { return crc ^ CRC32_NEGL; }
+	uint32_t finalize() const { return crc ^ CRC32_NEGL; }
 	
 private:
 	
-	static const boost::uint32_t CRC32_NEGL = 0xffffffffl;
+	static const uint32_t CRC32_NEGL = 0xffffffffl;
 	
-	boost::uint32_t crc;
+	uint32_t crc;
 };
 
 } // namespace crypto

@@ -47,24 +47,24 @@ enum BinaryType {
 
 BinaryType determine_binary_type(std::istream & is) {
 	
-	boost::uint16_t dos_magic = util::load<boost::uint16_t>(is.seekg(0));
+	uint16_t dos_magic = util::load<uint16_t>(is.seekg(0));
 	if(is.fail() || dos_magic != DOSMagic) {
 		return UnknownBinary; // Not a DOS file
 	}
 	
 	// Skip the DOS stub
-	boost::uint16_t new_offset = util::load<boost::uint16_t>(is.seekg(0x3c));
+	uint16_t new_offset = util::load<uint16_t>(is.seekg(0x3c));
 	if(is.fail()) {
 		return DOSMagic;
 	}
 	
-	boost::uint16_t new_magic = util::load<boost::uint16_t>(is.seekg(new_offset));
+	uint16_t new_magic = util::load<uint16_t>(is.seekg(new_offset));
 	if(is.fail()) {
 		return DOSMagic;
 	}
 	
 	if(new_magic == PEMagic) {
-		boost::uint16_t pe2_magic = util::load<boost::uint16_t>(is);
+		uint16_t pe2_magic = util::load<uint16_t>(is);
 		if(is.fail() || pe2_magic != PEMagic2) {
 			return DOSMagic;
 		}
@@ -112,8 +112,8 @@ exe_reader::resource ne_reader::find_resource(std::istream & is, uint32_t name,
 	result.offset = result.size = 0;
 	
 	is.seekg(0x24 - 2, std::ios_base::cur); // Already read the magic
-	boost::uint16_t resources_offset = util::load<boost::uint16_t>(is);
-	boost::uint16_t resources_end = util::load<boost::uint16_t>(is);
+	uint16_t resources_offset = util::load<uint16_t>(is);
+	uint16_t resources_end = util::load<uint16_t>(is);
 	if(is.fail()) {
 		return result;
 	}
@@ -124,22 +124,22 @@ exe_reader::resource ne_reader::find_resource(std::istream & is, uint32_t name,
 	
 	is.seekg(std::streamoff(resources_offset) - 0x28, std::ios_base::cur);
 	
-	boost::uint16_t shift = util::load<boost::uint16_t>(is);
+	uint16_t shift = util::load<uint16_t>(is);
 	if(is.fail() || shift >= 32) {
 		return result;
 	}
 	
-	boost::uint16_t name_count;
+	uint16_t name_count;
 	for(;;) {
 		
-		boost::uint16_t type_id = util::load<boost::uint16_t>(is);
-		name_count = util::load<boost::uint16_t>(is);
+		uint16_t type_id = util::load<uint16_t>(is);
+		name_count = util::load<uint16_t>(is);
 		is.seekg(4, std::ios_base::cur);
 		if(is.fail() || type_id == 0) {
 			return result;
 		}
 		
-		if(type_id == boost::uint16_t(type | 0x8000)) {
+		if(type_id == uint16_t(type | 0x8000)) {
 			break;
 		}
 		
@@ -147,18 +147,18 @@ exe_reader::resource ne_reader::find_resource(std::istream & is, uint32_t name,
 		
 	}
 	
-	for(boost::uint16_t i = 0; i < name_count; i++) {
+	for(uint16_t i = 0; i < name_count; i++) {
 		
-		boost::uint16_t offset = util::load<boost::uint16_t>(is);
-		boost::uint16_t size   = util::load<boost::uint16_t>(is);
+		uint16_t offset = util::load<uint16_t>(is);
+		uint16_t size   = util::load<uint16_t>(is);
 		is.seekg(2, std::ios_base::cur);
-		boost::uint16_t name_id = util::load<boost::uint16_t>(is);
+		uint16_t name_id = util::load<uint16_t>(is);
 		is.seekg(4, std::ios_base::cur);
 		if(is.fail()) {
 			return result;
 		}
 		
-		if(name_id == boost::uint16_t(name | 0x8000)) {
+		if(name_id == uint16_t(name | 0x8000)) {
 			result.offset = uint32_t(offset) << shift;
 			result.size   = uint32_t(size)   << shift;
 			break;
@@ -176,7 +176,7 @@ bool ne_reader::get_file_version(std::istream & is) {
 		return false;
 	}
 	
-	return skip_to_fixed_file_info<boost::int8_t>(is, res.offset, 4);
+	return skip_to_fixed_file_info<int8_t>(is, res.offset, 4);
 }
 
 // Reader for VXD binaries
@@ -200,17 +200,17 @@ bool le_reader::get_file_version(std::istream & is) {
 	}
 	
 	is.seekg(resources_offset);
-	boost::uint8_t type = util::load<boost::uint8_t>(is);
-	boost::uint16_t id = util::load<boost::uint16_t>(is);
-	boost::uint8_t name = util::load<boost::uint8_t>(is);
+	uint8_t type = util::load<uint8_t>(is);
+	uint16_t id = util::load<uint16_t>(is);
+	uint8_t name = util::load<uint8_t>(is);
 	is.seekg(4, std::ios_base::cur); // skip ordinal + flags
 	uint32_t size = util::load<uint32_t>(is);
 	if(is.fail() || type != 0xff || id != 16 || name != 0xff || size <= 20 + 52) {
 		return false;
 	}
 	
-	boost::uint16_t node = util::load<boost::uint16_t>(is);
-	boost::uint16_t data = util::load<boost::uint16_t>(is);
+	uint16_t node = util::load<uint16_t>(is);
+	uint16_t data = util::load<uint16_t>(is);
 	is.seekg(16, std::ios_base::cur); // skip key
 	if(is.fail() || node < 20 + 52 || data < 52) {
 		return false;
@@ -225,7 +225,7 @@ struct pe_reader : public exe_reader {
 	struct header {
 		
 		//! Number of CoffSection structures following this header after optionalHeaderSize bytes
-		boost::uint16_t nsections;
+		uint16_t nsections;
 		
 		//! Offset of the section table in the file
 		uint32_t section_table_offset;
@@ -285,15 +285,15 @@ struct pe_reader : public exe_reader {
 bool pe_reader::header::load(std::istream & is) {
 	
 	is.seekg(2, std::ios_base::cur); // machine
-	nsections = util::load<boost::uint16_t>(is);
+	nsections = util::load<uint16_t>(is);
 	is.seekg(4 + 4 + 4, std::ios_base::cur); // creation time + symbol table offset + nbsymbols
-	boost::uint16_t optional_header_size = util::load<boost::uint16_t>(is);
+	uint16_t optional_header_size = util::load<uint16_t>(is);
 	is.seekg(2, std::ios_base::cur); // characteristics
 	
 	section_table_offset = uint32_t(is.tellg()) + optional_header_size;
 	
 	// Skip the optional header.
-	boost::uint16_t optional_header_magic = util::load<boost::uint16_t>(is);
+	uint16_t optional_header_magic = util::load<uint16_t>(is);
 	if(is.fail()) {
 		return false;
 	}
@@ -373,10 +373,10 @@ uint32_t pe_reader::find_resource_entry(std::istream & is, uint32_t id) {
 	}
 	
 	// Number of named resource entries.
-	boost::uint16_t nbnames = util::load<boost::uint16_t>(is);
+	uint16_t nbnames = util::load<uint16_t>(is);
 	
 	// Number of id resource entries.
-	boost::uint16_t nbids = util::load<boost::uint16_t>(is);
+	uint16_t nbids = util::load<uint16_t>(is);
 	
 	if(id == Default) {
 		uint32_t offset = util::load<uint32_t>(is.seekg(4, std::ios_base::cur));
@@ -473,7 +473,7 @@ bool pe_reader::get_file_version(std::istream & is) {
 		return false;
 	}
 	
-	return skip_to_fixed_file_info<boost::uint16_t>(is, res.offset, 6);
+	return skip_to_fixed_file_info<uint16_t>(is, res.offset, 6);
 }
 
 } // anonymous namespace

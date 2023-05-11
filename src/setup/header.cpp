@@ -324,13 +324,13 @@ void header::load(std::istream & is, const version & version) {
 	run_entry_count = util::load<uint32_t>(is, version.bits());
 	uninstall_run_entry_count = util::load<uint32_t>(is, version.bits());
 	
-	boost::int32_t license_size = 0;
-	boost::int32_t info_before_size = 0;
-	boost::int32_t info_after_size = 0;
+	int32_t license_size = 0;
+	int32_t info_before_size = 0;
+	int32_t info_after_size = 0;
 	if(version < INNO_VERSION(1, 3, 0)) {
-		license_size = util::load<boost::int32_t>(is, version.bits());
-		info_before_size = util::load<boost::int32_t>(is, version.bits());
-		info_after_size = util::load<boost::int32_t>(is, version.bits());
+		license_size = util::load<int32_t>(is, version.bits());
+		info_before_size = util::load<int32_t>(is, version.bits());
+		info_after_size = util::load<int32_t>(is, version.bits());
 	}
 	
 	winver.load(is, version);
@@ -387,10 +387,10 @@ void header::load(std::istream & is, const version & version) {
 	}
 	
 	if(version >= INNO_VERSION(4, 0, 0)) {
-		extra_disk_space_required = util::load<boost::int64_t>(is);
+		extra_disk_space_required = util::load<int64_t>(is);
 		slices_per_disk = util::load<uint32_t>(is);
 	} else {
-		extra_disk_space_required = util::load<boost::int32_t>(is);
+		extra_disk_space_required = util::load<int32_t>(is);
 		slices_per_disk = 1;
 	}
 	
@@ -422,7 +422,7 @@ void header::load(std::istream & is, const version & version) {
 	}
 	
 	if(version.is_isx() && version >= INNO_VERSION(2, 0, 10) && version < INNO_VERSION(3, 0, 0)) {
-		boost::int32_t code_line_offset = util::load<boost::int32_t>(is);
+		int32_t code_line_offset = util::load<int32_t>(is);
 		(void)code_line_offset;
 	}
 	
@@ -503,7 +503,7 @@ void header::load(std::istream & is, const version & version) {
 		 * type and before EncryptionUsed flag.
 		 * The other values/flags between here and there look sane (mostly default).
 		 */
-		(void)util::load<boost::uint8_t>(is);
+		(void)util::load<uint8_t>(is);
 	}
 	
 	stored_flag_reader<flags> flagreader(is, version.bits());

@@ -192,7 +192,7 @@ struct header {
 	
 	windows_version_range winver;
 	
-	typedef boost::uint32_t Color;
+	typedef uint32_t Color;
 	Color back_color;
 	Color back_color2;
 	Color image_back_color;
@@ -203,8 +203,8 @@ struct header {
 		ModernStyle
 	};
 	style wizard_style;
-	boost::uint32_t wizard_resize_percent_x;
-	boost::uint32_t wizard_resize_percent_y;
+	uint32_t wizard_resize_percent_x;
+	uint32_t wizard_resize_percent_y;
 	
 	enum alpha_format {
 		AlphaIgnored,
@@ -216,7 +216,7 @@ struct header {
 	crypto::checksum password;
 	std::string password_salt;
 	
-	boost::int64_t extra_disk_space_required;
+	int64_t extra_disk_space_required;
 	size_t slices_per_disk;
 	
 	enum install_verbosity {
@@ -267,13 +267,13 @@ struct header {
 	architecture_types architectures_allowed;
 	architecture_types architectures_installed_in_64bit_mode;
 	
-	boost::uint32_t signed_uninstaller_original_size;
-	boost::uint32_t signed_uninstaller_header_checksum;
+	uint32_t signed_uninstaller_original_size;
+	uint32_t signed_uninstaller_header_checksum;
 	
 	auto_bool disable_dir_page;
 	auto_bool disable_program_group_page;
 	
-	boost::uint64_t uninstall_display_size;
+	uint64_t uninstall_display_size;
 	
 	flags options;
 	

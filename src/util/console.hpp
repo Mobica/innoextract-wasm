@@ -98,14 +98,14 @@ enum ClearMode {
 //! A text-based progress bar for terminals.
 class progress {
 	
-	boost::uint64_t max;
-	boost::uint64_t value;
+	uint64_t max;
+	uint64_t value;
 	bool show_rate;
 	
 	boost::posix_time::ptime start_time;
 	
 	float last_status;
-	boost::uint64_t last_time;
+	uint64_t last_time;
 	
 	float last_rate;
 	std::ostringstream label;
@@ -117,7 +117,7 @@ public:
 	 *                        If this value is \c 0, the progress bar will be unbounded.
 	 * \param show_value_rate Display the rate at which the progress changes.
 	 */
-	progress(boost::uint64_t max_value = 0, bool show_value_rate = true);
+	progress(uint64_t max_value = 0, bool show_value_rate = true);
 	
 	/*!
 	 * Update the progress bar.
@@ -129,7 +129,7 @@ public:
 	 *
 	 * \return true if the progres bar was updated
 	 */
-	bool update(boost::uint64_t delta = 0, bool force = false);
+	bool update(uint64_t delta = 0, bool force = false);
 	
 	/*!
 	 * Draw a bounded progress bar (with a maximum).

@@ -61,7 +61,7 @@ struct type_entry {
 	
 	setup_type type;
 	
-	boost::uint64_t size;
+	uint64_t size;
 	
 	void load(std::istream & is, const info & i);
 	

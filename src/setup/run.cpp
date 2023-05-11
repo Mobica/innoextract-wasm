@@ -72,7 +72,7 @@ void run_entry::load(std::istream & is, const info & i) {
 	load_version_data(is, i.version);
 	
 	if(i.version >= INNO_VERSION(1, 3, 24)) {
-		show_command = util::load<boost::int32_t>(is);
+		show_command = util::load<int32_t>(is);
 	} else {
 		show_command = 0;
 	}

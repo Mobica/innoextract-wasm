@@ -49,7 +49,7 @@ private:
 	
 	void update();
 	
-	boost::uint8_t state[256];
+	uint8_t state[256];
 	size_t a, b;
 	
 };

@@ -36,7 +36,7 @@ void message_entry::load(std::istream & is, const info & i) {
 	is >> util::encoded_string(name, i.codepage);
 	is >> util::binary_string(value);
 	
-	language = util::load<boost::int32_t>(is);
+	language = util::load<int32_t>(is);
 	
 	uint32_t codepage;
 	if(language < 0) {

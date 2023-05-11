@@ -65,12 +65,12 @@ struct data_entry {
 	
 	stream::file file;
 	
-	boost::uint64_t uncompressed_size;
+	uint64_t uncompressed_size;
 	
-	boost::int64_t timestamp;
-	boost::uint32_t timestamp_nsec;
+	int64_t timestamp;
+	uint32_t timestamp_nsec;
 	
-	boost::uint64_t file_version;
+	uint64_t file_version;
 	
 	flags options;
 	

@@ -80,8 +80,8 @@ void data_entry::load(std::istream & is, const info & i) {
 		
 		// 16-bit installers use the FAT filetime format
 		
-		boost::uint16_t time = util::load<boost::uint16_t>(is);
-		boost::uint16_t date = util::load<boost::uint16_t>(is);
+		uint16_t time = util::load<uint16_t>(is);
+		uint16_t date = util::load<uint16_t>(is);
 		
 		struct tm t;
 		std::memset(&t, 0, sizeof(t));
@@ -99,9 +99,9 @@ void data_entry::load(std::istream & is, const info & i) {
 		
 		// 32-bit installers use the Win32 FILETIME format
 		
-		boost::int64_t filetime = util::load<boost::int64_t>(is);
+		int64_t filetime = util::load<int64_t>(is);
 		
-		static const boost::int64_t FiletimeOffset = 0x19DB1DED53E8000ll;
+		static const int64_t FiletimeOffset = 0x19DB1DED53E8000ll;
 		if(filetime < FiletimeOffset) {
 			log_warning << "Unexpected filetime: " << filetime;
 		}

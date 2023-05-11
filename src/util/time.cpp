@@ -54,12 +54,12 @@ namespace util {
 
 #if defined(_WIN32)
 
-static const boost::int64_t FiletimeOffset = 0x19DB1DED53E8000ll;
+static const int64_t FiletimeOffset = 0x19DB1DED53E8000ll;
 
 static time from_filetime(FILETIME ft) {
 	
-	boost::int64_t filetime = boost::int64_t(ft.dwHighDateTime) << 32;
-	filetime += boost::int64_t(ft.dwLowDateTime);
+	int64_t filetime = int64_t(ft.dwHighDateTime) << 32;
+	filetime += int64_t(ft.dwLowDateTime);
 	
 	filetime -= FiletimeOffset;
 	
@@ -68,7 +68,7 @@ static time from_filetime(FILETIME ft) {
 
 static FILETIME to_filetime(time t, uint32_t nsec = 0) {
 	
-	boost::int64_t filetime64 = boost::int64_t(t) * 10000000 + boost::int64_t(nsec) / 100 + FiletimeOffset;
+	int64_t filetime64 = int64_t(t) * 10000000 + int64_t(nsec) / 100 + FiletimeOffset;
 	
 	FILETIME filetime;
 	filetime.dwLowDateTime = DWORD(filetime64);
@@ -268,7 +268,7 @@ bool set_file_time(const boost::filesystem::path & path, time sec, uint32_t nsec
 	
 	struct timespec timens[2];
 	timens[0].tv_sec = to_time_t<time_t>(sec, path.string().c_str());
-	timens[0].tv_nsec = boost::int32_t(nsec);
+	timens[0].tv_nsec = int32_t(nsec);
 	timens[1] = timens[0];
 	
 	#endif
@@ -312,7 +312,7 @@ bool set_file_time(const boost::filesystem::path & path, time sec, uint32_t nsec
 	
 	struct timeval times[2];
 	times[0].tv_sec = to_time_t<time_t>(sec, path.string().c_str());
-	times[0].tv_usec = boost::int32_t(nsec / 1000);
+	times[0].tv_usec = int32_t(nsec / 1000);
 	times[1] = times[0];
 	
 	return (utimes(path.string().c_str(), times) == 0);

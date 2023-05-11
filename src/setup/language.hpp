@@ -52,8 +52,8 @@ struct language_entry {
 	std::string info_before;
 	std::string info_after;
 	
-	boost::uint32_t language_id;
-	boost::uint32_t codepage;
+	uint32_t language_id;
+	uint32_t codepage;
 	size_t dialog_font_size;
 	size_t dialog_font_standard_height;
 	size_t title_font_size;

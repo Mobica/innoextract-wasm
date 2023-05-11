@@ -37,7 +37,7 @@ class sha1_transform {
 	
 public:
 	
-	typedef boost::uint32_t hash_word;
+	typedef uint32_t hash_word;
 	typedef util::big_endian byte_order;
 	static const size_t offset = 1;
 	static const size_t block_size = 64;

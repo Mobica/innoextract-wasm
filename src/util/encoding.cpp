@@ -238,7 +238,7 @@ bool is_extended_ascii(codepage_id codepage) {
 bool is_ascii(const std::string & data) {
 	// String in an extended ASCII encoding contains only ASCII characters
 	BOOST_FOREACH(char c, data) {
-		if(boost::uint8_t(c) >= 128) {
+		if(uint8_t(c) >= 128) {
 			return false;
 		}
 	}
@@ -294,7 +294,7 @@ void to_utf8_fallback(const std::string & from, std::string & to, codepage_id co
 		
 		unicode_char unicode = 0;
 		for(size_t i = 0; i < skip; i++) {
-			unicode |= unicode_char(boost::uint8_t(*it++)) << (i * 8);
+			unicode |= unicode_char(uint8_t(*it++)) << (i * 8);
 		}
 		
 		char ascii = char((unicode >> shift) & 0x7f);
@@ -324,7 +324,7 @@ unicode_char utf8_read(In & it, In end, unicode_char replacement = replacement_c
 	if(it == end) {
 		return unicode_char(-1);
 	}
-	unicode_char chr = boost::uint8_t(*it++);
+	unicode_char chr = uint8_t(*it++);
 	
 	// For multi-byte characters, read the remaining bytes
 	if(chr & (1 << 7)) {
@@ -334,27 +334,27 @@ unicode_char utf8_read(In & it, In end, unicode_char replacement = replacement_c
 			return replacement;
 		}
 		
-		if(it == end || !is_utf8_continuation_byte(boost::uint8_t(*it))) {
+		if(it == end || !is_utf8_continuation_byte(uint8_t(*it))) {
 			// Unexpected end of multi-byte sequence
 			return replacement;
 		}
-		chr &= 0x3f, chr <<= 6, chr |= unicode_char(boost::uint8_t(*it++) & 0x3f);
+		chr &= 0x3f, chr <<= 6, chr |= unicode_char(uint8_t(*it++) & 0x3f);
 		
 		if(chr & (1 << (5 + 6))) {
 			
-			if(it == end || !is_utf8_continuation_byte(boost::uint8_t(*it))) {
+			if(it == end || !is_utf8_continuation_byte(uint8_t(*it))) {
 				// Unexpected end of multi-byte sequence
 				return replacement;
 			}
-			chr &= ~unicode_char(1 << (5 + 6)), chr <<= 6, chr |= unicode_char(boost::uint8_t(*it++) & 0x3f);
+			chr &= ~unicode_char(1 << (5 + 6)), chr <<= 6, chr |= unicode_char(uint8_t(*it++) & 0x3f);
 			
 			if(chr & (1 << (4 + 6 + 6))) {
 				
-				if(it == end || !is_utf8_continuation_byte(boost::uint8_t(*it))) {
+				if(it == end || !is_utf8_continuation_byte(uint8_t(*it))) {
 					// Unexpected end of multi-byte sequence
 					return replacement;
 				}
-				chr &= ~unicode_char(1 << (4 + 6 + 6)), chr <<= 6, chr |= unicode_char(boost::uint8_t(*it++) & 0x3f);
+				chr &= ~unicode_char(1 << (4 + 6 + 6)), chr <<= 6, chr |= unicode_char(uint8_t(*it++) & 0x3f);
 				
 				if(chr & (1 << (3 + 6 + 6 + 6))) {
 					// Illegal UTF-8 byte
@@ -383,7 +383,7 @@ size_t utf8_length(unicode_char chr) {
 
 void utf8_write(std::string & to, unicode_char chr) {
 	
-	static const boost::uint8_t first_bytes[7] = {
+	static const uint8_t first_bytes[7] = {
 		0x00, 0x00, 0xc0, 0xe0, 0xf0, 0xf8, 0xfc
 	};
 	
@@ -391,17 +391,17 @@ void utf8_write(std::string & to, unicode_char chr) {
 	size_t length = utf8_length(chr);
 	
 	// Extract bytes to write
-	boost::uint8_t bytes[4];
+	uint8_t bytes[4];
 	switch(length) {
-		case 4: bytes[3] = static_cast<boost::uint8_t>((chr | 0x80) & 0xBF), chr >>= 6; /* fall-through */
-		case 3: bytes[2] = static_cast<boost::uint8_t>((chr | 0x80) & 0xBF), chr >>= 6; /* fall-through */
-		case 2: bytes[1] = static_cast<boost::uint8_t>((chr | 0x80) & 0xBF), chr >>= 6; /* fall-through */
-		case 1: bytes[0] = static_cast<boost::uint8_t>(chr | first_bytes[length]);
+		case 4: bytes[3] = static_cast<uint8_t>((chr | 0x80) & 0xBF), chr >>= 6; /* fall-through */
+		case 3: bytes[2] = static_cast<uint8_t>((chr | 0x80) & 0xBF), chr >>= 6; /* fall-through */
+		case 2: bytes[1] = static_cast<uint8_t>((chr | 0x80) & 0xBF), chr >>= 6; /* fall-through */
+		case 1: bytes[0] = static_cast<uint8_t>(chr | first_bytes[length]);
 		default: break;
 	}
 	
 	// Add them to the output
-	const boost::uint8_t * cur_byte = bytes;
+	const uint8_t * cur_byte = bytes;
 	switch(length) {
 		case 4: to.push_back(char(*cur_byte++)); /* fall-through */
 		case 3: to.push_back(char(*cur_byte++)); /* fall-through */
@@ -442,13 +442,13 @@ void utf16le_to_wtf8(const std::string & from, std::string & to) {
 	}
 	while(it != end) {
 		
-		unicode_char chr = boost::uint8_t(*it++);
-		chr |= unicode_char(boost::uint8_t(*it++)) << 8;
+		unicode_char chr = uint8_t(*it++);
+		chr |= unicode_char(uint8_t(*it++)) << 8;
 		
 		// If it's a surrogate pair, convert to a single UTF-32 character
 		if(is_utf16_high_surrogate(chr) && it != end) {
-			unicode_char d = boost::uint8_t(*it);
-			d |= unicode_char(boost::uint8_t(*(it + 1))) << 8;
+			unicode_char d = uint8_t(*it);
+			d |= unicode_char(uint8_t(*(it + 1))) << 8;
 			if(is_utf16_low_surrogate(d)) {
 				chr = ((chr - 0xd800) << 10) + (d - 0xdc00) + 0x0010000;
 				it += 2;
@@ -471,12 +471,12 @@ void utf16le_to_wtf8(const std::string & from, std::string & to) {
 const char * wtf8_find_end(const char * begin, const char * end) {
 	
 	const char * i = end;
-	while(i != begin && is_utf8_continuation_byte(boost::uint8_t(*(i - 1)))) {
+	while(i != begin && is_utf8_continuation_byte(uint8_t(*(i - 1)))) {
 		i--;
 	}
 	
 	if(i != begin) {
-		unicode_char chr = boost::uint8_t(*(i - 1));
+		unicode_char chr = uint8_t(*(i - 1));
 		size_t expected = 0;
 		if(chr & (1 << 7)) {
 			expected++;
@@ -507,13 +507,13 @@ void wtf8_to_utf16le(const char * begin, const char * end, std::string & to) {
 		if(chr >= 0x10000) {
 			chr -= 0x10000;
 			unicode_char high_surrogate = 0xd800 + (chr >> 10);
-			to.push_back(char(boost::uint8_t(high_surrogate)));
-			to.push_back(char(boost::uint8_t(high_surrogate >> 8)));
+			to.push_back(char(uint8_t(high_surrogate)));
+			to.push_back(char(uint8_t(high_surrogate >> 8)));
 			chr = 0xdc00 + (chr & 0x3ff);
 		}
 		
-		to.push_back(char(boost::uint8_t(chr)));
-		to.push_back(char(boost::uint8_t(chr >> 8)));
+		to.push_back(char(uint8_t(chr)));
+		to.push_back(char(uint8_t(chr >> 8)));
 	}
 	
 }
@@ -543,7 +543,7 @@ void windows1252_to_utf8(const std::string & from, std::string & to) {
 	BOOST_FOREACH(char c, from) {
 		
 		// Windows-1252 maps almost directly to Unicode - yay!
-		unicode_char chr = boost::uint8_t(c);
+		unicode_char chr = uint8_t(c);
 		if(chr >= 128 && chr < 160) {
 			chr = windows1252_replacements[chr - 128];
 			warn = warn || chr == replacement_char;
@@ -585,7 +585,7 @@ void utf8_to_windows1252(const std::string & from, std::string & to) {
 			}
 		}
 		
-		to.push_back(char(boost::uint8_t(chr)));
+		to.push_back(char(uint8_t(chr)));
 	}
 	
 	if(warn) {

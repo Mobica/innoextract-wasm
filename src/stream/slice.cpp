@@ -52,7 +52,7 @@ slice_reader::slice_reader(std::istream * istream, uint32_t offset)
 	  slices_per_disk(1), current_slice(0), slice_size(0),
 	  is(istream) {
 	
-	std::streampos max_size = std::streampos(std::numeric_limits<boost::int32_t>::max());
+	std::streampos max_size = std::streampos(std::numeric_limits<int32_t>::max());
 	
 	std::streampos file_size = is->seekg(0, std::ios_base::end).tellg();
 	
@@ -154,7 +154,7 @@ std::string slice_reader::slice_filename(const std::string & basename, size_t sl
 	} else {
 		size_t major = (slice / slices_per_disk) + 1;
 		size_t minor = slice % slices_per_disk;
-		oss << major << char(boost::uint8_t('a') + minor);
+		oss << major << char(uint8_t('a') + minor);
 	}
 	
 	oss << ".bin";

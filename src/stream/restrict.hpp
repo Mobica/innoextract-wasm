@@ -38,14 +38,14 @@ template <typename BaseSource>
 class restricted_source : public boost::iostreams::source {
 	
 	BaseSource &    base;      //!< The base source to read from.
-	boost::uint64_t remaining; //!< Number of bytes remaining in the restricted source.
+	uint64_t remaining; //!< Number of bytes remaining in the restricted source.
 	
 public:
 	
 	restricted_source(const restricted_source & o)
 		: base(o.base), remaining(o.remaining) { }
 	
-	restricted_source(BaseSource & source, boost::uint64_t size)
+	restricted_source(BaseSource & source, uint64_t size)
 		: base(source), remaining(size) { }
 	
 	std::streamsize read(char * buffer, std::streamsize bytes) {
@@ -55,7 +55,7 @@ public:
 		}
 		
 		// Restrict the number of bytes to read
-		bytes = std::streamsize(std::min(boost::uint64_t(bytes), remaining));
+		bytes = std::streamsize(std::min(uint64_t(bytes), remaining));
 		if(bytes == 0) {
 			return -1; // End of the restricted source reached
 		}
@@ -64,7 +64,7 @@ public:
 		
 		// Remember how many bytes were read so far
 		if(nread > 0) {
-			remaining -= std::min(boost::uint64_t(nread), remaining);
+			remaining -= std::min(uint64_t(nread), remaining);
 		}
 		
 		return nread;
@@ -79,7 +79,7 @@ public:
  * Like boost::iostreams::restrict, but always has a 64-bit counter.
  */
 template <typename BaseSource>
-restricted_source<BaseSource> restrict(BaseSource & source, boost::uint64_t size) {
+restricted_source<BaseSource> restrict(BaseSource & source, uint64_t size) {
 	return restricted_source<BaseSource>(source, size);
 }
 

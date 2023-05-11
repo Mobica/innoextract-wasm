@@ -39,24 +39,24 @@ namespace util {
 template <int Bits>
 struct uint_t { };
 template <>
-struct uint_t<8>  : public boost::uint_t<8>  { typedef boost::uint8_t exact; };
+struct uint_t<8>  : public boost::uint_t<8>  { typedef uint8_t exact; };
 template <>
-struct uint_t<16> : public boost::uint_t<16> { typedef boost::uint16_t exact; };
+struct uint_t<16> : public boost::uint_t<16> { typedef uint16_t exact; };
 template <>
-struct uint_t<32> : public boost::uint_t<32> { typedef boost::uint32_t exact; };
+struct uint_t<32> : public boost::uint_t<32> { typedef uint32_t exact; };
 template <>
-struct uint_t<64>                            { typedef boost::uint64_t exact; };
+struct uint_t<64>                            { typedef uint64_t exact; };
 
 template <int Bits>
 struct int_t { };
 template <>
-struct int_t<8>  : public boost::int_t<8>  { typedef boost::int8_t exact; };
+struct int_t<8>  : public boost::int_t<8>  { typedef int8_t exact; };
 template <>
-struct int_t<16> : public boost::int_t<16> { typedef boost::int16_t exact; };
+struct int_t<16> : public boost::int_t<16> { typedef int16_t exact; };
 template <>
-struct int_t<32> : public boost::int_t<32> { typedef boost::int32_t exact; };
+struct int_t<32> : public boost::int_t<32> { typedef int32_t exact; };
 template <>
-struct int_t<64>                           { typedef boost::int64_t exact; };
+struct int_t<64>                           { typedef int64_t exact; };
 
 #else
 

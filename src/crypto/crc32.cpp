@@ -83,8 +83,8 @@ static const uint32_t crc32_table[] = {
 	0x2d02ef8dl
 };
 
-static boost::uint8_t crc32_index(uint32_t crc) {
-	return boost::uint8_t(crc & 0xff);
+static uint8_t crc32_index(uint32_t crc) {
+	return uint8_t(crc & 0xff);
 }
 
 static uint32_t crc32_shifted(uint32_t crc) {
@@ -94,7 +94,7 @@ static uint32_t crc32_shifted(uint32_t crc) {
 void crc32::update(const char * data, size_t length) {
 	
 	for(; (size_t(data) % 4 != 0) && length > 0; length--) {
-		crc = crc32_table[crc32_index(crc) ^ boost::uint8_t(*data++)] ^ crc32_shifted(crc);
+		crc = crc32_table[crc32_index(crc) ^ uint8_t(*data++)] ^ crc32_shifted(crc);
 	}
 	
 	while(length >= 4) {
@@ -108,7 +108,7 @@ void crc32::update(const char * data, size_t length) {
 	}
 	
 	while(length--) {
-		crc = crc32_table[crc32_index(crc) ^ boost::uint8_t(*data++)] ^ crc32_shifted(crc);
+		crc = crc32_table[crc32_index(crc) ^ uint8_t(*data++)] ^ crc32_shifted(crc);
 	}
 	
 }
