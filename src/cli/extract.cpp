@@ -1308,7 +1308,7 @@ void process_file(const fs::path & installer, const extract_options & o) {
 			uint64_t output_size = 0;
 			while(!file_source->eof()) {
 				char buffer[8192 * 10];
-				std::streamsize buffer_size = std::streamsize(boost::size(buffer));
+				std::streamsize buffer_size = std::streamsize(std::size(buffer));
 				std::streamsize n = file_source->read(buffer, buffer_size).gcount();
 				if(n > 0) {
 					for(auto output : outputs) {

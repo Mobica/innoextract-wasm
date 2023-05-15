@@ -220,7 +220,7 @@ void version::load(std::istream & is) {
 	
 	if(legacy_version[0] == 'i' && legacy_version[sizeof(legacy_version) - 1] == '\x1a') {
 		
-		for(size_t i = 0; i < size_t(boost::size(legacy_versions)); i++) {
+		for(size_t i = 0; i < size_t(std::size(legacy_versions)); i++) {
 			if(!memcmp(legacy_version, legacy_versions[i].name, sizeof(legacy_version))) {
 				value = legacy_versions[i].version;
 				variant = legacy_versions[i].variant;
@@ -269,7 +269,7 @@ void version::load(std::istream & is) {
 	        std::streamsize(sizeof(version_string) - sizeof(legacy_version)));
 	
 	
-	for(size_t i = 0; i < size_t(boost::size(versions)); i++) {
+	for(size_t i = 0; i < size_t(std::size(versions)); i++) {
 		if(versions[i].name[0] != '\0' && !memcmp(version_string, versions[i].name, sizeof(version_string))) {
 			value = versions[i].version;
 			variant = versions[i].variant;
@@ -279,7 +279,7 @@ void version::load(std::istream & is) {
 		}
 	}
 	
-	char * end = std::find(version_string, version_string + boost::size(version_string), '\0');
+	char * end = std::find(version_string, version_string + std::size(version_string), '\0');
 	std::string version_str(version_string, end);
 	debug("unknown version: \"" << version_str << '"');
 	if(!boost::contains(version_str, "Inno Setup")) {

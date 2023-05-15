@@ -453,7 +453,7 @@ uint64_t Context::copy_data(const stream::file_reader::pointer& source,
   uint64_t output_size = 0;
   while (!source->eof()) {
     char buffer[8192 * 10];
-    std::streamsize buffer_size = std::streamsize(boost::size(buffer));
+    std::streamsize buffer_size = std::streamsize(std::size(buffer));
     std::streamsize n = source->read(buffer, buffer_size).gcount();
     if (n > 0) {
       for (file_output* output : outputs) {

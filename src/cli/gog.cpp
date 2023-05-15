@@ -310,8 +310,8 @@ void process_rar_files(const std::vector<fs::path> & files,
 		md5.update(password.c_str(), password.length());
 		char hash[16];
 		md5.finalize(hash);
-		password.resize(size_t(boost::size(hash) * 2));
-		for(size_t i = 0; i < size_t(boost::size(hash)); i++) {
+		password.resize(size_t(std::size(hash) * 2));
+		for(size_t i = 0; i < size_t(std::size(hash)); i++) {
 			password[2 * i + 0] = hex_char(uint8_t(hash[i]) / 16);
 			password[2 * i + 1] = hex_char(uint8_t(hash[i]) % 16);
 		}
@@ -421,7 +421,7 @@ void process_bin_files(const std::vector<fs::path> & files, const extract_option
 	}
 	
 	char magic[4];
-	if(!ifs.read(magic, std::streamsize(boost::size(magic))).fail()) {
+	if(!ifs.read(magic, std::streamsize(std::size(magic))).fail()) {
 		
 		if(std::memcmp(magic, "Rar!", 4) == 0) {
 			ifs.close();
