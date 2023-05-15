@@ -95,7 +95,16 @@ if(WASM)
 	include(CreateSourceGroups)
 	include(FilterList)
 	# Set compiler flags
-	set(CMAKE_CXX_STANDARD 11)
+	set(CMAKE_CXX_STANDARD 17)
+	if(NOT CMAKE_CXX_STANDARD LESS 17)
+		set(INNOEXTRACT_HAVE_ALIGNOF)
+		if(WIN32)
+			set(INNOEXTRACT_HAVE_STD_CODECVT_UTF8_UTF16 1600)
+		endif()
+		set(INNOEXTRACT_HAVE_STD_UNIQUE_PTR 1600)
+	else()
+		message(FATAL_ERROR "C++17 support required")
+	endif()
 	add_compile_options(-Wno-deprecated-declarations -Wno-narrowing -sUSE_ZLIB=1 -O3 -fexceptions -Wcast-align -Wover-aligned)
 
 	add_link_options(
