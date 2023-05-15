@@ -449,7 +449,7 @@ int main(int argc, char * argv[]) {
 	
 	bool suggest_bug_report = false;
 	try {
-		BOOST_FOREACH(const std::string & file, files) {
+		for(const auto& file : files) {
 			process_file(file, o);
 			if(!o.data_version && files.size() > 1) {
 				std::cout << '\n';

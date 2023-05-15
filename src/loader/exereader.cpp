@@ -326,7 +326,7 @@ bool pe_reader::section_table::load(std::istream & is, const header & coff) {
 	
 	sections.resize(coff.nsections);
 	
-	BOOST_FOREACH(section & s, sections) {
+	for(auto& s : sections) {
 		
 		is.seekg(8, std::ios_base::cur); // name
 		
@@ -347,7 +347,7 @@ bool pe_reader::section_table::load(std::istream & is, const header & coff) {
 
 uint32_t pe_reader::section_table::to_file_offset(uint32_t address) {
 	
-	BOOST_FOREACH(const section & s, sections) {
+	for(const auto& s : sections) {
 		if(address >= s.virtual_address && address < s.virtual_address + s.virtual_size) {
 			return address + s.raw_address - s.virtual_address;
 		}
