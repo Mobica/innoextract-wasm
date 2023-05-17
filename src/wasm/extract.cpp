@@ -274,16 +274,19 @@ std::string Context::ListFiles() {
 std::string Context::Extract(std::string list_json) {
   const std::string& output_dir = info_.header.app_name;
   auto input = json::parse(list_json);
-  auto ids = input["ids"];
+  auto files = input["files"];
+  std::string lang;
   std::vector<const processed_file*> selected_files;
   selected_files.reserve(all_files_.size());
 
-  const std::string lang = input["lang"];
+  if (input.contains("lang")){
+    lang = input["lang"];
+  }
 
-  std::sort(ids.begin(), ids.end());
-  log_info << "Unpacking " << ids.size() << " files have been started.";
-  for (const auto& i : ids) {
-    selected_files.push_back(&all_files_[i]);
+  std::sort(files.begin(), files.end());
+  log_info << "Unpacking " << files.size() << " files have been started.";
+  for (const auto& f : files) {
+    selected_files.push_back(&all_files_[f]);
   }
 
   // cleaning MEMFS
@@ -305,7 +308,7 @@ std::string Context::Extract(std::string list_json) {
 
 
   for (const processed_file* file_ptr : selected_files) {
-    if(file_ptr->entry().languages.empty() || setup::expression_match(lang, file_ptr->entry().languages))
+    if(file_ptr->entry().languages.empty() || lang.empty() || setup::expression_match(lang, file_ptr->entry().languages))
       files_for_location[file_ptr->entry().location].push_back(output_location(file_ptr, 0));
     uint64_t offset = info_.data_entries[file_ptr->entry().location].uncompressed_size;
     uint32_t sort_slice = info_.data_entries[file_ptr->entry().location].chunk.first_slice;
@@ -330,7 +333,6 @@ std::string Context::Extract(std::string list_json) {
   }
 
   total_size_ = 0;
-  uint64_t files = 0;
 
   typedef std::map<stream::file, size_t> Files;
   typedef std::map<stream::chunk, Files> Chunks;

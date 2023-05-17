@@ -67,8 +67,10 @@ function addLanguageSelector() {
 }
 
 function removeLanguageSelector() {
-    if(document.getElementById("langSelect"))
+    if(document.getElementById("langSelect")){
         extractGroup.removeChild(langSelect);
+        langSelect = undefined;
+    }
 }
 
 function startInnoExtract() {
@@ -107,13 +109,15 @@ function extractFiles() {
     var startDate = new Date();
     extractBtn.disabled = true;
     checked = tree.treeview('getChecked');
-    info = { ids: []};
+    info = { files: []};
     for (const element of checked) {
         if (element.fileId !== undefined)
-            info.ids.push(element.fileId);
+            info.files.push(element.fileId);
     }
-    if(!langSelect.hidden)
+
+    if(langSelect){
         info.lang = langSelect.value;
+    }
 
     Module.ccall('extract', 'string', ['string'], [JSON.stringify(info)], {async: true}).then(result =>{
         extractBtn.disabled = false;
