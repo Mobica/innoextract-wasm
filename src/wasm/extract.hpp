@@ -1,12 +1,12 @@
 #ifndef INNOEXTRACT_WASM_H
 #define INNOEXTRACT_WASM_H
 
-#include <boost/filesystem.hpp>
 #include <boost/ptr_container/ptr_map.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <set>
 #include <string>
 #include <vector>
+#include <filesystem>
 
 #include "crypto/checksum.hpp"
 #include "crypto/hasher.hpp"
@@ -18,7 +18,7 @@
 
 #include "wasm/nonzip/nonzip.h"
 
-namespace fs = boost::filesystem;
+namespace fs = std::filesystem;
 
 namespace wasm {
 

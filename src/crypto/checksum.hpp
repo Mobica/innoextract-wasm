@@ -30,7 +30,7 @@
 #include <iosfwd>
 #include <istream>
 
-#include <boost/cstdint.hpp>
+
 
 #include "util/endian.hpp"
 #include "util/enum.hpp"

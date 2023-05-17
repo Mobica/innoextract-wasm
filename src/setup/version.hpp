@@ -29,7 +29,7 @@
 #include <iosfwd>
 #include <exception>
 
-#include <boost/cstdint.hpp>
+
 
 #include "util/flags.hpp"
 

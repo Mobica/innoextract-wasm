@@ -29,7 +29,7 @@
 #include <stddef.h>
 #include <ostream>
 
-#include <boost/range/size.hpp>
+
 #include <boost/utility/enable_if.hpp>
 
 #include "util/console.hpp"

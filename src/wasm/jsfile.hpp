@@ -1,10 +1,10 @@
 #ifndef INNOEXTRACT_WASM_JSFILE_H
 #define INNOEXTRACT_WASM_JSFILE_H
 
-#include <boost/filesystem/path.hpp>
 #include <istream>
+#include <filesystem>
 
-namespace fs = boost::filesystem;
+namespace fs = std::filesystem;
 
 namespace wasm {
 

@@ -26,7 +26,7 @@
 #ifndef INNOEXTRACT_CRYPTO_MD5_HPP
 #define INNOEXTRACT_CRYPTO_MD5_HPP
 
-#include <boost/cstdint.hpp>
+
 
 #include "crypto/iteratedhash.hpp"
 #include "util/endian.hpp"

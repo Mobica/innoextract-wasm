@@ -28,9 +28,11 @@
 
 #include <ctime>
 #include <string>
+#include <filesystem>
+// #include <chrono> // we can turn this on when proper c+20 support is added to gcc
 
-#include <boost/cstdint.hpp>
-#include <boost/filesystem/path.hpp>
+
+
 
 namespace util {
 
@@ -80,7 +82,7 @@ void set_local_timezone(std::string timezone);
  *
  * \return \c true if the file time was changed, \c false otherwise.
  */
-bool set_file_time(const boost::filesystem::path & path, time sec, uint32_t nsec);
+bool set_file_time(const std::filesystem::path & path, time sec, uint32_t nsec);
 
 } // namespace util
 

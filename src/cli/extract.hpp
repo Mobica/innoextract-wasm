@@ -29,9 +29,7 @@
 #include <stdexcept>
 #include <string>
 #include <vector>
-
-#include <boost/cstdint.hpp>
-#include <boost/filesystem/path.hpp>
+#include <filesystem>
 
 #include "setup/filename.hpp"
 
@@ -89,7 +87,7 @@ struct extract_options {
 	
 	std::string password;
 	
-	boost::filesystem::path output_dir;
+	std::filesystem::path output_dir;
 	
 	extract_options()
 		: quiet(false)
@@ -117,6 +115,6 @@ struct extract_options {
 	
 };
 
-void process_file(const boost::filesystem::path & installer, const extract_options & o);
+void process_file(const std::filesystem::path & installer, const extract_options & o);
 
 #endif // INNOEXTRACT_CLI_EXTRACT_HPP

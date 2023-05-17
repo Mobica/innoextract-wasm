@@ -29,7 +29,7 @@
 #include <bitset>
 #include <string>
 
-#include <boost/cstdint.hpp>
+
 
 namespace util {
 

@@ -26,7 +26,7 @@
 #ifndef INNOEXTRACT_CRYPTO_CRC32_HPP
 #define INNOEXTRACT_CRYPTO_CRC32_HPP
 
-#include <boost/cstdint.hpp>
+
 
 #include "crypto/checksum.hpp"
 

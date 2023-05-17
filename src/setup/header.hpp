@@ -31,7 +31,7 @@
 #include <string>
 #include <iosfwd>
 
-#include <boost/cstdint.hpp>
+
 
 #include "crypto/checksum.hpp"
 #include "setup/windows.hpp"

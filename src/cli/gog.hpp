@@ -28,8 +28,9 @@
 
 #include <string>
 #include <vector>
+#include <filesystem>
 
-#include <boost/filesystem/path.hpp>
+
 
 namespace setup { struct info; }
 
@@ -41,7 +42,7 @@ namespace gog {
 std::string get_game_id(const setup::info & info);
 
 void probe_bin_files(const extract_options & o, const setup::info & info,
-                     const boost::filesystem::path & setup_file, bool external);
+                     const std::filesystem::path & setup_file, bool external);
 
 } // namespace gog
 

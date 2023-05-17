@@ -31,7 +31,7 @@
 #include "boost/algorithm/string.hpp"
 #include <boost/range/begin.hpp>
 #include <boost/range/end.hpp>
-#include <boost/range/size.hpp>
+
 
 #include "util/load.hpp"
 #include "util/log.hpp"

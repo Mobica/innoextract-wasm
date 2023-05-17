@@ -29,8 +29,8 @@
 #include <ostream>
 #include <string>
 
-#include <boost/cstdint.hpp>
-#include <boost/range/size.hpp>
+
+
 
 #include "util/console.hpp"
 

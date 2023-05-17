@@ -24,7 +24,7 @@
 #include <istream>
 #include <sstream>
 
-#include <boost/foreach.hpp>
+
 
 #include "setup/component.hpp"
 #include "setup/data.hpp"

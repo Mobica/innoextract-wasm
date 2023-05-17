@@ -6,7 +6,7 @@ endif()
 
 if(WASM)
 
-	set(CMAKE_TOOLCHAIN_FILE "$ENV{EMSDK}/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake") 
+	set(CMAKE_TOOLCHAIN_FILE "$ENV{EMSDK}/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake")
 
 	project(innoextract)
 	# set(DEBUG 1)
@@ -24,7 +24,7 @@ if(WASM)
 		set(EMBDIR "${EMBOOSTDIR}/stage/lib")
 		set(EMHEADERS "${EMBOOSTDIR}")
 
-		set(EMLIBS 
+		set(EMLIBS
 			${EMBDIR}/libboost_date_time.bc
 			${EMBDIR}/libboost_filesystem.bc
 			${EMBDIR}/libboost_iostreams.bc
@@ -84,7 +84,7 @@ if(WASM)
 				endforeach()
 				list(APPEND LIBRARIES ${${LIB}_LIBRARIES})
 			endforeach()
-		endif()	
+		endif()
 	endif()
 
 	# Helper scrips
@@ -94,6 +94,7 @@ if(WASM)
 	set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake") # For custom cmake modules
 	include(CreateSourceGroups)
 	include(FilterList)
+	include(CheckSymbolExists)
 	# Set compiler flags
 	set(CMAKE_CXX_STANDARD 17)
 	if(NOT CMAKE_CXX_STANDARD LESS 17)
@@ -108,12 +109,54 @@ if(WASM)
 	add_compile_options(-Wno-deprecated-declarations -Wno-narrowing -sUSE_ZLIB=1 -O3 -fexceptions -Wcast-align -Wover-aligned)
 
 	add_link_options(
-	-sINITIAL_MEMORY=1024MB -sSTACK_SIZE=512MB -sALLOW_MEMORY_GROWTH 
+	-sINITIAL_MEMORY=1024MB -sSTACK_SIZE=512MB -sALLOW_MEMORY_GROWTH
 	-sEXPORTED_RUNTIME_METHODS=ccall,cwrap -sEXPORTED_FUNCTIONS=[_main,_malloc,_free] -sINVOKE_RUN=0 -sASYNCIFY -sASYNCIFY_STACK_SIZE=65565
 	--pre-js ../src/wasm/pre.js -sNO_DISABLE_EXCEPTION_CATCHING )
 
 	add_compile_options("-fvisibility=hidden")
 	add_compile_options("-fvisibility-inlines-hidden")
+
+	# Check for optional functionality and system configuration
+
+	if(NOT WIN32)
+
+		check_symbol_exists(isatty "unistd.h" INNOEXTRACT_HAVE_ISATTY)
+		check_symbol_exists(ioctl "sys/ioctl.h" INNOEXTRACT_HAVE_IOCTL)
+		check_symbol_exists(timegm "time.h" INNOEXTRACT_HAVE_TIMEGM)
+		check_symbol_exists(gmtime_r "time.h" INNOEXTRACT_HAVE_GMTIME_R)
+		check_symbol_exists(AT_FDCWD "fcntl.h" INNOEXTRACT_HAVE_AT_FDCWD)
+		if(INNOEXTRACT_HAVE_AT_FDCWD)
+			check_symbol_exists(utimensat "sys/stat.h" INNOEXTRACT_HAVE_UTIMENSAT)
+		endif()
+		if(INNOEXTRACT_HAVE_UTIMENSAT AND INNOEXTRACT_HAVE_AT_FDCWD)
+			set(INNOEXTRACT_HAVE_UTIMENSAT_d 1)
+		else()
+			if(USE_DYNAMIC_UTIMENSAT AND INNOEXTRACT_HAVE_AT_FDCWD)
+				set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_DL_LIBS})
+				check_symbol_exists(dlsym "dlfcn.h" INNOEXTRACT_HAVE_DLSYM)
+				check_symbol_exists(RTLD_DEFAULT "dlfcn.h" INNOEXTRACT_HAVE_RTLD_DEFAULT)
+				unset(CMAKE_REQUIRED_LIBRARIES)
+				if(INNOEXTRACT_HAVE_DLSYM AND INNOEXTRACT_HAVE_RTLD_DEFAULT)
+					set(INNOEXTRACT_HAVE_DYNAMIC_UTIMENSAT 1)
+					if(CMAKE_DL_LIBS)
+						list(APPEND LIBRARIES ${CMAKE_DL_LIBS})
+					endif()
+				endif()
+			endif()
+			check_symbol_exists(utimes "sys/time.h" INNOEXTRACT_HAVE_UTIMES)
+		endif()
+		check_symbol_exists(posix_spawnp "spawn.h" INNOEXTRACT_HAVE_POSIX_SPAWNP)
+		if(INNOEXTRACT_HAVE_POSIX_SPAWNP)
+			check_symbol_exists(environ "unistd.h" INNOEXTRACT_HAVE_UNISTD_ENVIRON)
+		else()
+			check_symbol_exists(fork "unistd.h" INNOEXTRACT_HAVE_FORK)
+			check_symbol_exists(execvp "unistd.h" INNOEXTRACT_HAVE_EXECVP)
+		endif()
+		if(INNOEXTRACT_HAVE_POSIX_SPAWNP OR (INNOEXTRACT_HAVE_FORK AND INNOEXTRACT_HAVE_EXECVP))
+			check_symbol_exists(waitpid "sys/wait.h" INNOEXTRACT_HAVE_WAITPID)
+		endif()
+
+	endif()
 
 else() #NOT WASM
 	project(innoextract)
@@ -368,7 +411,7 @@ else() #NOT WASM
 	# Check for optional functionality and system configuration
 
 	if(NOT WIN32)
-		
+
 		check_symbol_exists(isatty "unistd.h" INNOEXTRACT_HAVE_ISATTY)
 		check_symbol_exists(ioctl "sys/ioctl.h" INNOEXTRACT_HAVE_IOCTL)
 		check_symbol_exists(timegm "time.h" INNOEXTRACT_HAVE_TIMEGM)
@@ -404,11 +447,11 @@ else() #NOT WASM
 		if(INNOEXTRACT_HAVE_POSIX_SPAWNP OR (INNOEXTRACT_HAVE_FORK AND INNOEXTRACT_HAVE_EXECVP))
 			check_symbol_exists(waitpid "sys/wait.h" INNOEXTRACT_HAVE_WAITPID)
 		endif()
-		
+
 	endif()
 
 	if(NOT MSVC)
-		
+
 		if(CMAKE_CXX_COMPILER_ID STREQUAL "PathScale")
 			# EKOPath recognizes these but then fails to link
 		else()
@@ -425,7 +468,7 @@ else() #NOT WASM
 		if(NOT INNOEXTRACT_HAVE_BUILTIN_BSWAP64)
 			check_symbol_exists(bswap_64 "byteswap.h" INNOEXTRACT_HAVE_BSWAP_64)
 		endif()
-		
+
 	endif()
 
 	# All sources:
@@ -444,7 +487,7 @@ set(INNOEXTRACT_SOURCES
 	src/index.hpp if DOCUMENTATION
 	src/release.hpp
 	src/release.cpp
-	
+
 	src/cli/debug.hpp
 	src/cli/debug.cpp if DEBUG
 	src/cli/extract.hpp
@@ -460,7 +503,7 @@ set(INNOEXTRACT_SOURCES
 	src/wasm/nonzip/nonzip.cpp if WASM
 	src/wasm/extract.hpp if WASM
 	src/wasm/extract.cpp if WASM
-	
+
 	src/crypto/adler32.hpp
 	src/crypto/adler32.cpp
 	src/crypto/arc4.hpp if INNOEXTRACT_HAVE_ARC4
@@ -476,12 +519,12 @@ set(INNOEXTRACT_SOURCES
 	src/crypto/md5.cpp
 	src/crypto/sha1.hpp
 	src/crypto/sha1.cpp
-	
+
 	src/loader/exereader.hpp
 	src/loader/exereader.cpp
 	src/loader/offsets.hpp
 	src/loader/offsets.cpp
-	
+
 	src/setup/component.hpp
 	src/setup/component.cpp
 	src/setup/data.hpp
@@ -524,7 +567,7 @@ set(INNOEXTRACT_SOURCES
 	src/setup/version.cpp
 	src/setup/windows.hpp
 	src/setup/windows.cpp
-	
+
 	src/stream/block.hpp
 	src/stream/block.cpp
 	src/stream/checksum.hpp
@@ -539,7 +582,7 @@ set(INNOEXTRACT_SOURCES
 	src/stream/restrict.hpp
 	src/stream/slice.hpp
 	src/stream/slice.cpp
-	
+
 	src/util/align.hpp
 	src/util/ansi.hpp
 	src/util/boostfs_compat.hpp
@@ -564,7 +607,7 @@ set(INNOEXTRACT_SOURCES
 	src/util/time.cpp
 	src/util/types.hpp
 	src/util/unique_ptr.hpp
-	src/util/windows.hpp   
+	src/util/windows.hpp
 	src/util/windows.cpp if WIN32
 	src/wasm/emjs.cpp if WASM
 )
@@ -591,7 +634,7 @@ if(WASM)
 
 		set(LZMAHEADERS $ENV{LZMADIR}/api)
 		set(LZMALIBS $ENV{LZMADIR}/.libs/liblzma.a )
-		
+
 		list(APPEND LIBRARIES ${LZMALIBS})
 	endif()
 

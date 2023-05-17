@@ -27,9 +27,7 @@
 #define INNOEXTRACT_UTIL_BOOSTFS_COMPAT_HPP
 
 #include <string>
-
-#include <boost/filesystem/path.hpp>
-#include <boost/filesystem/operations.hpp>
+#include <filesystem>
 
 namespace util {
 
@@ -37,7 +35,7 @@ inline const std::string & as_string(const std::string & path) {
 	return path;
 }
 
-inline const std::string as_string(const boost::filesystem::path & path) {
+inline const std::string as_string(const std::filesystem::path & path) {
 	return path.string();
 }
 

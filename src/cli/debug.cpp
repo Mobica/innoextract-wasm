@@ -22,10 +22,7 @@
 
 #include <ctime>
 #include <iostream>
-
-#include <boost/foreach.hpp>
-#include <boost/filesystem/operations.hpp>
-#include <boost/range/size.hpp>
+#include <filesystem>
 
 #include "loader/offsets.hpp"
 
@@ -56,7 +53,7 @@
 #include "util/output.hpp"
 #include "util/time.hpp"
 
-namespace fs = boost::filesystem;
+namespace fs = std::filesystem;
 
 void print_offsets(const loader::offsets & offsets) {
 	

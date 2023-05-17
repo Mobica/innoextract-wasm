@@ -35,7 +35,7 @@
 #include <byteswap.h>
 #endif
 
-#include <boost/cstdint.hpp>
+
 
 namespace util {
 

@@ -25,7 +25,7 @@
 #include <ostream>
 #include <iomanip>
 
-#include <boost/range/size.hpp>
+
 
 namespace crypto {
 

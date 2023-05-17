@@ -28,7 +28,7 @@
 
 #include <stddef.h>
 
-#include <boost/cstdint.hpp>
+
 
 #include "configure.hpp"
 

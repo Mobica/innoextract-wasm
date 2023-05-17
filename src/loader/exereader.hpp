@@ -28,7 +28,7 @@
 
 #include <istream>
 
-#include <boost/cstdint.hpp>
+
 
 namespace loader {
 

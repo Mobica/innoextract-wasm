@@ -27,8 +27,8 @@
 #include <cstring>
 #include <vector>
 
-#include <boost/cstdint.hpp>
-#include <boost/foreach.hpp>
+
+
 
 #include "util/load.hpp"
 

@@ -30,7 +30,7 @@
 #include <iosfwd>
 #include <vector>
 
-#include <boost/cstdint.hpp>
+
 
 #include "crypto/checksum.hpp"
 #include "setup/item.hpp"

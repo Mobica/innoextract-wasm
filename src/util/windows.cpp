@@ -33,12 +33,13 @@
 #include <sstream>
 #include <stdexcept>
 #include <vector>
+#include <filesystem>
 
 #include <wchar.h>
 #include <windows.h>
 #include <shellapi.h>
 
-#include <boost/filesystem/path.hpp>
+
 #include <boost/iostreams/stream_buffer.hpp>
 
 #include "configure.hpp"
@@ -49,8 +50,8 @@
 namespace { typedef std::codecvt_utf8_utf16<wchar_t> utf8_codecvt; }
 #else
 // Using private Boost stuff - bad, but meh.
-#include <boost/filesystem/detail/utf8_codecvt_facet.hpp>
-namespace { typedef boost::filesystem::detail::utf8_codecvt_facet utf8_codecvt; }
+
+namespace { typedef std::filesystem::detail::utf8_codecvt_facet utf8_codecvt; }
 #endif
 
 #include "util/ansi.hpp"
@@ -523,8 +524,8 @@ int main() {
 		LocalFree(wargv);
 	}
 	
-	// Tell boost::filesystem to interpret our path strings as UTF-8
-	boost::filesystem::path::imbue(std::locale(std::locale(), new utf8_codecvt()));
+	// Tell std::filesystem to interpret our path strings as UTF-8
+	std::filesystem::path::imbue(std::locale(std::locale(), new utf8_codecvt()));
 	
 	// Enable UTF-8 output and ANSI escape sequences
 	util::console_wrapper wrapped;

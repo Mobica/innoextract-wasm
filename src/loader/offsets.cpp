@@ -23,9 +23,9 @@
 #include <cstring>
 #include <limits>
 
-#include <boost/cstdint.hpp>
+
 #include <boost/static_assert.hpp>
-#include <boost/range/size.hpp>
+
 
 #include <stddef.h>
 

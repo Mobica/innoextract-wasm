@@ -29,7 +29,7 @@
 #include <string>
 #include <iosfwd>
 
-#include <boost/cstdint.hpp>
+
 
 #include "setup/windows.hpp"
 #include "util/enum.hpp"

@@ -20,7 +20,7 @@
 
 #include "stream/lzma.hpp"
 
-#include <boost/cstdint.hpp>
+
 
 #include <lzma.h>
 

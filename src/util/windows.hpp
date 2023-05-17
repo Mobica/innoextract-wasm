@@ -25,8 +25,8 @@
  * Mostly deals with converting between UTF-8 and UTF-16 input/output.
  * More precisely:
  *  - Converts wide char command-line arguments to UTF-8 and calls utf8_main().
- *  - Sets an UTF-8 locale for boost::filesystem::path.
- *    This makes everything in boost::filesystem UTF-8 aware, except for {i,o,}fstream.
+ *  - Sets an UTF-8 locale for std::filesystem::path.
+ *    This makes everything in std::filesystem UTF-8 aware, except for {i,o,}fstream.
  *    For those, there are UTF-8 aware implementations in util/fstream.hpp
  *  - Converts UTF-8 to UTF-16 in std::cout and std::cerr if attached to a console
  *  - Interprets ANSI escape sequences in std::cout and std::cerr if attached to a console

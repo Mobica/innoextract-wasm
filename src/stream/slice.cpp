@@ -24,10 +24,10 @@
 #include <cstring>
 #include <limits>
 
-#include <boost/cstdint.hpp>
+
 #include <boost/algorithm/string/predicate.hpp>
-#include <boost/filesystem/operations.hpp>
-#include <boost/range/size.hpp>
+
+
 
 #include "util/console.hpp"
 #include "util/load.hpp"
@@ -85,7 +85,7 @@ void slice_reader::seek(size_t slice) {
 bool slice_reader::open_file(const path_type & file) {
 
 #ifndef WASM_BUILD
-	if(!boost::filesystem::exists(file)) {
+	if(!std::filesystem::exists(file)) {
 		return false;
 	}
 #endif //WASM_BUILD
@@ -164,8 +164,8 @@ std::string slice_reader::slice_filename(const std::string & basename, size_t sl
 
 bool slice_reader::open_file_case_insensitive(const path_type & dirname, const path_type & filename) {
 	path_type dir_name = dirname.empty()?".":dirname;
-	boost::filesystem::directory_iterator end;
-	for(boost::filesystem::directory_iterator i(dir_name); i != end; ++i) {
+	std::filesystem::directory_iterator end;
+	for(std::filesystem::directory_iterator i(dir_name); i != end; ++i) {
 		path_type actual_filename = i->path().filename();
 		if(boost::iequals(actual_filename.string(), filename.string()) && open_file(dirname / actual_filename)) {
 			return true;

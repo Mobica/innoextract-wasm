@@ -25,7 +25,7 @@
 #include <istream>
 #include <algorithm>
 
-#include <boost/cstdint.hpp>
+
 #include <boost/iostreams/filtering_stream.hpp>
 #include <boost/iostreams/restrict.hpp>
 #include <boost/iostreams/filter/zlib.hpp>

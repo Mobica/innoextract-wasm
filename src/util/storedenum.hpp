@@ -31,7 +31,7 @@
 #include <bitset>
 #include <ios>
 
-#include <boost/cstdint.hpp>
+
 #include <boost/static_assert.hpp>
 #include <boost/typeof/typeof.hpp>
 #include <boost/utility/enable_if.hpp>

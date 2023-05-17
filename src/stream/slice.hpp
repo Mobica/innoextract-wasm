@@ -28,9 +28,10 @@
 
 #include <ios>
 #include <string>
+#include <filesystem>
 
 #include <boost/iostreams/concepts.hpp>
-#include <boost/filesystem/path.hpp>
+
 
 #include "util/fstream.hpp"
 
@@ -56,7 +57,7 @@ struct slice_error : public std::ios_base::failure {
  */
 class slice_reader : public boost::iostreams::source {
 	
-	typedef boost::filesystem::path path_type;
+	typedef std::filesystem::path path_type;
 	
 	// Information for reading embedded setup data
 	const uint32_t data_offset;

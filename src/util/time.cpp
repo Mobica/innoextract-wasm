@@ -45,7 +45,7 @@
 #elif !defined(_WIN32) && INNOEXTRACT_HAVE_UTIMES
 #include <sys/time.h>
 #elif !defined(_WIN32)
-#include <boost/filesystem/operations.hpp>
+
 #endif
 
 #include "util/log.hpp"
@@ -259,7 +259,7 @@ extern "C" typedef int (*utimensat_proc)
 	(int fd, const char *path, const struct timespec times[2], int flag);
 #endif
 
-bool set_file_time(const boost::filesystem::path & path, time sec, uint32_t nsec) {
+bool set_file_time(const std::filesystem::path & path, time sec, uint32_t nsec) {
 	
 	#if (INNOEXTRACT_HAVE_DYNAMIC_UTIMENSAT || INNOEXTRACT_HAVE_UTIMENSAT) \
 	    && INNOEXTRACT_HAVE_AT_FDCWD
@@ -321,14 +321,19 @@ bool set_file_time(const boost::filesystem::path & path, time sec, uint32_t nsec
 	
 	// fallback with second precision or worse
 	
+	/*
+	below code can be turned on if gcc will properly support chrono library (clock_cast to be precise)
 	try {
 		(void)nsec; // sub-second precision not supported by Boost
 		std::time_t tt = to_time_t<std::time_t>(sec, path.string().c_str());
-		boost::filesystem::last_write_time(path, tt);
+		std::filesystem::last_write_time(path, std::chrono::clock_cast<std::chrono::file_clock>(std::chrono::system_clock::from_time_t(tt)));
 		return true;
 	} catch(...) {
 		return false;
 	}
+	*/
+
+	return false;
 	
 	#endif
 	

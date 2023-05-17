@@ -27,7 +27,7 @@
 #ifndef INNOEXTRACT_STREAM_RESTRICT_HPP
 #define INNOEXTRACT_STREAM_RESTRICT_HPP
 
-#include <boost/cstdint.hpp>
+
 #include <boost/iostreams/concepts.hpp>
 #include <boost/iostreams/read.hpp>
 

@@ -34,7 +34,7 @@
 #include <ios>
 #include <string>
 
-#include <boost/cstdint.hpp>
+
 #include <boost/iostreams/chain.hpp>
 
 #include "util/enum.hpp"

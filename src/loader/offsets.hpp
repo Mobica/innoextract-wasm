@@ -28,7 +28,7 @@
 
 #include <iosfwd>
 
-#include <boost/cstdint.hpp>
+
 
 #include "crypto/checksum.hpp"
 

@@ -30,8 +30,8 @@
 
 #include <cstring>
 
-#include <boost/cstdint.hpp>
-#include <boost/range/size.hpp>
+
+
 
 #include "crypto/checksum.hpp"
 #include "util/align.hpp"

@@ -26,7 +26,7 @@
 #ifndef INNOEXTRACT_CRYPTO_SHA1_HPP
 #define INNOEXTRACT_CRYPTO_SHA1_HPP
 
-#include <boost/cstdint.hpp>
+
 
 #include "crypto/iteratedhash.hpp"
 #include "util/endian.hpp"

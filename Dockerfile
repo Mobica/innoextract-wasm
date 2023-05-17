@@ -4,8 +4,7 @@ FROM ubuntu:22.04
 RUN \
   apt-get update && \
   apt-get -y upgrade && \
-  apt-get install -y build-essential && \
-  apt-get install -y software-properties-common && \
+  apt-get install -y build-essential software-properties-common && \
   apt-get install -y git htop man unzip vim wget nano && \
   apt-get install -y cmake lbzip2 python3 && \
   apt-get -y clean && \

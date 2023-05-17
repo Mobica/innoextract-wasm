@@ -27,11 +27,11 @@
 #include <iostream>
 #include <signal.h>
 
-#include <boost/cstdint.hpp>
-#include <boost/foreach.hpp>
+
+
 #include <boost/noncopyable.hpp>
 #include <boost/algorithm/string/predicate.hpp>
-#include <boost/filesystem/operations.hpp>
+
 
 #include "cli/extract.hpp"
 
@@ -52,7 +52,7 @@
 #include "util/log.hpp"
 #include "util/process.hpp"
 
-namespace fs = boost::filesystem;
+namespace fs = std::filesystem;
 
 namespace gog {
 
@@ -498,7 +498,7 @@ size_t probe_bin_file_series(const extract_options & o, const setup::info & info
 void probe_bin_files(const extract_options & o, const setup::info & info,
                      const fs::path & setup_file, bool external) {
 	
-	boost::filesystem::path dir = setup_file.parent_path();
+	fs::path dir = setup_file.parent_path();
 	std::string basename = util::as_string(setup_file.stem());
 	
 	size_t bin_count = 0;

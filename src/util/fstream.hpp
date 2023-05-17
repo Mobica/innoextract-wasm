@@ -21,7 +21,7 @@
 /*!
  * \file
  *
- * boost::filesystem::{i,o,}fstream doesn't support unicode names on windows
+ * std::filesystem::{i,o,}fstream doesn't support unicode names on windows
  * Implement our own wrapper using boost::iostreams.
  */
 #ifndef INNOEXTRACT_UTIL_FSTREAM_HPP
@@ -29,7 +29,9 @@
 
 #if !defined(_WIN32)
 
-#include <boost/filesystem/fstream.hpp>
+
+#include <filesystem>
+#include <fstream>
 
 #ifdef WASM_BUILD
 #include "wasm/jsfile.hpp"
@@ -38,19 +40,19 @@
 namespace util {
 
 #ifndef WASM_BUILD
-typedef boost::filesystem::ifstream ifstream;
+typedef std::ifstream ifstream;
 #else //
 typedef wasm::JSFile ifstream;
 #endif //WASM_BUILD
 
-typedef boost::filesystem::ofstream ofstream;
-typedef boost::filesystem::fstream  fstream;
+typedef std::ofstream ofstream;
+typedef std::fstream  fstream;
 
 } // namespace util
 
 #else // if defined(_WIN32)
 
-#include <boost/filesystem/path.hpp>
+
 #include <boost/iostreams/device/file_descriptor.hpp>
 #include <boost/iostreams/stream.hpp>
 
@@ -58,7 +60,7 @@ namespace util {
 
 /*!
  * {i,o,}fstream implementation with support for Unicode filenames.
- * Create a subclass instead of a typedef to force boost::filesystem::path parameters.
+ * Create a subclass instead of a typedef to force std::filesystem::path parameters.
  */
 template <typename Device>
 class path_fstream : public boost::iostreams::stream<Device> {
@@ -68,7 +70,7 @@ private: // disallow copying
 	path_fstream(const path_fstream &);
 	const path_fstream & operator=(const path_fstream &);
 	
-	typedef boost::filesystem::path path;
+	typedef std::filesystem::path path;
 	typedef boost::iostreams::stream<Device> base;
 	
 	Device & device() { return **this; }

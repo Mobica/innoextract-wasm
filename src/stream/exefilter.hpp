@@ -31,7 +31,7 @@
 #include <iosfwd>
 #include <cassert>
 
-#include <boost/cstdint.hpp>
+
 #include <boost/iostreams/char_traits.hpp>
 #include <boost/iostreams/concepts.hpp>
 #include <boost/iostreams/get.hpp>

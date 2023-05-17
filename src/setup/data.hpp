@@ -29,7 +29,7 @@
 #include <stddef.h>
 #include <iosfwd>
 
-#include <boost/cstdint.hpp>
+
 
 #include "crypto/checksum.hpp"
 #include "stream/chunk.hpp"

@@ -24,12 +24,13 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <filesystem>
 
-#include <boost/foreach.hpp>
+
 #include <boost/program_options.hpp>
 #include <boost/algorithm/string/predicate.hpp>
-#include <boost/filesystem/path.hpp>
-#include <boost/filesystem/operations.hpp>
+
+
 
 #include "release.hpp"
 
@@ -43,7 +44,7 @@
 #include "util/time.hpp"
 #include "util/windows.hpp"
 
-namespace fs = boost::filesystem;
+namespace fs = std::filesystem;
 namespace po = boost::program_options;
 
 enum ExitValues {
