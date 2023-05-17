@@ -216,8 +216,8 @@ int main(int argc, char * argv[]) {
 	o.quiet = o.silent || options.count("quiet");
 	logger::quiet = o.quiet;
 #ifdef DEBUG
-	if(options.count("debug")) {
-		logger::debug = true;
+	if(!options.count("debug")) {
+		logger::debug = false;
 	}
 #endif
 	
