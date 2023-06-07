@@ -52,7 +52,7 @@ file_output::file_output(const fs::path& dir, const processed_file* f, bool writ
 bool file_output::write(char* data, size_t n) {
   ZIPentry *z;
   if(!file_open_) {
-    printf("Unpacking file %s, size=%llu\n", file_->entry().size);
+    printf("Unpacking file %s\n", path_.c_str());
     ze_ = zs_entrybegin(zip_, path_.c_str(), time(0), ZS_STORE, 0);
     z = zs_entrydata(zip_, ze_, (uint8_t*) data, n, 0);
 		file_open_ = true;
@@ -509,7 +509,6 @@ void Context::verify_close_outputs(const std::vector<file_output*>& outputs,
     }
     output->close();
     output->settime(data.timestamp);
-    log_info << " - File " << output->path() << " unpacked.";
 
     if (output->file()->is_multipart()) {
       multi_outputs_.erase(output->file());
