@@ -40,7 +40,7 @@ file_output::file_output(const fs::path& dir, const processed_file* f, bool writ
       if (file_->is_multipart()) {
         flags |= std::ios_base::in;
       }
-      if (zip_ == NULL) {
+      if(zip_ == NULL) {
         throw std::exception();
       }
     } catch (...) {
