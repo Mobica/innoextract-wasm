@@ -3,5 +3,10 @@ Documentation       Test files data
 
 *** Variables ***
 ${test_files_directory_path}  ${CURDIR}${/}
+<<<<<<< HEAD
 &{file_4mb}  name=file_4MB.exe  path=${test_files_directory_path}file_4MB.exe  archive_size_bytes=${4722512}
 &{10k_files}  name=10k_files.exe  path=${test_files_directory_path}10k_files.exe  archive_size_bytes=${42537871}
+=======
+&{file_4mb}  name=file_4MB.exe  path=${test_files_directory_path}file_4MB.exe  archive_size_bytes=${4722731}  output=smol11  files_in_archive=2
+&{10k_files}  name=10k_files.exe  path=${test_files_directory_path}10k_files.exe  archive_size_bytes=${42537871}  output=10000 koni wielkości kaczki  files_in_archive=10001 
+>>>>>>> 836431f (Added Validation for archive file details)
