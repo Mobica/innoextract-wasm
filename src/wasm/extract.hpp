@@ -48,12 +48,12 @@ class file_output : private boost::noncopyable {
   boost::uint64_t total_written_;
 
   bool write_;
-  ZIPstream *zip_ = NULL;
+  ZIPstream* zip_ = nullptr;
 	bool file_open_;
-	ZIPentry *ze_;
+	ZIPentry* zip_entry_;
 
  public:
-  explicit file_output(const fs::path& dir, const processed_file* f, bool write, ZIPstream *zip);
+  explicit file_output(const fs::path& dir, const processed_file* f, bool write, ZIPstream* zip);
   bool write(char* data, size_t n);
   void seek(boost::uint64_t new_position);
   void close();
@@ -85,7 +85,7 @@ class Context {
   uint64_t total_size_;
   typedef boost::ptr_map<const processed_file*, file_output> multi_part_outputs;
   multi_part_outputs multi_outputs_;
-  ZIPstream *zip_ = NULL;
+  ZIPstream* zip_ = NULL;
   void add_dirs(std::set<std::string>& vec, const std::string& path) const;
   uint64_t get_size() const;
   uint64_t copy_data(const stream::file_reader::pointer& source,

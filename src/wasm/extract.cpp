@@ -40,7 +40,7 @@ file_output::file_output(const fs::path& dir, const processed_file* f, bool writ
       if (file_->is_multipart()) {
         flags |= std::ios_base::in;
       }
-      if(zip_ == NULL) {
+      if (zip_ == NULL) {
         throw std::exception();
       }
     } catch (...) {
@@ -50,14 +50,14 @@ file_output::file_output(const fs::path& dir, const processed_file* f, bool writ
 }
 
 bool file_output::write(char* data, size_t n) {
-  ZIPentry *z;
-  if(!file_open_) {
+  ZIPentry* zip_entry;
+  if (!file_open_) {
     printf("Unpacking file %s\n", path_.c_str());
     ze_ = zs_entrybegin(zip_, path_.c_str(), time(0), ZS_STORE, 0);
-    z = zs_entrydata(zip_, ze_, (uint8_t*) data, n, 0);
+    z = zs_entrydata(zip_, ze_, reinterpret_cast<uint8_t*>(data), n, 0);
 		file_open_ = true;
 	} else {
-    z = zs_entrydata(zip_, ze_, (uint8_t*) data, n, 0);
+    z = zs_entrydata(zip_, ze_, reinterpret_cast<uint8_t*>(data), n, 0);
   }
 
   if (checksum_position_ == position_) {
@@ -68,7 +68,7 @@ bool file_output::write(char* data, size_t n) {
   position_ += n;
   total_written_ += n;
 
-  if(is_complete()){
+  if (is_complete()) {
     zs_entryend(zip_, ze_, 0);
   }
 
@@ -88,8 +88,9 @@ void file_output::close() {
 }
 
 void file_output::settime(time_t t){
-  if(file_open_)
+  if (file_open_) {
     zs_entrydatetime(ze_, t);
+  }
 }
 
 bool file_output::is_complete() const { return total_written_ == file_->entry().size; }
@@ -311,7 +312,7 @@ std::string Context::Extract(std::string list_json) {
   std::string zipfile = output_dir + ".zip";
   emjs::open(zipfile.c_str(), "wb");
   emscripten_sleep(100);
-  zip_ = zs_init(NULL);
+  zip_ = zs_init(nullptr);
   printf("opening zip file %s\n", zipfile.c_str());
 
   typedef std::pair<const processed_file*, uint64_t> output_location;
