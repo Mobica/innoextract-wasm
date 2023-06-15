@@ -50,14 +50,14 @@ file_output::file_output(const fs::path& dir, const processed_file* f, bool writ
 }
 
 bool file_output::write(char* data, size_t n) {
-  ZIPentry* zip_entry;
+  ZIPentry* ze;
   if (!file_open_) {
     printf("Unpacking file %s\n", path_.c_str());
-    ze_ = zs_entrybegin(zip_, path_.c_str(), time(0), ZS_STORE, 0);
-    z = zs_entrydata(zip_, ze_, reinterpret_cast<uint8_t*>(data), n, 0);
+    zip_entry_ = zs_entrybegin(zip_, path_.c_str(), time(0), ZS_STORE, 0);
+    ze = zs_entrydata(zip_, zip_entry_, reinterpret_cast<uint8_t*>(data), n, 0);
 		file_open_ = true;
 	} else {
-    z = zs_entrydata(zip_, ze_, reinterpret_cast<uint8_t*>(data), n, 0);
+    ze = zs_entrydata(zip_, zip_entry_, reinterpret_cast<uint8_t*>(data), n, 0);
   }
 
   if (checksum_position_ == position_) {
@@ -69,10 +69,10 @@ bool file_output::write(char* data, size_t n) {
   total_written_ += n;
 
   if (is_complete()) {
-    zs_entryend(zip_, ze_, 0);
+    zs_entryend(zip_, zip_entry_, 0);
   }
 
-  return z == ze_;
+  return ze == zip_entry_;
 }
 
 void file_output::seek(boost::uint64_t new_position) {
@@ -89,7 +89,7 @@ void file_output::close() {
 
 void file_output::settime(time_t t){
   if (file_open_) {
-    zs_entrydatetime(ze_, t);
+    zs_entrydatetime(zip_entry_, t);
   }
 }
 
