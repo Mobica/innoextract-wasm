@@ -489,7 +489,7 @@ std::string extractor::extract(const std::string& list_json) {
 
         uint64_t output_size = copy_data(file_source, outputs);
 
-        if(aborted) { // copy_data is the most likely function to be in while execution is being aborted
+        if (aborted) { // copy_data is the most likely function to be in while execution is being aborted
           goto ret_abort; // escaping a double loop
         }
 
@@ -581,7 +581,7 @@ uint64_t extractor::copy_data(const stream::file_reader::pointer& source,
 
       emjs::ui_progbar_update(float(bytes_extracted_) / total_size_ * 100);
     }
-    if(aborted) {
+    if (aborted) {
       return 0;
     }
 
