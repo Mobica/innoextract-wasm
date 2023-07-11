@@ -330,7 +330,6 @@ std::string extractor::extract(const std::string& list_json) {
   auto files = input["files"];
   std::string lang;
   std::vector<const processed_file*> selected_files;
-  json ret;
   set_abort(false);
   selected_files.reserve(all_files_.size());
 
@@ -489,8 +488,13 @@ std::string extractor::extract(const std::string& list_json) {
 
         uint64_t output_size = copy_data(file_source, outputs);
 
-        if (aborted) { // copy_data is the most likely function to be in while execution is being aborted
-          goto ret_abort; // escaping a double loop
+        if(aborted) { // copy_data is the most likely function to be in while execution is being aborted
+          log_info << "Extraction aborted";
+          abort_zip();
+
+          json ret;
+          ret["status"]="Aborted by user";
+          return ret.dump();
         }
 
         const setup::data_entry& data = installer_info_.data_entries[location.second];
@@ -520,13 +524,8 @@ std::string extractor::extract(const std::string& list_json) {
   log_info << "Done. Creating ZIP file.";
   save_zip();
 
+  json ret;
   ret["status"]="Completed successfully";
-  return ret.dump();
-
-  ret_abort:
-  log_info << "Extraction aborted";
-  abort_zip("Aborted by user");
-  ret["status"]="Aborted by user";
   return ret.dump();
 }
 
@@ -621,9 +620,9 @@ void extractor::save_zip() {
   emjs::close();
 }
 
-void extractor::abort_zip(char const * reason) {
+void extractor::abort_zip(void) {
   zs_free(output_zip_stream_);
-  emjs::abort_down(reason);
+  emjs::abort_down();
 }
 
 void extractor::set_abort(bool state) {

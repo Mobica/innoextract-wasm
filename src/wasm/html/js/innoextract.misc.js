@@ -121,7 +121,6 @@ function clearFileInfo() {
 }
 
 function resetUI() {
-    clearFileInfo();
     addExtractButton("");
     progressBar.style.width = 0;
     progressBar.innerHTML = "0%"
@@ -161,7 +160,9 @@ function startInnoExtract() {
         });
     }
 }
+
 startBtn.addEventListener("click", startInnoExtract, false);
+startBtn.disabled = true;
 
 function extractFiles() {
     var startDate = new Date();
@@ -205,6 +206,7 @@ function createList() {
     fileList.innerHTML = '';
     if (global_file_list.length == 0) {
         fileList.appendChild(emptyListInfo);
+        startBtn.disabled = true;
     } else {
         for (let i = 0; i < global_file_list.length; i++) {
             let li = fileTemplate.content.cloneNode(true);
@@ -213,6 +215,8 @@ function createList() {
             li.querySelector('input').value = i;
             fileList.appendChild(li);
         }
+
+        startBtn.disabled = false;
     }
 }
 

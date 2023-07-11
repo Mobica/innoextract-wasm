@@ -168,7 +168,7 @@ EM_JS(void, close_int, (void), {
   console.log("zipstream: close")
 });
 
-EM_ASYNC_JS(void, abort_int, (char const * reason), {
+EM_ASYNC_JS(void, abort_int, (void), {
   Module.writer.abort();
 });
 
@@ -184,8 +184,8 @@ ssize_t emjs_write(void* buf, size_t len)
   return emjs::write(buf, 1, len);
 }
 
-void abort_down(char const * reason){
-  abort_int(reason);
+void abort_down(void){
+  abort_int();
 }
 
 
@@ -213,9 +213,8 @@ EMSCRIPTEN_KEEPALIVE char const * extract(char const *list_json) {
   return result.c_str();
 }
 
-EMSCRIPTEN_KEEPALIVE int set_abort(void) {
+EMSCRIPTEN_KEEPALIVE void set_abort(void) {
   wasm::extractor::get().set_abort(true);
-  return 1;
 }
 }
 

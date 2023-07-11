@@ -89,7 +89,7 @@ class extractor {
 
   static extractor* singleton_instance;
   static std::once_flag init_instance_flag;
-  volatile bool aborted;
+  bool aborted;
 
   extractor();
   extractor(const extractor&) = delete;
@@ -111,7 +111,7 @@ class extractor {
   void verify_close_outputs(const std::vector<file_output*>& outputs,
                             const setup::data_entry& data);
   void save_zip();
-  void abort_zip(char const *);
+  void abort_zip();
 
   fs::path installer_path_{};
   util::ifstream installer_ifs_{};
