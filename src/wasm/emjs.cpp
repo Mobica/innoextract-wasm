@@ -184,7 +184,7 @@ ssize_t emjs_write(void* buf, size_t len)
   return emjs::write(buf, 1, len);
 }
 
-void abort_down(void){
+void abort_down(void) {
   abort_int();
 }
 

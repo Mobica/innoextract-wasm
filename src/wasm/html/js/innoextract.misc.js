@@ -82,12 +82,12 @@ function removeLanguageSelector() {
 }
 
 function addExtractButton(state) {
-    if (document.getElementById("abortBtn")){
+    if (document.getElementById("abortBtn")) {
         extractGroup.removeChild(abortBtn);
         abortBtn = undefined;
     }
 
-    if (!document.getElementById("extractBtn")){
+    if (!document.getElementById("extractBtn")) {
         extractGroup.insertAdjacentHTML('beforeend','<button id="extractBtn" class="btn btn-warning flex-fill" '+state+'><i class="bi bi-file-earmark-zip-fill"></i> Extract and save as ZIP</button>');
         extractBtn = document.getElementById("extractBtn")
         extractBtn.addEventListener("click", extractFiles, false);
@@ -98,12 +98,12 @@ function addExtractButton(state) {
 }
 
 function addAbortButton() {
-    if (document.getElementById("extractBtn")){
+    if (document.getElementById("extractBtn")) {
         extractGroup.removeChild(extractBtn);
         extractBtn = undefined;
     }
 
-    if (!document.getElementById("abortBtn")){
+    if (!document.getElementById("abortBtn")) {
         extractGroup.insertAdjacentHTML('beforeend','<button id="abortBtn" class="btn btn-danger flex-fill"><i class="bi bi-x-octagon-fill"></i></i> Abort</button>');
         abortBtn = document.getElementById("abortBtn")
         abortBtn.addEventListener("click", abortExtraction, false);
@@ -179,7 +179,7 @@ function extractFiles() {
     }
 
     addAbortButton();
-    if (document.getElementById("langSelect")){
+    if (document.getElementById("langSelect")) {
         langSelect.disabled = true;
     }
 

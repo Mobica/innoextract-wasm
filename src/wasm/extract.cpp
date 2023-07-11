@@ -488,7 +488,7 @@ std::string extractor::extract(const std::string& list_json) {
 
         uint64_t output_size = copy_data(file_source, outputs);
 
-        if(aborted) { // copy_data is the most likely function to be in while execution is being aborted
+        if (aborted) { // copy_data is the most likely function to be in while execution is being aborted
           log_info << "Extraction aborted";
           abort_zip();
 
@@ -620,7 +620,7 @@ void extractor::save_zip() {
   emjs::close();
 }
 
-void extractor::abort_zip(void) {
+void extractor::abort_zip() {
   zs_free(output_zip_stream_);
   emjs::abort_down();
 }
