@@ -1,3 +1,5 @@
+const content = document.getElementById("content");
+const footer = document.getElementById("footer");
 const fileBrowser = document.getElementById("fileBrowser");
 const addBtn = document.getElementById("addBtn");
 const removeBtn = document.getElementById("removeBtn");
@@ -11,9 +13,11 @@ var extractBtn;
 var abortBtn;
 
 //Options
+const logsButton = document.getElementById("logsButton");
 const enableDebugOpt = document.getElementById("optsEnableDebug");
 const excludeTempsOpt = document.getElementById("optsExcludeTemporary");
 const extractionLanguageFilterOpt = document.getElementById("extractionLanguageFilterOptions");
+const logsToFileOpt = document.getElementById("optsLogsToFile");
 
 //File list
 const emptyListInfo = document.getElementById("emptyListInfo");
@@ -162,6 +166,14 @@ function updateReloadBadge() {
         }
     });
 }
+
+logsToFileOpt.addEventListener("change", updateLogsButton, false);
+
+function updateLogsButton() {
+    logsButton.disabled = logsToFileOpt.checked
+}
+
+updateLogsButton();
 
 function createOptionsJson() {
     var optionsJson = new Object();
@@ -374,4 +386,48 @@ function uncollapse(id, button) {
         button.style.fontWeight = "bold";
         button.style.color = "var(--bs-link-hover-color)";
     }
+    hideOverflow();
 }
+
+function openOptsIfChecked() {
+    var opts = document.getElementsByClassName("form-check-input");
+    var collapsible = document.getElementById("collapseOpts");
+
+    Array.from(opts).forEach((opt) => {
+        if (opt.checked) {
+            collapsible.classList.add("show");
+        }
+    });
+}
+
+footer.addEventListener("transitionstart", () => {
+    hideOverflow();
+    updateFooter();
+});
+
+footer.addEventListener("transitionend", () => {
+    updateFooter();
+});
+
+content.addEventListener("transitionstart", () => {
+    hideOverflow();
+});
+
+function updateFooter() {
+    content.style.minHeight = "calc(100vh - " + footer.offsetHeight + "px)";
+}
+
+var overflowTimer
+function hideOverflow() {
+    document.body.style.overflow = "hidden";
+
+    clearTimeout(overflowTimer);
+    overflowTimer = setTimeout(() => {
+        document.body.style.overflow = "auto";
+    }, 600);
+}
+
+openOptsIfChecked();
+updateFooter();
+
+document.body.style.opacity = 1;
