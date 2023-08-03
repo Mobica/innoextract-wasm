@@ -1,7 +1,7 @@
 #con {
     font-family: monospace;
     font-size: small;
-    overflow: scroll;
+    overflow-y: scroll;
     height: 250px;
     resize: vertical;
 }
@@ -10,8 +10,12 @@
     margin: 0px;
 }
 
-.err {
+.error {
     color: #dc3545;
+}
+
+.debug {
+    color: #808080;
 }
 
 #langSelect {
@@ -43,4 +47,12 @@
 body {
     transition: opacity 0.25s;
     opacity: 0;
+}
+
+body, * {
+    transition: background-color 0.5s, color 0.2s;
+}
+
+#reloadBadge, #cookieBadge, #logLinesBadge {
+    display: none;
 }
