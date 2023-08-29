@@ -19,7 +19,6 @@ ${TEST_FILE}           ${file_4mb}
 ${EXTRACTION_TIMEOUT}    30s
 
 
-
 *** Test Cases ***
 Extract test file
     [documentation]  Extract smoke file successfully
