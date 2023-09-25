@@ -33,6 +33,9 @@
 #include "util/load.hpp"
 #include "util/log.hpp"
 
+#ifdef WASM_BUILD
+#include "wasm/emjs.h"
+#endif //WASM_BUILD
 namespace stream {
 
 namespace {
@@ -80,10 +83,12 @@ void slice_reader::seek(size_t slice) {
 }
 
 bool slice_reader::open_file(const path_type & file) {
-	
+
+#ifndef WASM_BUILD
 	if(!boost::filesystem::exists(file)) {
 		return false;
 	}
+#endif //WASM_BUILD
 	
 	log_info << "Opening \"" << color::cyan << file.string() << color::reset << '"';
 	
@@ -158,9 +163,9 @@ std::string slice_reader::slice_filename(const std::string & basename, size_t sl
 }
 
 bool slice_reader::open_file_case_insensitive(const path_type & dirname, const path_type & filename) {
-	
+	path_type dir_name = dirname.empty()?".":dirname;
 	boost::filesystem::directory_iterator end;
-	for(boost::filesystem::directory_iterator i(dirname); i != end; ++i) {
+	for(boost::filesystem::directory_iterator i(dir_name); i != end; ++i) {
 		path_type actual_filename = i->path().filename();
 		if(boost::iequals(actual_filename.string(), filename.string()) && open_file(dirname / actual_filename)) {
 			return true;

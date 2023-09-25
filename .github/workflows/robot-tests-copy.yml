@@ -1,0 +1,23 @@
+name: robot-tests-copy
+on:
+  workflow_dispatch:
+    inputs:
+      testTag:
+        description: 'Test tags'
+        required: true
+        default: 'smoke'
+        type: choice
+        options:
+        - smoke
+        - something else
+        - 3rd choice
+
+jobs:
+
+  build:
+
+    runs-on: rnd201
+
+    steps:
+    - name: Git config
+      run:  echo ${{ inputs.testTag }}

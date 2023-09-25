@@ -1,0 +1,62 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "wasm-main" ]
+  pull_request:
+    branches: [ "wasm-main" ]
+
+jobs:
+
+  build:
+
+    runs-on: rnd201
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Delete old innoextract-wasm Docker containers and images
+      run: |
+        # Delete docker volumes that are not in use by any containers
+        yes | docker volume prune
+        
+        # Check if container exist and delete
+        if [ "$(docker ps -a | grep -c innoextract-wasm)" -gt 0 ]; then
+            docker container rm $(docker container ls -a | grep 'innoextract-wasm' | awk '{print $1}')
+            echo "[---- Deleted container innoextract-wasm]"
+        else
+          echo "[---- Container with name: innoextract-wasm  doesn't exist. ]"
+        fi
+        
+        # Check if imgage exist and delete
+        if [ "$(docker images | grep -c innoextract-wasm)" -gt 0 ]; then
+            docker rmi innoextract-wasm
+            echo "[---- Deleted image innoextract-wasm]"
+        else
+          echo "[---- Image with name: innoextract-wasm  doesn't exist. ]"
+        fi
+
+    - name: Build innoextract-wasm Docker image
+      run: |
+        # Build innoextract-wasm image
+        docker build . --file Dockerfile --tag innoextract-wasm
+        
+    - name: Run innoextract-wasm
+      run: |
+        # Run innoextract-wasm
+        docker run innoextract-wasm
+    
+    - name: Delete files in old /home/runner/build folder
+      run: |
+        # Delete files in /build folder.
+        if [ "$(ls /home/runner/build | wc -l)" -gt 0 ]; then
+            rm -r /home/runner/build/*
+            echo "[---- All files and folders remover in /home/runner/build ]"
+        else
+          echo "[---- Folder /home/runner/build empty. No actions needed. ]"
+        fi
+        
+    - name: Copy build page from docker to /home/runner/build
+      run: |
+        # Copy files from innoextract-wasm docker container to /home/runner/build
+        docker cp $(docker container ls -a | grep 'innoextract-wasm' | awk '{print $1}'):/root/innoextract/build /home/runner
+      
