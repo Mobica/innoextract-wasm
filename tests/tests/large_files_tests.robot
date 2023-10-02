@@ -16,7 +16,7 @@ Test Teardown    Clean After Test
 *** Variables ***
 ${TEST_FILE}           ${file_1}
 ${EXTRACTION_TIMEOUT}    ${file_1}[extraction_time]
-${PATH_TO_PATERRN_FOLDER}    /tmp/TestArtifacts/ReturnToCastleWolfenstein_pattern  
+${PATH_TO_PATERRN_FOLDER}    ${file_1}[pattern_path]  
 
 *** Test Cases ***
 Extract and validate a large test file
