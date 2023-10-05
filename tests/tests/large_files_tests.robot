@@ -16,7 +16,7 @@ Test Teardown    Clean After Test
 *** Variables ***
 ${TEST_FILE}           ${file_1}
 ${EXTRACTION_TIMEOUT}    ${file_1}[extraction_time]
-${PATH_TO_PATERRN_FOLDER}    ${file_1}[pattern_path]  
+${PATH_TO_PATTERN_FOLDER}    ${file_1}[pattern_path]  
 
 *** Test Cases ***
 Extract and validate a large test file
@@ -66,7 +66,7 @@ Extract and compare directory and files tree
     Unzip File    ${downloaded_file_path_new_name}
     ${unzipped_new_folder_name}=     Remove Spaces From Directory Name   ${DOWNLOAD_PATH}${TEST_FILE}[archive_name]
     # Validate output
-    Compare Directory And Files Tree    ${unzipped_new_folder_name}    ${PATH_TO_PATERRN_FOLDER}
+    Compare Directory And Files Tree    ${unzipped_new_folder_name}    ${PATH_TO_PATTERN_FOLDER}
 
 Extract and compare files checksum
     [documentation]  Extract and compare files checksums and sizes
@@ -91,6 +91,5 @@ Extract and compare files checksum
     # Unzip extracted ZIP file
     Validate and Unzip Test File    ${downloaded_file_path_new_name}
     ${unzipped_new_folder_name}=     Remove Spaces From Directory Name   ${DOWNLOAD_PATH}${TEST_FILE}[archive_name]
-    Log To Console    unzipped new folder name: ${unzipped_new_folder_name}
     # Validate output
-    Compare Cheksum For Each File   ${unzipped_new_folder_name}    ${PATH_TO_PATERRN_FOLDER}
+    Compare Cheksum For Each File   ${unzipped_new_folder_name}    ${PATH_TO_PATTERN_FOLDER}

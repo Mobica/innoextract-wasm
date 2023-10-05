@@ -121,8 +121,6 @@ Remove Spaces From Directory Name
 Compare Directory And Files Tree
     [Arguments]    ${path_to_unzipped_folder}    ${path_to_unzipped_folder_pattern}
     ${rc}    ${output}    Run And Return Rc And Output   diff -qr ${path_to_unzipped_folder} ${path_to_unzipped_folder_pattern}
-    Log To Console    rc: ${rc}
-    Log To Console    output: ${output}
     Should Be Equal As Integers    ${rc}    0
     Log To Console    Directory tree is the same as pattern: OK.
 
@@ -131,7 +129,5 @@ Compare Directory And Files Tree
     Log To Console    Checking checksums for    ${path_to_unzipped_folder}
     # rclone is a programm comparing file sizes and hashes for each file in a given path
     ${rc}    ${output}    Run And Return Rc And Output    rclone check ${path_to_unzipped_folder_pattern} ${path_to_unzipped_folder}
-    Log To Console    rc: ${rc}
-    Log To Console    otuput: ${output}
     Should Be Equal As Integers    ${rc}    0
     Log To Console    Checksums and file sizes are the same as pattern: OK.
