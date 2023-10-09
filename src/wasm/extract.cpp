@@ -695,7 +695,7 @@ std::string extractor::extract(const std::string& list_json) {
     fs::remove_all(output_dir);
   }
 
-  std::string zipfile = output_dir + ".zip";
+  const std::string zipfile = output_dir + ".zip";
   emjs::open(zipfile.c_str(), "wb", total_size_);
   emscripten_sleep(100);
   output_zip_stream_ = zs_init(nullptr);
@@ -931,7 +931,7 @@ uint64_t extractor::copy_data(const stream::file_reader::pointer& source,
     char buffer[8192 * 10];
     const auto buffer_size = std::streamsize(boost::size(buffer));
     const auto extracted_n = source->read(buffer, buffer_size).gcount();
-    if (extracted_n >= 0) {
+    if (extracted_n > 0 || (source->eof() && !source->bad())) {
       for (auto output : outputs) {
         bool success = output->write(buffer, extracted_n);
         if (!success) {
