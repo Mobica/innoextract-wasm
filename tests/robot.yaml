@@ -6,6 +6,12 @@ tasks:
   Run all tasks:
     shell: python -m robot --report NONE --outputdir output --logtitle "Task log" tests/*
 
+  Install tools for linux:
+    shell: ./linux_env.sh
+  
+  Install tools for windows:
+    shell: ./windows_env.bat
+
 condaConfigFile: conda.yaml
 
 environmentConfigs:
