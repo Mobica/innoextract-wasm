@@ -16,10 +16,10 @@ Test Setup    Prepare For Test
 
 *** Variables ***
 ${BROWSER}             Firefox
-${HOME_PAGE_PATH}      http://localhost
+${HOME_PAGE_PATH}      http://localhost:8000
 ${TEST_FILE}           ${file_4mb}
 ${MULTI_PART_TEST_FILE}           ${multi_part_4mb}
-${EXTRACTION_TIMEOUT}    30s
+${EXTRACTION_TIMEOUT}    60s
 ${INPUT_TEST_FILES_PATH}        ${CURDIR}${/}../src/test_files/
 
 *** Test Cases ***

@@ -23,9 +23,10 @@ Click Remove Button
     Log  Click Remove Button  console=yes
 
 Click Load Button
+    Wait Until Element Is Enabled    ${StartButton}
     Click Element  ${StartButton}
     Log  Click Start Button  console=yes
-    Wait Until Element Is Enabled    ${StartButton}
+    #Wait Until Element Is Enabled    ${StartButton}
     
 Log Console Is Visible
     Wait Until Element Is Visible   ${CollapseLogsButton}
