@@ -30,4 +30,7 @@ LogsConsole = '//div[@id="collapseLogs"]'
 
 # Web site footer sections
 AboutButton = '//a[contains(text(),"About")]'
-InnoextractText = '//a[contains(text(),"Innoextract-wasm")]'
+AboutSubpageText = '//a[contains(text(),"Innoextract-wasm")]'
+KnownIssuesButton = '//a[contains(text(),"issues")]'
+OpenSourceTechnologiesButton = '//a[contains(text(),"Open source technologies")]'
+ChangeThemeButton = '//*[@id="themeSwitch"]'
