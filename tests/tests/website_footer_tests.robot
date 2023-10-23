@@ -16,39 +16,39 @@ Test Teardown       Clean After Test
 
 *** Test Cases ***
 Find and open About page
-    [tags]  WebsiteFooter
-    [documentation]  Click button About and check if subpage is opened
+    [Documentation]    Click button About and check if subpage is opened
+    [Tags]    websitefooter
     Click Element    ${AboutButton}
-    Wait Until Element Is Visible    ${AboutSubpageText}    
+    Wait Until Element Is Visible    ${AboutSubpageText}
 
 Find and open Known Issues page
-    [tags]  WebsiteFooter
-    [documentation]  Click button Known Issues and check if subpage is opened
+    [Documentation]    Click button Known Issues and check if subpage is opened
+    [Tags]    websitefooter
     Click Element    ${KnownIssuesButton}
     Wait Until Element Is Visible    ${KnownIssuesText}
 
 Find and open Open source technologies page
-    [documentation]  Click button Open source technologies and check if subpage is opened
-    [tags]  WebsiteFooter
+    [Documentation]    Click button Open source technologies and check if subpage is opened
+    [Tags]    websitefooter
 
     Click Element    ${OpenSourceTechnologiesButton}
     Wait Until Element Is Visible    ${OpenSourceTechnologiesText}
 
 Find and open Github repository page
-    [documentation]  Click button Github repository and check if subpage is opened
-    [tags]  WebsiteFooter
+    [Documentation]    Click button Github repository and check if subpage is opened
+    [Tags]    websitefooter
 
     Click Element    ${GithubRepository}
     Switch Window    new
     Location Should Be    https://github.com/Mobica/innoextract-wasm
 
 Find and open Dark mode page, check background is changed
-    [documentation]  Click button Dark mode and check if background is changed to dark, then click Light mode and change is background colour is changed to ligh
-    [tags]  WebsiteFooter
+    [Documentation]    Click button Dark mode and check if background is changed to dark, then click Light mode and change is background colour is changed to ligh
+    [Tags]    websitefooter
 
     Click Element    ${ChangeThemeButton}
     ${currentTheme}    Get Element Attribute    tag:html    data-bs-theme
     Should Be Equal As Strings    ${currentTheme}    dark
     Click Element    ${ChangeThemeButton}
-    ${variable}    Get Element Attribute    tag:html    data-bs-theme
-    Should Be Equal As Strings    ${variable}    light
+    ${currentTheme}    Get Element Attribute    tag:html    data-bs-theme
+    Should Be Equal As Strings    ${currentTheme}    light
