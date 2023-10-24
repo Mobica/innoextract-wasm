@@ -16,7 +16,7 @@ Test Teardown       Clean After Test
 
 *** Test Cases ***
 Find and verify header properties
-    [Documentation]    Find and verify header namre and image source
+    [Documentation]    Find and verify header name and image source
     [Tags]    websiteheader
 
     Page Should Contain Image    img/icon_64.png
