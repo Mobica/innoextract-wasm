@@ -1,7 +1,7 @@
 *** Settings ***
 Library    OperatingSystem
 Library    SeleniumLibrary
-Variables  ../locators/locators.py
+Variables  src/page_objects/locators/locators.py
 
 *** Keywords ***
 Ubuntu Upload Test File
@@ -20,3 +20,8 @@ File Select Is Visible
     ${current_window_id}    OperatingSystem.Run    xdotool getactivewindow
     ${current_window_title}    OperatingSystem.Run    xdotool getwindowname ${current_window_id}
     Should Be Equal As Strings    ${current_window_title}    File Upload
+
+Browser Is Selected
+    ${current_window_id}    OperatingSystem.Run    xdotool getactivewindow
+    ${current_window_title}    OperatingSystem.Run    xdotool getwindowname ${current_window_id}
+    Should Be Equal As Strings    ${current_window_title}    Innoextract WASM — Mozilla Firefox

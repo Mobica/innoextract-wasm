@@ -3,23 +3,23 @@ Documentation  Multiple Files Tests
 Library        OperatingSystem
 Library        SeleniumLibrary
 Library        String
-Resource       ../src/page_objects/keywords/common.robot
-Resource       ../src/page_objects/keywords/home_page.robot
-Resource       ../src/test_files/test_files.resource
-Resource       ../src/page_objects/keywords/ubuntu.robot
-Library        ../src/page_objects/libraries/browser_lib.py
+Resource       src/page_objects/keywords/common.robot
+Resource       src/page_objects/keywords/home_page.robot
+Resource       src/test_files/test_files.resource
+Resource       src/page_objects/keywords/ubuntu.robot
+Library        src/page_objects/libraries/browser_lib.py
 Library        Collections
-Variables      ../src/page_objects/locators/locators.py
-Variables      ../src/test_files/test_files.yaml
+Variables      src/page_objects/locators/locators.py
+Variables      src/test_files/test_files.yaml
 Suite Setup   Prepare Test Environment
 Test Setup    Prepare For Test
 
 *** Variables ***
 ${BROWSER}             Firefox
-${HOME_PAGE_PATH}      http://localhost:8000
+${HOME_PAGE_PATH}      http://localhost
 ${TEST_FILE}           ${file_4mb}
 ${MULTI_PART_TEST_FILE}           ${multi_part_4mb}
-${EXTRACTION_TIMEOUT}    60s
+${EXTRACTION_TIMEOUT}    30s
 ${INPUT_TEST_FILES_PATH}        ${CURDIR}${/}../src/test_files/
 
 *** Test Cases ***
@@ -83,6 +83,7 @@ Extract Multiple Files
         Wait Until Keyword Succeeds    5    1    Click Add Files Button
         Ubuntu Upload Test File  ${test_file_path}
         Wait Until Element Is Visible    xpath://label[contains(text(),"${test_file}[name]")]
+        Wait Until Keyword Succeeds    5    1    Browser Is Selected
     END
     Click Load Button
     Click Extract And Save Button    ${EXTRACTION_TIMEOUT}

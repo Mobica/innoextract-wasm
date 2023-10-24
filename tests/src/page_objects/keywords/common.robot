@@ -2,13 +2,13 @@
 Library    OperatingSystem
 Library    SeleniumLibrary
 Library    String
-Library    ../libraries/browser_lib.py
+Library    libraries/browser_lib.py
 Library    Process
 Library    Collections
-Variables  ../locators/locators.py
+Variables  src/page_objects/locators/locators.py
 
 *** Variables ***
-${HOME_PAGE_PATH}      http://localhost:8000
+${HOME_PAGE_PATH}      http://localhost
 ${BROWSER}             Firefox
 
 *** Keywords ***
@@ -28,7 +28,7 @@ Clean After Test
 
 Opening Browser
     [Arguments]    ${site_url}    ${browser}    ${profile}
-    Open Browser    ${site_url}    ${browser}    ff_profile_dir=${profile}    service_log_path=./output/geckodriver-1.log
+    Open Browser    ${site_url}    ${browser}    ff_profile_dir=${profile}
     Wait Until Element Is Visible    ${InputTitle}    timeout=5
     Log    URL open: ${site_url}    console=yes
 
@@ -49,7 +49,7 @@ Rename Downloaded Zip File Name
 Check If Zip File Is Not Empty
     [Arguments]    ${path}    ${test_file}
     ${file_path}    Set Variable    ${download_path}${test_file}[archive_name].zip
-    Wait Until Created    ${file_path}    timeout=30
+    Wait Until Created    ${file_path}    timeout=15
     Sleep    5s
     File Should Not Be Empty    ${file_path}
     Log To Console    File created and is not empty - ${file_path}

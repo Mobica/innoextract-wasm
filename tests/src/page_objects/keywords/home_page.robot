@@ -1,9 +1,9 @@
 *** Settings ***
 Library  SeleniumLibrary
-Library  ../libraries/custom.py
+Library  libraries/custom.py
 Library    OperatingSystem
 Library    String
-Variables  ../locators/locators.py
+Variables  src/page_objects/locators/locators.py
 Resource    src/page_objects/keywords/ubuntu.robot
 
 *** Keywords ***
@@ -11,7 +11,6 @@ Click Add Files Button
     Click Element  ${AddFilesButton}
     File Select Is Visible
     Log  Click Add Files Button  console=yes
-
 
 Click Extract And Save Button
     [Arguments]    ${timeout}
@@ -29,7 +28,6 @@ Click Load Button
     Wait Until Element Is Enabled    ${StartButton}
     Click Element  ${StartButton}
     Log  Click Start Button  console=yes
-    #Wait Until Element Is Enabled    ${StartButton}
     
 Log Console Is Visible
     Wait Until Element Is Visible   ${CollapseLogsButton}
