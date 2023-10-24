@@ -80,12 +80,13 @@ Extract Multiple Files
 
     FOR    ${file}    IN    @{file_list}
         ${test_file_path}    Catenate    SEPARATOR=    ${test_file}[path]/${file}
-        Click Add Files Button
+        Wait Until Keyword Succeeds    5    1    Click Add Files Button
         Ubuntu Upload Test File  ${test_file_path}
+        Wait Until Element Is Visible    xpath://label[contains(text(),"${test_file}[name]")]
     END
     Click Load Button
     Click Extract And Save Button    ${EXTRACTION_TIMEOUT}
-    
+
 Clean Input List
     ${radio_buttons_amount}    Get Element Count    ${RadioButton}
     FOR    ${button}    IN RANGE    1    ${radio_buttons_amount+1}

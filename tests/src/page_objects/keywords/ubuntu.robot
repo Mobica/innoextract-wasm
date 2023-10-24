@@ -15,3 +15,8 @@ Ubuntu Upload Test File
     OperatingSystem.Run    xdotool key KP_Enter
     OperatingSystem.Run    xdotool --window %1
     Wait Until Element Is Enabled   ${StartButton}
+
+File Select Is Visible
+    ${current_window_id}    OperatingSystem.Run    xdotool getactivewindow
+    ${current_window_title}    OperatingSystem.Run    xdotool getwindowname ${current_window_id}
+    Should Be Equal As Strings    ${current_window_title}    File Upload
