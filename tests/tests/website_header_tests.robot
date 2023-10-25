@@ -19,5 +19,5 @@ Find and verify header properties
     [Documentation]    Find and verify header name and image source
     [Tags]    websiteheader
 
-    Page Should Contain Image    img/icon_64.png
-    Page Should Contain Element    //span[contains(text(),"Innoextract wasm")]
+    Page Should Contain Image    ${HeaderIcon}
+    Page Should Contain Element    ${HeaderText}
