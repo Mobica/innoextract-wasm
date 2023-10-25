@@ -11,8 +11,6 @@ Library        ../src/page_objects/libraries/browser_lib.py
 Library        Collections
 Variables      ../src/page_objects/locators/locators.py
 Variables      ../src/test_files/test_files.yaml
-Suite Setup   Prepare Test Environment
-Test Setup    Prepare For Test
 
 *** Variables ***
 ${BROWSER}             Firefox

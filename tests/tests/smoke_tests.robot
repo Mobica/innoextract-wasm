@@ -8,9 +8,6 @@ Resource       ../src/page_objects/keywords/home_page.robot
 Resource       ../src/page_objects/keywords/ubuntu.robot
 Resource       ../src/test_files/test_files.resource
 Library        ../src/page_objects/libraries/browser_lib.py
-Suite Setup   Prepare Test Environment
-Test Setup    Prepare For Test
-Test Teardown    Clean After Test
 
 *** Variables ***
 ${TEST_FILE}           ${file_4mb}
