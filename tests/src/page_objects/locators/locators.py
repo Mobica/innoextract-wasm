@@ -28,3 +28,16 @@ LogsConsole = '//div[@id="collapseLogs"]'
 # Popup notifications
 # TODO add scenarios for Popup notifications
 
+# Website footer sections
+AboutButton = '//a[contains(text(),"About")]'
+AboutSubpageText = '//div[@id="footer-group"]/div[@id="about"]'
+KnownIssuesButton = '//a[contains(text(),"issues")]'
+KnownIssuesText = '//div[@id="footer-group"]/div[@id="issues"]'
+OpenSourceTechnologiesButton = '//a[contains(text(),"Open source technologies")]'
+OpenSourceTechnologiesText = "//div[@id='techs']/ul"
+GithubRepository = '//div[@id="footer"]//a[@class="collapse-name"][contains(text(),"Github")]'
+ChangeThemeButton = 'id:themeSwitch'
+
+# Website header section
+HeaderIcon = 'img/icon_64.png'
+HeaderText = '//span[contains(text(),"Innoextract wasm")]'

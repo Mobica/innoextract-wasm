@@ -1,27 +1,29 @@
 *** Settings ***
-Library    OperatingSystem
-Library    SeleniumLibrary
-Library    String
-Library    libraries/browser_lib.py
-Library    Process
-Library    Collections
-Variables  src/page_objects/locators/locators.py
+Library         OperatingSystem
+Library         SeleniumLibrary
+Library         String
+Library         libraries/browser_lib.py
+Library         Process
+Library         Collections
+Variables       src/page_objects/locators/locators.py
+
 
 *** Variables ***
-${HOME_PAGE_PATH}      http://localhost
-${BROWSER}             Firefox
+${HOME_PAGE_PATH}       http://localhost
+${BROWSER}              Firefox
+
 
 *** Keywords ***
 Prepare Test Environment
-    Log To Console    Cleaning ${CURDIR}/../../../output 
-    Remove Files   ${CURDIR}/../../../output/selenium*    ${CURDIR}/../../../output/geckodriver*
+    Log To Console    Cleaning ${CURDIR}/../../../output
+    Remove Files    ${CURDIR}/../../../output/selenium*    ${CURDIR}/../../../output/geckodriver*
     Remove Directory    ${CURDIR}/../../../output/tmp    recursive=${True}
 
 Prepare For Test
-    ${DOWNLOAD_PATH}  Create Unique Download Path
+    ${DOWNLOAD_PATH}    Create Unique Download Path
     Set Global Variable    ${DOWNLOAD_PATH}
-    ${profile}  create_profile  ${DOWNLOAD_PATH}
-    Opening Browser  ${HOME_PAGE_PATH}  ${browser}  ${profile}
+    ${profile}    create_profile    ${DOWNLOAD_PATH}
+    Opening Browser    ${HOME_PAGE_PATH}    ${browser}    ${profile}
 
 Clean After Test
     Close Browser
@@ -33,14 +35,14 @@ Opening Browser
     Log    URL open: ${site_url}    console=yes
 
 Create Unique Download Path
-    ${random_string}    Generate Random String    20   
+    ${random_string}    Generate Random String    20
     # ${path}    Catenate    SEPARATOR=/    ${CURDIR}/../../../output/tmp    ${random_string}/
     ${path}    Catenate    SEPARATOR=/    /tmp/output    ${random_string}/
-    Log  \nUnique download path created: ${path}    console=yes
-    [return]    ${path}
+    Log    \nUnique download path created: ${path}    console=yes
+    RETURN    ${path}
 
 Rename Downloaded Zip File Name
-    [Arguments]    ${path}    ${test_file}    ${new_name}=innout    ${postfix}=0   ${new_file_extenion}=.zip
+    [Arguments]    ${path}    ${test_file}    ${new_name}=innout    ${postfix}=0    ${new_file_extenion}=.zip
     ${file_name}    Catenate    SEPARATOR=    ${new_name}    ${postfix}    ${new_file_extenion}
     Copy File    ${path}${test_file}[archive_name].zip    ${path}${file_name}
     Wait Until Created    ${path}${file_name}
@@ -64,37 +66,35 @@ Check If Downloaded Zip File Is Not Empty
 Check If JS Console Does Not Contain Errors
     # For firefox logs must be routed to geckodriver.log
     # See profile settings - fp.set_preference("bdevtools.console.stdout.content", True)
-    Log to Console   Check if there are no errors in JS console
+    Log to Console    Check if there are no errors in JS console
     File Should Exist    ${CURDIR}/../../../output/geckodriver-1.log
-    ${file}=    Get File    ${CURDIR}/../../../output/geckodriver-1.log
-    @{file_lines}=    Split To Lines    ${file}
-    FOR    ${line}   IN    @{file_lines}
+    ${file}    Get File    ${CURDIR}/../../../output/geckodriver-1.log
+    @{file_lines}    Split To Lines    ${file}
+    FOR    ${line}    IN    @{file_lines}
         Should Not Contain    ${line}    ERROR
         Should Not Contain    ${line}    Error
-        ${error}=    String.Get Regexp Matches    ${line}    console\.error: (.*?)$    1
+        ${error}    String.Get Regexp Matches    ${line}    console\.error: (.*?)$    1
         IF    $error
-           ${error_content}=    Set Variable    ${error[0]}
-           IF     $error_content!='({})'
-               Fail
-            END
+            ${error_content}    Set Variable    ${error[0]}
+            IF    $error_content!='({})'    Fail
         END
     END
 
 Validate ZIP File
     [Arguments]    ${downloaded_file_path}
-    Check If Downloaded Zip File Is Not Empty   ${downloaded_file_path}
-    ${rc}    ${output}    Run And Return Rc And Output   7za t ${downloaded_file_path}
+    Check If Downloaded Zip File Is Not Empty    ${downloaded_file_path}
+    ${rc}    ${output}    Run And Return Rc And Output    7za t ${downloaded_file_path}
     Log To Console    output: ${output}
     Should Be Equal As Integers    ${rc}    0
-    Should Not Contain	${output}	FAIL
+    Should Not Contain    ${output}    FAIL
     Log To Console    ZIP file validated: OK!
 
 Unzip File
     [Arguments]    ${downloaded_file_path}
-    ${rc}    ${output}    Run And Return Rc And Output   7za x ${downloaded_file_path} -o${DOWNLOAD_PATH}
+    ${rc}    ${output}    Run And Return Rc And Output    7za x ${downloaded_file_path} -o${DOWNLOAD_PATH}
     Log To Console    output: ${output}
     Should Be Equal As Integers    ${rc}    0
-    Should Not Contain	${output}	FAIL
+    Should Not Contain    ${output}    FAIL
     Log To Console    ZIP file extracted successfully!
 
 Validate and Unzip Test File
@@ -113,14 +113,15 @@ Remove Spaces From File Name
 Remove Spaces From Directory Name
     [Arguments]    ${downloaded_file_path}
     ${downloaded_file_path_new_name}    Replace String    ${downloaded_file_path}    ${space}    ${empty}
-    Copy Directory   ${downloaded_file_path}    ${downloaded_file_path_new_name}
+    Copy Directory    ${downloaded_file_path}    ${downloaded_file_path_new_name}
     Wait Until Created    ${downloaded_file_path_new_name}
     Log To Console    Removed spaces from folder name: ${downloaded_file_path_new_name}
     RETURN    ${downloaded_file_path_new_name}
 
 Compare Directory And Files Tree
     [Arguments]    ${path_to_unzipped_folder}    ${path_to_unzipped_folder_pattern}
-    ${rc}    ${output}    Run And Return Rc And Output   diff -qr ${path_to_unzipped_folder} ${path_to_unzipped_folder_pattern}
+    ${rc}    ${output}    Run And Return Rc And Output
+    ...    diff -qr ${path_to_unzipped_folder} ${path_to_unzipped_folder_pattern}
     Should Be Equal As Integers    ${rc}    0
     Log To Console    Directory tree is the same as pattern: OK.
 
@@ -128,6 +129,7 @@ Compare Directory And Files Tree
     [Arguments]    ${path_to_unzipped_folder}    ${path_to_unzipped_folder_pattern}
     Log To Console    Checking checksums for    ${path_to_unzipped_folder}
     # rclone is a programm comparing file sizes and hashes for each file in a given path
-    ${rc}    ${output}    Run And Return Rc And Output    rclone check ${path_to_unzipped_folder_pattern} ${path_to_unzipped_folder}
+    ${rc}    ${output}    Run And Return Rc And Output
+    ...    rclone check ${path_to_unzipped_folder_pattern} ${path_to_unzipped_folder}
     Should Be Equal As Integers    ${rc}    0
     Log To Console    Checksums and file sizes are the same as pattern: OK.

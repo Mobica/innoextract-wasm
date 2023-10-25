@@ -1,7 +1,7 @@
 *** Settings ***
-Library    OperatingSystem
-Library    SeleniumLibrary
-Variables  src/page_objects/locators/locators.py
+Library         OperatingSystem
+Library         SeleniumLibrary
+Variables       src/page_objects/locators/locators.py
 
 *** Variables ***
 &{page_name}
@@ -11,7 +11,7 @@ Variables  src/page_objects/locators/locators.py
 
 *** Keywords ***
 Ubuntu Upload Test File
-    [Arguments]  ${file_path}
+    [Arguments]    ${file_path}
     OperatingSystem.Run    xdotool key ctrl+l
     Sleep    2s
     OperatingSystem.Run    xdotool type ${file_path}
