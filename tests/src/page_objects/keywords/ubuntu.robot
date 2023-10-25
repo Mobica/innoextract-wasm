@@ -3,6 +3,12 @@ Library    OperatingSystem
 Library    SeleniumLibrary
 Variables  src/page_objects/locators/locators.py
 
+*** Variables ***
+&{page_name}
+...    Firefox=Innoextract WASM — Mozilla Firefox
+...    Chrome=Innoextract WASM - Google Chrome
+
+
 *** Keywords ***
 Ubuntu Upload Test File
     [Arguments]  ${file_path}
@@ -24,4 +30,4 @@ File Select Is Visible
 Browser Is Selected
     ${current_window_id}    OperatingSystem.Run    xdotool getactivewindow
     ${current_window_title}    OperatingSystem.Run    xdotool getwindowname ${current_window_id}
-    Should Be Equal As Strings    ${current_window_title}    Innoextract WASM — Mozilla Firefox
+    Should Be Equal As Strings    ${current_window_title}    &{page_name}[firefox]
