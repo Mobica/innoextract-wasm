@@ -5,7 +5,7 @@ Library         String
 Library         libraries/browser_lib.py
 Library         Process
 Library         Collections
-Variables       locators/locators.py
+Variables       src/page_objects/locators/locators.py
 
 
 *** Variables ***

@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation       Multiple Files Tests
+Documentation  Multiple Files Tests
 
 Library             OperatingSystem
 Library             SeleniumLibrary
@@ -13,9 +13,8 @@ Library             Collections
 Variables           src/page_objects/locators/locators.py
 Variables           src/test_files/test_files.yaml
 
-Suite Setup         Prepare Test Environment
-Test Setup          Prepare For Test
-
+Suite Setup   Prepare Test Environment
+Test Setup    Prepare For Test
 
 *** Variables ***
 ${BROWSER}                  Firefox
@@ -84,8 +83,10 @@ Extract Multiple Files
 
     FOR    ${file}    IN    @{file_list}
         ${test_file_path}    Catenate    SEPARATOR=    ${test_file}[path]/${file}
-        Click Add Files Button
+        Wait Until Keyword Succeeds    5    1    Click Add Files Button
         Ubuntu Upload Test File    ${test_file_path}
+        Wait Until Element Is Visible    xpath://label[contains(text(),"${test_file}[name]")]
+        Wait Until Keyword Succeeds    5    1    Browser Is Selected
     END
     Click Load Button
     Click Extract And Save Button    ${EXTRACTION_TIMEOUT}

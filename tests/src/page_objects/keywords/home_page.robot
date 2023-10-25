@@ -3,13 +3,14 @@ Library         SeleniumLibrary
 Library         libraries/custom.py
 Library         OperatingSystem
 Library         String
-Variables       locators/locators.py
-
+Variables       src/page_objects/locators/locators.py
+Resource        src/page_objects/keywords/ubuntu.robot
 
 *** Keywords ***
 Click Add Files Button
-    Click Element    ${AddFilesButton}
-    Log    Click Add Files Button    console=yes
+    Click Element  ${AddFilesButton}
+    File Select Is Visible
+    Log  Click Add Files Button  console=yes
 
 Click Extract And Save Button
     [Arguments]    ${timeout}
@@ -24,13 +25,13 @@ Click Remove Button
     Log    Click Remove Button    console=yes
 
 Click Load Button
-    Click Element    ${StartButton}
-    Log    Click Start Button    console=yes
     Wait Until Element Is Enabled    ${StartButton}
-
+    Click Element  ${StartButton}
+    Log  Click Start Button  console=yes
+    
 Log Console Is Visible
     Wait Until Element Is Visible    ${CollapseLogsButton}
-    ${variable} Run Keyword And Return Status    Element Should Be Visible    ${LogsTitle}
+    ${variable}    Run Keyword And Return Status    Element Should Be Visible    ${LogsTitle}
     RETURN    ${variable}
 
  Click Show/Hide Logs Button
@@ -40,7 +41,7 @@ Unhide Log Window
     Log    Unhide window with logs
     ${status}   Log Console Is Visible
     IF    ${status} == False    Click Show/Hide Logs Button
-    Wait Until Element Is Visible    xpath=${LogsTitle}
+    Wait Until Element Is Visible    xpath:${LogsTitle}
 
 Check If Log Console Contains
     [Arguments]    ${message}    ${timeout}=5
