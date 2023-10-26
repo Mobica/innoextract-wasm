@@ -1,3 +1,4 @@
+*** Settings ***
 Documentation       Website header Tests
 
 Library             SeleniumLibrary

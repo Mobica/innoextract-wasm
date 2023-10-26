@@ -1,3 +1,4 @@
+*** Settings ***
 Documentation       Multiple Files Tests
 
 Library             OperatingSystem

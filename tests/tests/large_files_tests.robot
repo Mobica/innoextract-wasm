@@ -1,3 +1,4 @@
+*** Settings ***
 Documentation       Smoke Tests
 
 Library             OperatingSystem

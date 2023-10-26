@@ -1,3 +1,4 @@
+*** Settings ***
 Documentation       Website footer Tests
 
 Library             SeleniumLibrary
