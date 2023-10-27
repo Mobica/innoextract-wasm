@@ -28,7 +28,7 @@ LogsConsole = '//div[@id="collapseLogs"]'
 # Popup notifications
 # TODO add scenarios for Popup notifications
 
-# Website footer sections
+# Website footer section
 AboutButton = '//a[contains(text(),"About")]'
 AboutSubpageText = '//div[@id="footer-group"]/div[@id="about"]'
 KnownIssuesButton = '//a[contains(text(),"issues")]'
