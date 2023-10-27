@@ -41,3 +41,24 @@ ChangeThemeButton = 'id:themeSwitch'
 # Website header section
 HeaderIcon = 'img/icon_64.png'
 HeaderText = '//span[contains(text(),"Innoextract wasm")]'
+
+# Options section
+OptionsButton = '//button[@id="optsButton"]'
+OptionsList = '//div[@id="collapseOpts"]'
+EnableDebugSwitch = '//*[@id="optsEnableDebug"]'
+ReloadBadge = '//*[@id="reloadBadge"]'
+ExcludeTemporaryFilesSwitch = '//*[@id="optsExcludeTemporary"]'
+OutputLogsSwitch = '//*[@id="optsLogsToFile"]'
+LogsButton = '//*[@id="logsButton"]'
+
+ExtractionLangFilterOption = '//*[@id="extractionLanguageFilterOptions"]'
+EverythingOption = '//option[@value="all"]'
+OnlyChosenLanguageOption = '//option[@value="lang"]'
+ChosenLanguageAndLangAgnosticOption = '//option[@value="lang-plus-agn"]'
+OnlyLanguageAgnosticOption = '//option[@value="lang-agn"]'
+
+CollisionResolutionOption = 'collisionResolutionOptions'
+OverwriteOption = '//option[@value="overwrite"]'
+RenameOption = '//option[@value="rename"]'
+RenameAllOption = '//option[@value="rename-all"]'
+ErrorOption = '//option[@value="error"]'
