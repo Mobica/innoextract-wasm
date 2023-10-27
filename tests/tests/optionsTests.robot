@@ -53,7 +53,7 @@ Find and open Output logs to a file
     Wait Until Element Is Not Visible    ${ReloadBadge}
 
 Find and open Extraction language filter option
-    [Documentation]    Click    Options, then Extraction language filter option, select every option and verify if Reload Badge appears/disappears
+    [Documentation]    Click Options, then Extraction language filter option, select every option and verify if Reload Badge appears/disappears
     [Tags]    option
 
     Click Element    ${OptionsButton}
