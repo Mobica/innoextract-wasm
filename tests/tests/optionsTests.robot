@@ -74,7 +74,7 @@ Find and open Extraction language filter
     Wait Until Element Is Not Visible    ${ReloadBadge}
 
 Find and open Collision resolution option
-    [Documentation]    Click Option, then Collision resolution option, select every option and verify if Reload Badge appears/disappears
+    [Documentation]    Click Option, then Collision resolution, select every option and verify if Reload Badge appears/disappears
     [Tags]    options
 
     Click Element    ${OptionsButton}
