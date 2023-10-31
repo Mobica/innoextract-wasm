@@ -1,12 +1,14 @@
 *** Settings ***
+Library         Collections
 Library         OperatingSystem
 Library         SeleniumLibrary
 Variables       src/page_objects/locators/locators.py
+Variables       variables.py
 
 *** Variables ***
 &{page_name}
-...    Firefox=Innoextract WASM — Mozilla Firefox
-...    Chrome=Innoextract WASM - Google Chrome
+...    firefox=Innoextract WASM — Mozilla Firefox
+...    chrome=Innoextract WASM - Google Chrome
 
 
 *** Keywords ***
@@ -30,4 +32,5 @@ File Select Is Visible
 Browser Is Selected
     ${current_window_id}    OperatingSystem.Run    xdotool getactivewindow
     ${current_window_title}    OperatingSystem.Run    xdotool getwindowname ${current_window_id}
-    Should Be Equal As Strings    ${current_window_title}    &{page_name}[firefox]
+    ${browser_title_bar}    Get From Dictionary    ${page_name}    ${browser}
+    Should Be Equal As Strings    ${current_window_title}    ${browser_title_bar}

@@ -12,17 +12,13 @@ Library             src/page_objects/libraries/browser_lib.py
 Library             Collections
 Variables           src/page_objects/locators/locators.py
 Variables           src/test_files/test_files.yaml
+Variables           variables.py
 
 Suite Setup   Prepare Test Environment
 Test Setup    Prepare For Test
 
 *** Variables ***
-${BROWSER}                  Firefox
-${HOME_PAGE_PATH}           http://localhost
-${TEST_FILE}                ${file_4mb}
-${MULTI_PART_TEST_FILE}     ${multi_part_4mb}
-${EXTRACTION_TIMEOUT}       30s
-${INPUT_TEST_FILES_PATH}    ${CURDIR}${/}../src/test_files/
+${extraction_timeout}       60s
 
 
 *** Test Cases ***
@@ -33,20 +29,20 @@ Extract two files one by one test
 
     # Adding and Extracting First File
 
-    Extract File    ${TEST_FILE}    ${TEST_FILE}[path]
-    Check If Zip File Is Not Empty    ${DOWNLOAD_PATH}    ${TEST_FILE}
+    Extract File    ${file_4mb}    ${file_4mb}[path]
+    Check If Zip File Is Not Empty    ${DOWNLOAD_PATH}    ${file_4mb}
     # Adding and Extracting Second File
-    Rename Downloaded Zip File Name    ${DOWNLOAD_PATH}    ${TEST_FILE}
+    Rename Downloaded Zip File Name    ${DOWNLOAD_PATH}    ${file_4mb}
     Clean Input List
-    Extract File    ${TEST_FILE}    ${TEST_FILE}[path]
-    Check If Zip File Is Not Empty    ${DOWNLOAD_PATH}    ${TEST_FILE}
+    Extract File    ${file_4mb}    ${file_4mb}[path]
+    Check If Zip File Is Not Empty    ${DOWNLOAD_PATH}    ${file_4mb}
 
 Extract multiple files test
     [Documentation]    Extract file consisting of multiple files
     [Tags]    multiple    performance
     Log To Console    Extracting file consisting of multiple files
-    Extract Multiple Files    ${MULTI_PART_TEST_FILE}    ${DOWNLOAD_PATH}
-    Check If Zip File Is Not Empty    ${DOWNLOAD_PATH}    ${MULTI_PART_TEST_FILE}
+    Extract Multiple Files    ${multi_part_4mb}    ${DOWNLOAD_PATH}
+    Check If Zip File Is Not Empty    ${DOWNLOAD_PATH}    ${multi_part_4mb}
     Clean Input List
 
 Extract all files test
@@ -54,8 +50,8 @@ Extract all files test
     [Tags]    multiple    performance    all
     FOR    ${file}    IN    @{TestFiles}
         Log To Console    Extracting ${file}[name]
-        ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${TEST_FILE}[archive_name].zip
-        ${path}    Set Variable    ${INPUT_TEST_FILES_PATH}${file}[name]
+        ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${file_4mb}[archive_name].zip
+        ${path}    Set Variable    ${input_test_files_path}${file}[name]
         Extract File    ${file}    ${path}    ${file}[extraction_time]
         Wait Until Created    ${downloaded_file_path}
     END
@@ -64,11 +60,11 @@ Extract all files test
 
 *** Keywords ***
 Extract File
-    [Arguments]    ${test_file}    ${test_file_path}    ${EXTRACTION_TIMEOUT}=30s
-    Click Add Files Button
+    [Arguments]    ${test_file}    ${test_file_path}    ${extraction_timeout}=30s
+    Wait Until Keyword Succeeds    5    1    Click Add Files Button
     Ubuntu Upload Test File    ${test_file_path}
     Click Load Button
-    Click Extract And Save Button    ${EXTRACTION_TIMEOUT}
+    Click Extract And Save Button    ${extraction_timeout}
     Wait Until Page Does Not Contain Element    ${ExtractAndSaveDisabledButton}
 
 Extract Multiple Files
@@ -89,7 +85,7 @@ Extract Multiple Files
         Wait Until Keyword Succeeds    5    1    Browser Is Selected
     END
     Click Load Button
-    Click Extract And Save Button    ${EXTRACTION_TIMEOUT}
+    Click Extract And Save Button    ${extraction_timeout}
 
 Clean Input List
     ${radio_buttons_amount}    Get Element Count    ${RadioButton}
