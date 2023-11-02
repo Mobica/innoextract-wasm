@@ -53,4 +53,3 @@ LogsButton = '//span[contains(text(),"Logs")]'
 DownloadLogsButton = '//span[contains(text(),"Download log")]'
 ExtractionLangFilterOption = '//*[@id="extractionLanguageFilterOptions"]'
 CollisionResolutionOption = 'collisionResolutionOptions'
-

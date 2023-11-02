@@ -21,10 +21,8 @@ Find and open Enable Debug Output
 
     Click Element    ${OptionsButton}
     Wait Until Element Is Visible    ${OptionsList}
-
     Click Element    ${EnableDebugSwitch}
     Wait Until Element Is Visible    ${ReloadBadge}
-
     Click Element    ${EnableDebugSwitch}
     Wait Until Element Is Not Visible    ${ReloadBadge}
 
@@ -34,10 +32,8 @@ Find and open Exclude temporary files
 
     Click Element    ${OptionsButton}
     Wait Until Element Is Visible    ${OptionsList}
-
     Click Element    ${ExcludeTemporaryFilesSwitch}
     Wait Until Element Is Visible    ${ReloadBadge}
-
     Click Element    ${ExcludeTemporaryFilesSwitch}
     Wait Until Element Is Not Visible    ${ReloadBadge}
 
@@ -47,9 +43,9 @@ Find and open Output logs to a file
 
     Click Element    ${OptionsButton}
     Wait Until Element Is Visible    ${OptionsList}
-
-    Click Element    ${OutputLogsSwitch}
     Wait Until Element Is Visible    ${LogsButton}
+    Click Element    ${OutputLogsSwitch}
+    Wait Until Element Is Visible    ${DownloadLogsButton}
     Wait Until Element Is Not Visible    ${ReloadBadge}
 
 Find and open Extraction language filter
@@ -59,19 +55,18 @@ Find and open Extraction language filter
     Click Element    ${OptionsButton}
     Wait Until Element Is Visible    ${OptionsList}
 
-    Click Element    ${ExtractionLangFilterOption}
-
-    Click Element    ${EverythingOption}
-    Wait Until Element Is Visible    ${ReloadBadge}
-
-    Click Element    ${OnlyChosenLanguageOption}
-    Wait Until Element Is Visible    ${ReloadBadge}
-
-    Click Element    ${OnlyLanguageAgnosticOption}
-    Wait Until Element Is Visible    ${ReloadBadge}
-
-    Click Element    ${ChosenLanguageAndLangAgnosticOption}
+    Select From List By Index    extractionLanguageFilterOptions    0
+    List Selection Should Be    extractionLanguageFilterOptions    lang-plus-agn
     Wait Until Element Is Not Visible    ${ReloadBadge}
+    Select From List By Index    extractionLanguageFilterOptions    1
+    List Selection Should Be    extractionLanguageFilterOptions    all
+    Wait Until Element Is Visible    ${ReloadBadge}
+    Select From List By Index    extractionLanguageFilterOptions    2
+    List Selection Should Be    extractionLanguageFilterOptions    lang
+    Wait Until Element Is Visible    ${ReloadBadge}
+    Select From List By Index    extractionLanguageFilterOptions    3
+    List Selection Should Be    extractionLanguageFilterOptions    lang-agn
+    Wait Until Element Is Visible    ${ReloadBadge}
 
 Find and open Collision resolution option
     [Documentation]    Click Option, then Collision resolution, select every option and verify if Reload Badge appears/disappears
@@ -79,17 +74,12 @@ Find and open Collision resolution option
 
     Click Element    ${OptionsButton}
     Wait Until Element Is Visible    ${OptionsList}
+    Select From List By Index    collisionResolutionOptions    0
+    List Selection Should Be    collisionResolutionOptions    overwrite
+    Select From List By Index    collisionResolutionOptions    1
+    List Selection Should Be    collisionResolutionOptions    rename
+    Select From List By Index    collisionResolutionOptions    2
+    List Selection Should Be    collisionResolutionOptions    rename-all
+    Select From List By Index    collisionResolutionOptions    3
+    List Selection Should Be    collisionResolutionOptions    error
 
-    Click Element    ${CollisionResolutionOption}
-
-    Click Element    ${OverwriteOption}
-    Wait Until Element Is Not Visible    ${ReloadBadge}
-
-    Click Element    ${RenameOption}
-    Wait Until Element Is Visible    ${ReloadBadge}
-
-    Click Element    ${RenameAllOption}
-    Wait Until Element Is Visible    ${ReloadBadge}
-
-    Click Element    ${ErrorOption}
-    Wait Until Element Is Visible    ${ReloadBadge}
