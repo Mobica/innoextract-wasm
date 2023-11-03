@@ -48,6 +48,11 @@ Check If Log Console Contains
     Unhide Log Window
     Wait Until Element Contains    ${LogsConsole}    ${message}    ${timeout}
 
+Check If Log Console Does Not Contain
+    [Arguments]    ${message}    ${timeout}=5
+    Unhide Log Window
+    Wait Until Element Does Not Contain    ${LogsConsole}    ${message}    ${timeout}
+
 Check If Log Console Does Not Contain Errors
     Log    Check if there are no errors or warnings in the Log Console    console=yes
     ${logs}    Get Text    ${LogsConsole}
