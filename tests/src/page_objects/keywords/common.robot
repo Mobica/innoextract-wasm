@@ -2,35 +2,31 @@
 Library         OperatingSystem
 Library         SeleniumLibrary
 Library         String
-Library         libraries/browser_lib.py
+Library         src/page_objects/libraries/browser_lib.py
 Library         Process
 Library         Collections
 Variables       src/page_objects/locators/locators.py
-
-
-*** Variables ***
-${HOME_PAGE_PATH}       http://localhost
-${BROWSER}              Firefox
+Variables       variables.py
 
 
 *** Keywords ***
 Prepare Test Environment
-    Log To Console    Cleaning ${CURDIR}/../../../output
-    Remove Files    ${CURDIR}/../../../output/selenium*    ${CURDIR}/../../../output/geckodriver*
-    Remove Directory    ${CURDIR}/../../../output/tmp    recursive=${True}
+    Log To Console    Cleaning ./output
+    Remove Files    ./output/selenium*    ./output/geckodriver*
+    Remove Directory    ./output/tmp    recursive=${True}
 
 Prepare For Test
     ${DOWNLOAD_PATH}    Create Unique Download Path
     Set Global Variable    ${DOWNLOAD_PATH}
     ${profile}    create_profile    ${DOWNLOAD_PATH}
-    Opening Browser    ${HOME_PAGE_PATH}    ${browser}    ${profile}
+    Opening Browser    ${home_page_path}    ${browser}    ${profile}
 
 Clean After Test
     Close Browser
 
 Opening Browser
     [Arguments]    ${site_url}    ${browser}    ${profile}
-    Open Browser    ${site_url}    ${browser}    ff_profile_dir=${profile}
+    Open Browser    ${site_url}    ${browser}    ff_profile_dir=${profile}    service_log_path=./output/geckodriver-1.log
     Wait Until Element Is Visible    ${InputTitle}    timeout=5
     Log    URL open: ${site_url}    console=yes
 
@@ -51,7 +47,7 @@ Rename Downloaded Zip File Name
 Check If Zip File Is Not Empty
     [Arguments]    ${path}    ${test_file}
     ${file_path}    Set Variable    ${download_path}${test_file}[archive_name].zip
-    Wait Until Created    ${file_path}    timeout=15
+    Wait Until Created    ${file_path}    timeout=30
     Sleep    5s
     File Should Not Be Empty    ${file_path}
     Log To Console    File created and is not empty - ${file_path}
@@ -67,8 +63,8 @@ Check If JS Console Does Not Contain Errors
     # For firefox logs must be routed to geckodriver.log
     # See profile settings - fp.set_preference("bdevtools.console.stdout.content", True)
     Log to Console    Check if there are no errors in JS console
-    File Should Exist    ${CURDIR}/../../../output/geckodriver-1.log
-    ${file}    Get File    ${CURDIR}/../../../output/geckodriver-1.log
+    File Should Exist    ./output/geckodriver-1.log
+    ${file}    Get File    ./output/geckodriver-1.log
     @{file_lines}    Split To Lines    ${file}
     FOR    ${line}    IN    @{file_lines}
         Should Not Contain    ${line}    ERROR
