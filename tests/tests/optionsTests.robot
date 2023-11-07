@@ -76,10 +76,15 @@ Find and open Collision resolution option
     Wait Until Element Is Visible    ${OptionsList}
     Select From List By Index    collisionResolutionOptions    0
     List Selection Should Be    collisionResolutionOptions    overwrite
+    Wait Until Element Is Not Visible    ${ReloadBadge}
     Select From List By Index    collisionResolutionOptions    1
     List Selection Should Be    collisionResolutionOptions    rename
+    Wait Until Element Is Visible    ${ReloadBadge}
     Select From List By Index    collisionResolutionOptions    2
     List Selection Should Be    collisionResolutionOptions    rename-all
+    Wait Until Element Is Visible    ${ReloadBadge}
     Select From List By Index    collisionResolutionOptions    3
     List Selection Should Be    collisionResolutionOptions    error
+    Wait Until Element Is Visible    ${ReloadBadge}
+
 
