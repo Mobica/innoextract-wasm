@@ -28,7 +28,7 @@ LogsConsole = '//div[@id="collapseLogs"]'
 # Popup notifications
 # TODO add scenarios for Popup notifications
 
-# Website footer sections
+# Website footer section
 AboutButton = '//a[contains(text(),"About")]'
 AboutSubpageText = '//div[@id="footer-group"]/div[@id="about"]'
 KnownIssuesButton = '//a[contains(text(),"issues")]'
@@ -41,3 +41,15 @@ ChangeThemeButton = 'id:themeSwitch'
 # Website header section
 HeaderIcon = 'img/icon_64.png'
 HeaderText = '//span[contains(text(),"Innoextract wasm")]'
+
+# Options section
+OptionsButton = '//button[@id="optsButton"]'
+OptionsList = '//div[@id="collapseOpts"]'
+EnableDebugSwitch = '//*[@id="optsEnableDebug"]'
+ReloadBadge = '//*[@id="reloadBadge"]'
+ExcludeTemporaryFilesSwitch = '//*[@id="optsExcludeTemporary"]'
+OutputLogsSwitch = '//*[@id="optsLogsToFile"]'
+LogsButton = '//span[contains(text(),"Logs")]'
+DownloadLogsButton = '//span[contains(text(),"Download log")]'
+ExtractionLangFilterOption = '//*[@id="extractionLanguageFilterOptions"]'
+CollisionResolutionOption = 'collisionResolutionOptions'
