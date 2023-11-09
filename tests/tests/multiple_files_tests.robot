@@ -14,8 +14,9 @@ Variables           src/page_objects/locators/locators.py
 Variables           src/test_files/test_files.yaml
 Variables           variables.py
 
-Suite Setup   Prepare Test Environment
-Test Setup    Prepare For Test
+#Suite Setup   Prepare Test Environment
+#Test Setup    Prepare For Test
+Test Teardown    Clean After Test
 
 *** Variables ***
 ${extraction_timeout}       60s
@@ -42,6 +43,7 @@ Extract multiple files test
     [Tags]    multiple    performance
     Log To Console    Extracting file consisting of multiple files
     Extract Multiple Files    ${multi_part_4mb}    ${DOWNLOAD_PATH}
+    Sleep    30
     Check If Zip File Is Not Empty    ${DOWNLOAD_PATH}    ${multi_part_4mb}
     Clean Input List
 
