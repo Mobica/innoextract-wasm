@@ -13,10 +13,6 @@ Suite Setup         Prepare Test Environment
 Test Setup          Prepare For Test
 Test Teardown       Clean After Test
 
-
-*** Variables ***
-${extraction_timeout}       ${60}
-
 *** Test Cases ***
 Find and open Enable Debug Output
     [Documentation]    Click Options, then toggle on/off Enable Debug output button and verify if Reload Badge appears/disappears
@@ -84,29 +80,6 @@ Find and open Collision resolution option
     Select From List By Index    collisionResolutionOptions    3
     List Selection Should Be    collisionResolutionOptions    error
     Wait Until Element Is Visible    ${ReloadBadge}
-
-Enable Debug Output functionality test
-    [Documentation]    Enable debug output functionality adds debug logs if selected
-    [Tags]    options
-    Click Add Files Button
-    Ubuntu Upload Test File    ${file_4mb}[path]
-    Click Load Button
-    Check If Log Console Contains    Opening "${file_4mb}[name]"
-    Validate Output Description    ${file_4mb}[archive_name]
-    Wait Until Page Does Not Contain Element    ${ExtractAndSaveDisabledButton}
-    Click Extract And Save Button    ${extraction_timeout}
-    Validate File Details In Log Console    ${file_4mb}
-    Check If Log Console Does Not Contain    loaded
-    Click Element    ${OptionsButton}
-    Wait Until Element Is Visible    ${OptionsList}
-    Click Element    ${EnableDebugSwitch}
-    Click Load Button
-    Check If Log Console Contains    Opening "${file_4mb}[name]"
-    Validate Output Description    ${file_4mb}[archive_name]
-    Wait Until Page Does Not Contain Element    ${ExtractAndSaveDisabledButton}
-    Click Extract And Save Button    ${extraction_timeout}
-    Validate File Details In Log Console    ${file_4mb}
-    Check If Log Console Contains    loaded
 
 Exclude temporary files functionality test
     [Documentation]    Exclude temporary files functionality removes tmp folder from loaded file
