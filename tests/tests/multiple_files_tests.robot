@@ -14,8 +14,6 @@ Variables           src/page_objects/locators/locators.py
 Variables           src/test_files/test_files.yaml
 Variables           variables.py
 
-#Suite Setup   Prepare Test Environment
-#Test Setup    Prepare For Test
 Test Teardown    Clean After Test
 
 *** Variables ***
