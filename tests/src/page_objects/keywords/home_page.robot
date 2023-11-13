@@ -1,6 +1,6 @@
 *** Settings ***
 Library         SeleniumLibrary
-Library         libraries/custom.py
+Library         src/page_objects/libraries/custom.py
 Library         OperatingSystem
 Library         String
 Variables       src/page_objects/locators/locators.py

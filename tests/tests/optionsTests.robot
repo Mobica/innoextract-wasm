@@ -112,5 +112,6 @@ Enable Debug Output functionality test
     Click Extract And Save Button    ${extraction_timeout}
     Validate File Details In Log Console    ${file_4mb}
     Check If Log Console Contains    loaded
+    Wait Until Element Is Visible    ${ReloadBadge}
 
 
