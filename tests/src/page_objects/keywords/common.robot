@@ -5,6 +5,8 @@ Library         String
 Library         src/page_objects/libraries/browser_lib.py
 Library         Process
 Library         Collections
+Resource        src/page_objects/keywords/ubuntu.robot
+Resource        src/page_objects/keywords/windows.robot
 Variables       src/page_objects/locators/locators.py
 Variables       variables.py
 
@@ -12,13 +14,6 @@ Variables       variables.py
 *** Keywords ***
 Clean After Test
     Empty Directory    ${DOWNLOAD_PATH}
-
-Create Unique Download Path
-    ${random_string}    Generate Random String    20
-    # ${path}    Catenate    SEPARATOR=/    ${CURDIR}/../../../output/tmp    ${random_string}/
-    ${path}    Catenate    SEPARATOR=/    /tmp/output    ${random_string}/
-    Log    \nUnique download path created: ${path}    console=yes
-    RETURN    ${path}
 
 Rename Downloaded Zip File Name
     [Arguments]    ${path}    ${test_file}    ${new_name}=innout    ${postfix}=0    ${new_file_extenion}=.zip
@@ -112,3 +107,31 @@ Compare Directory And Files Tree
     ...    rclone check ${path_to_unzipped_folder_pattern} ${path_to_unzipped_folder}
     Should Be Equal As Integers    ${rc}    0
     Log To Console    Checksums and file sizes are the same as pattern: OK.
+
+Upload Test File
+    [Arguments]    ${file}
+    IF    "${CURRENT_OS}" == "Linux"
+        Ubuntu Upload Test File    ${file}
+    ELSE IF    "${CURRENT_OS}" == "Windows"
+        Windows Upload Test File    ${file}
+    ELSE
+        Fail    Unknown OS, Aborting test
+    END
+
+File Select Is Visible
+    IF    "${CURRENT_OS}" == "Linux"
+        Ubuntu File Select Is Visible
+    ELSE IF    "${CURRENT_OS}" == "Windows"
+        Windows File Select Is Visible
+    ELSE
+        Fail    Unknown OS, Aborting test
+    END
+
+Browser Is Selected
+    IF    "${CURRENT_OS}" == "Linux"
+        Ubuntu Browser Is Selected
+    ELSE IF    "${CURRENT_OS}" == "Windows"
+        Windows Browser Is Selected
+    ELSE
+        Fail    Unknown OS, Aborting test
+    END

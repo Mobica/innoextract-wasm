@@ -29,7 +29,7 @@ Extract and validate a large test file
     ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${TEST_FILE}[archive_name].zip
     # Add a file for extraxtion
     Click Add Files Button
-    Ubuntu Upload Test File    ${large_files_upload_path}${TEST_FILE}[name]
+    Upload Test File    ${large_files_upload_path}${TEST_FILE}[name]
     # Load the file
     Click Load Button
     Check If Log Console Contains    Opening "${TEST_FILE}[name]"
@@ -57,7 +57,7 @@ Extract and compare directory and files tree
     ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${TEST_FILE}[archive_name].zip
     # Add a file for extraxtion
     Click Add Files Button
-    Ubuntu Upload Test File    ${large_files_upload_path}${TEST_FILE}[name]
+    Upload Test File    ${large_files_upload_path}${TEST_FILE}[name]
     # Load the file
     Click Load Button
     Check If Log Console Contains    Opening "${TEST_FILE}[name]"
@@ -80,7 +80,7 @@ Extract and compare files checksum
     ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${TEST_FILE}[archive_name].zip
     # Add a file for extraxtion
     Click Add Files Button
-    Ubuntu Upload Test File    ${large_files_upload_path}${TEST_FILE}[name]
+    Upload Test File    ${large_files_upload_path}${TEST_FILE}[name]
     # Load the file
     Click Load Button
     Check If Log Console Contains    Opening "${TEST_FILE}[name]"
