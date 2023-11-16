@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation    Da init file
+Documentation    Init file with suite setup and teardown methods
 
 Library    SeleniumLibrary
 Library    OperatingSystem
@@ -13,6 +13,8 @@ Suite Setup    Run Keywords
 ...    Prepare Test Environment
 ...    AND
 ...    Prepare For Test
+...    AND
+...    Check OS And Create Variable
 
 Suite Teardown    Run Keyword    Clean After Suite
 
@@ -45,3 +47,7 @@ Create Unique Download Path
     ${path}    Catenate    SEPARATOR=/    /tmp/output    ${random_string}/
     Log    \nUnique download path created: ${path}    console=yes
     RETURN    ${path}
+
+Check OS And Create Variable
+    ${CURRENT_OS}    Evaluate    platform.system()    platform
+    Set Global Variable    ${CURRENT_OS}

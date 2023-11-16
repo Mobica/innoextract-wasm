@@ -41,7 +41,6 @@ Extract multiple files test
     [Tags]    multiple    performance
     Log To Console    Extracting file consisting of multiple files
     Extract Multiple Files    ${multi_part_4mb}    ${DOWNLOAD_PATH}
-    Sleep    30
     Check If Zip File Is Not Empty    ${DOWNLOAD_PATH}    ${multi_part_4mb}
     Clean Input List
 
@@ -62,7 +61,7 @@ Extract all files test
 Extract File
     [Arguments]    ${test_file}    ${test_file_path}    ${extraction_timeout}=30s
     Wait Until Keyword Succeeds    5    1    Click Add Files Button
-    Ubuntu Upload Test File    ${test_file_path}
+    Upload Test File    ${test_file_path}
     Click Load Button
     Click Extract And Save Button    ${extraction_timeout}
     Wait Until Page Does Not Contain Element    ${ExtractAndSaveDisabledButton}
@@ -80,7 +79,7 @@ Extract Multiple Files
     FOR    ${file}    IN    @{file_list}
         ${test_file_path}    Catenate    SEPARATOR=    ${test_file}[path]/${file}
         Wait Until Keyword Succeeds    5    1    Click Add Files Button
-        Ubuntu Upload Test File    ${test_file_path}
+        Upload Test File    ${test_file_path}
         Wait Until Element Is Visible    xpath://label[contains(text(),"${test_file}[name]")]
         Wait Until Keyword Succeeds    5    1    Browser Is Selected
     END

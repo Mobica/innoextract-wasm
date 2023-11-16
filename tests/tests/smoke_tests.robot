@@ -25,7 +25,7 @@ Extract test file
     ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${file_4mb}[archive_name].zip
 
     Click Add Files Button
-    Ubuntu Upload Test File    ${file_4mb}[path]
+    Upload Test File    ${file_4mb}[path]
     Click Load Button
     Check If Log Console Contains    Opening "${file_4mb}[name]"
     Validate Output Description    ${file_4mb}[archive_name]
