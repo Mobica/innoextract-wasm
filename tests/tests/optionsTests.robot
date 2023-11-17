@@ -13,6 +13,11 @@ Suite Setup         Prepare Test Environment
 Test Setup          Prepare For Test
 Test Teardown       Clean After Test
 
+
+*** Variables ***
+${extraction_timeout}       60s
+
+
 *** Test Cases ***
 Find and open Enable Debug Output
     [Documentation]    Click Options, then toggle on/off Enable Debug output button and verify if Reload Badge appears/disappears
@@ -84,13 +89,24 @@ Find and open Collision resolution option
 Exclude temporary files functionality test
     [Documentation]    Exclude temporary files functionality removes tmp folder from loaded file
     [Tags]    options
+
+    ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${test_setup}[archive_name].zip
+
     Click Add Files Button
     Ubuntu Upload Test File    ${test_setup}[path]
     Click Load Button
+    Click Extract And Save Button    ${extraction_timeout}
+    Wait Until Created    ${downloaded_file_path}
+    Validate and Unzip Test File    ${downloaded_file_path}
+    ${filesCount}    Count Items In Directory    ${DOWNLOAD_PATH}${test_setup}[archive_name]
+    Should Be Equal As Integers    ${filesCount}    2
     Click Element    ${FilesList}
     Wait Until Element Is Visible    ${TemporaryFilesFolder}
     Click Element    ${OptionsButton}
     Click Element    ${ExcludeTemporaryFilesSwitch}
     Click Load Button
-    Click Element    ${FilesList}
-    Wait Until Element Is Not Visible    ${TemporaryFilesFolder}
+    Click Extract And Save Button    ${extraction_timeout}
+    Wait Until Created    ${downloaded_file_path}
+    Validate and Unzip Test File    ${downloaded_file_path}
+    ${filesCount}    Count Items In Directory    ${DOWNLOAD_PATH}${test_setup}MyProgramme(1)
+    Should Be Equal As Integers    ${filesCount}    1
