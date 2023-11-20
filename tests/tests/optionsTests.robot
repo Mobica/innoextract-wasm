@@ -7,11 +7,12 @@ Resource            src/page_objects/keywords/common.robot
 Resource            src/page_objects/keywords/home_page.robot
 Resource            src/page_objects/keywords/ubuntu.robot
 Resource            src/test_files/test_files.resource
+Resource            __init__.robot
 Library             src/page_objects/libraries/browser_lib.py
 
-Suite Setup         Prepare Test Environment
-Test Setup          Prepare For Test
-Test Teardown       Clean After Test
+# Suite Setup         Prepare Test Environment
+# Test Setup          Prepare For Test
+# Test Teardown       Clean After Test
 
 *** Variables ***
 ${extraction_timeout}    ${60}
@@ -114,4 +115,25 @@ Enable Debug Output functionality test
     Check If Log Console Contains    loaded
     Wait Until Element Is Visible    ${ReloadBadge}
 
+Find and verify Output log to a file option
+    [Documentation]    Find and verify Output log to a file option
+    [Tags]    options
 
+    ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${file_4mb}[archive_name].zip
+    Click Add Files Button
+    Ubuntu Upload Test File    ${file_4mb}[path]
+    Click Load Button
+    Check If Log Console Contains    Opening "${file_4mb}[name]"
+    Validate Output Description    ${file_4mb}[archive_name]
+    Click Element    ${OptionsButton}
+    Wait Until Element Is Visible    ${LogsButton}
+    Click Element    ${OutputLogsSwitch}
+    Wait Until Element Is Visible    ${DownloadLogsButton}
+    Click Load Button
+    Click Element    ${DownloadLogsButton}
+    Switch Window    new
+    Wait Until Element Is Visible    ${DownloadedLogs}
+    # Wait Until Element Is Visible     //pre[contains(text(),'info: Opening "file_4MB.exe"')]
+
+
+    
