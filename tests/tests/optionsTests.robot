@@ -10,11 +10,6 @@ Resource            src/test_files/test_files.resource
 Resource            __init__.robot
 Library             src/page_objects/libraries/browser_lib.py
 
-# Suite Setup         Prepare Test Environment
-# Test Setup          Prepare For Test
-# Test Teardown       Clean After Test
-
-
 *** Test Cases ***
 Find and open Enable Debug Output
     [Documentation]    Click Options, then toggle on/off Enable Debug output button and verify if Reload Badge appears/disappears
@@ -88,8 +83,8 @@ Find and open Collision resolution option
     List Selection Should Be    collisionResolutionOptions    error
     Wait Until Element Is Visible    ${ReloadBadge}
 
-Find and verify Output log to a file option
-    [Documentation]    Find and verify Output log to a file option
+Verify Output log to a file option
+    [Documentation]    Verify Output log to a file option
     [Tags]    options
 
     ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${file_4mb}[archive_name].zip
@@ -105,8 +100,4 @@ Find and verify Output log to a file option
     Click Load Button
     Click Element    ${DownloadLogsButton}
     Switch Window    new
-    Wait Until Element Is Visible    ${DownloadedLogs}
-    # Wait Until Element Is Visible     //pre[contains(text(),'info: Opening "file_4MB.exe"')]
-
-
-    
+    Wait Until Element Is Visible     //pre[contains(text(),'info: Opening "file_4MB.exe"')]
