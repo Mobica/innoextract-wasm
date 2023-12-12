@@ -34,13 +34,10 @@ Extract test file
     Click Extract And Save Button    ${extraction_timeout}
     Wait Until Created    ${downloaded_file_path}
 
-    Validate and Unzip Test File    ${downloaded_file_path}/home/ewa/RND102/innoextract-wasm/tests/src/test_files/file_4MB.exe
-
-    
+    Validate and Unzip Test File    ${downloaded_file_path}
     Validate File Details In Log Console    ${test_file}
     Check If Log Console Does Not Contain Errors
     Check If JS Console Does Not Contain Errors
-    #Reload Page
 
 *** Test Cases ***
 Extract multiple files
@@ -48,7 +45,5 @@ Extract multiple files
     [Tags]    smoke
     [Template]    Extract test file
     ${file_4mb}
-    ${file_4mb}
-    ${file_4mb}
-    #${10k_files}
+    ${10k_files}
 
