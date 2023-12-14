@@ -16,6 +16,7 @@ Test Teardown       Clean After Test
 *** Variables ***
 ${extraction_timeout}       60s
 
+
 *** Keywords ***
 Extract test file
     [Arguments]    ${test_file}
@@ -38,6 +39,7 @@ Extract test file
     Validate File Details In Log Console    ${test_file}
     Check If Log Console Does Not Contain Errors
     Check If JS Console Does Not Contain Errors
+
 
 *** Test Cases ***
 Extract multiple files
