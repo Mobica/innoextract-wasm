@@ -50,7 +50,7 @@ Extract all files test
     FOR    ${file}    IN    @{TestFiles}
         Log To Console    Extracting ${file}[name]
         ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${file_4mb}[archive_name].zip
-        ${path}    Set Variable    ${input_test_files_path}${file}[name]
+        ${path}    Set Variable    ${test_files_directory_path}${file}[name]
         Extract File    ${file}    ${path}    ${file}[extraction_time]
         Wait Until Created    ${downloaded_file_path}
     END
