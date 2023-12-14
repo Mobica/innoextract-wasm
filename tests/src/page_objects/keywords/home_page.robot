@@ -35,6 +35,7 @@ Log Console Is Visible
     RETURN    ${variable}
 
  Click Show/Hide Logs Button
+    Wait Until Element Is Enabled    ${CollapseLogsButton}
     Click Element    ${CollapseLogsButton}
 
 Unhide Log Window

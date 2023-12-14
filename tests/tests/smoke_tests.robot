@@ -40,3 +40,18 @@ Extract test file
     Validate File Details In Log Console    ${file_4mb}
     Check If Log Console Does Not Contain Errors
     Check If JS Console Does Not Contain Errors
+
+Corrupted File Test
+    [Documentation]    Test to check if file with corrupted header/non inno setup file shows error popup
+    [Tags]    smoke    negative
+    Click Add Files Button
+    Upload Test File    ${file_4mb_corrupt}[path]
+    Click Load Button
+
+    Element Should Be Visible    ${ErrorPopup}
+    Element Text Should Be    ${ErrorPopupMsg}    Not a supported Inno Setup installer!
+    Click Button    ${ErrorPopupCloseBtn}
+
+    Check If Log Console Contains    Opening "${file_4mb_corrupt}[name]"
+    Check If Log Console Contains    Not a supported Inno Setup installer!
+    [Teardown]    NONE
