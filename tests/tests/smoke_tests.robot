@@ -9,6 +9,8 @@ Resource            src/page_objects/keywords/home_page.robot
 Resource            src/page_objects/keywords/ubuntu.robot
 Resource            src/test_files/test_files.resource
 Library             src/page_objects/libraries/browser_lib.py
+Variables           src/test_files/test_files.yaml
+Variables           variables.py
 
 Test Teardown       Clean After Test
 
@@ -22,9 +24,9 @@ Extract test file
     [Arguments]    ${test_file}
     # TODO: Move some steps to TEST SETUP or SUITE SETUP
     ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${test_file}[archive_name].zip
-
+    ${path}    Set Variable    ${input_test_files_path}${test_file}[name]
     Click Add Files Button
-    Upload Test File    ${test_file}[path]
+    Upload Test File    ${path}
     Click Load Button
     Check If Log Console Contains    Opening "${test_file}[name]"
     Validate Output Description    ${test_file}[archive_name]
@@ -46,6 +48,6 @@ Extract multiple files
     [Documentation]    Extract smoke file successfully
     [Tags]    smoke
     [Template]    Extract test file
-    ${file_4mb}
-    ${10k_files}
-
+    FOR    ${file}    IN    @{TestFiles}
+        ${file}
+    END
