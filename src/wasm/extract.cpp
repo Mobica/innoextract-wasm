@@ -45,15 +45,21 @@ file_output::file_output(const fs::path& dir, const processed_file* f, bool writ
   }
 }
 
-bool file_output::write(char* data, size_t n) {
+bool file_output::write(char* data, size_t n, size_t size2) {
   ZIPentry* ze;
   if (!file_open_) {
-    printf("Unpacking file %s\n", path_.c_str());
+    printf("Unpacking file %s (%llu bytes)\n", path_.c_str(), file_->entry().size);
     emjs::ui_innerhtml("status", path_.c_str());
     zip_entry_ = zs_entrybegin(zip_, path_.c_str(), time(0), ZS_STORE, 0);
     ze = zs_entrydata(zip_, zip_entry_, reinterpret_cast<uint8_t*>(data), n, 0);
     file_open_ = true;
+
+    wasm_debug("open_write: position=" << position_ << " total_written=" << total_written_
+                                       << " fsize=" << file_->entry().size << " size2=" << size2
+                                       << " n=" << n);
   } else {
+    wasm_debug("write: position=" << position_ << ", total_written=" << total_written_ << ", fsize="
+                                  << file_->entry().size << ", size2=" << size2 << ", n=" << n);
     ze = zs_entrydata(zip_, zip_entry_, reinterpret_cast<uint8_t*>(data), n, 0);
   }
 
@@ -64,8 +70,12 @@ bool file_output::write(char* data, size_t n) {
 
   position_ += n;
   total_written_ += n;
-
-  if (is_complete()) {
+  if (extractor::get().get_settings().debug_messages_enabled) {
+    printf("write: position=%llu, total_written=%llu, fsize=%llu, size2=%zu, n=%zu\n", position_,
+           total_written_, file_->entry().size, size2, n);
+    std::cout << "write: is_complete():" << std::endl;
+  }
+  if (file_->entry().size != 0 && is_complete() || size2 == total_written_) {
     zs_entryend(zip_, zip_entry_, 0);
   }
 
@@ -140,6 +150,10 @@ extractor& extractor::get() {
   std::call_once(init_instance_flag, &extractor::init_singleton);
 
   return *singleton_instance;
+}
+
+const ExtractionSettings& extractor::get_settings() {
+  return extraction_settings_;
 }
 
 static LanguageFilterOptions languageFilterOptionsFromString(const std::string& options) {
@@ -575,9 +589,8 @@ extractor::resolve_collisions(const std::vector<const processed_file*>& selected
   }
 
   for (const auto entry : path_to_files_map) {
-    if (extraction_settings_.debug_messages_enabled) {
-      log_info << "Collision detected for file: " << entry.first;
-    }
+
+    wasm_debug("Collision detected for file: " << entry.first);
 
     if (extraction_settings_.collision_resolution_options ==
         CollisionResolutionOptions::RenameAll) {
@@ -690,7 +703,7 @@ void extractor::create_empty_dirs(const nlohmann::ordered_json& input) const {
   // creating empty directories if they were were selected
   for (const std::string& dir : dirs) {
     zs_writeentry(output_zip_stream_, nullptr, 0, dir.c_str(), time(0), ZS_STORE, 0);
-    debug("Creating empty dir: %s\n", dir.c_str());
+    wasm_debug("Creating empty dir: " << dir);
   }
 }
 
@@ -842,19 +855,19 @@ uint64_t extractor::seek_input_stream(stream::chunk_reader::type* chunk_source,
   return file.offset + file.size;
 }
 
-uint64_t extractor::copy_data(const stream::file_reader::pointer& source,
-                              const std::vector<file_output*>& outputs) {
+uint64_t extractor::copy_data(const stream::file& file, const stream::file_reader::pointer& source,
+                              file_output* output) {
   uint64_t output_size = 0;
   while (!source->eof()) {
     char buffer[8192 * 10];
     const auto buffer_size = std::streamsize(boost::size(buffer));
     const auto extracted_n = source->read(buffer, buffer_size).gcount();
+    wasm_debug("copy_data read, extracted_n=" << extracted_n);
+
     if (extracted_n > 0 || (source->eof() && !source->bad())) {
-      for (auto output : outputs) {
-        bool success = output->write(buffer, extracted_n);
-        if (!success) {
-          throw std::runtime_error("Error writing file \"" + output->path().string() + '"');
-        }
+      bool success = output->write(buffer, extracted_n, file.size);
+      if (!success) {
+        throw std::runtime_error("Error writing file \"" + output->path().string() + '"');
       }
       bytes_extracted_ += extracted_n;
       output_size += extracted_n;
@@ -917,28 +930,61 @@ std::string extractor::extract(const std::string& list_json) {
       }
 
       uint64_t offset = 0;
+      uint64_t offset_start = 0;
       for (const auto& location : chunk.second) { // 1 chunk => n files
-        const stream::file& file = location.first;
         const std::vector<output_location>& output_locations = files_for_location[location.second];
-
-        offset = seek_input_stream(chunk_source.get(), file, offset);
-
         crypto::checksum checksum;
-        auto input = stream::file_reader::get(*chunk_source, file, &checksum);
         auto outputs = open_outputs(output_locations, output_dir);
 
-        uint64_t output_size = copy_data(input, outputs);
+        wasm_debug("n_outputs = " << outputs.size());
+        if (outputs.size() > 1) {
+          for (auto output : outputs) {
+            std::cout << "multi output: " << output->path() << std::endl;
+          }
+        }
 
-        if (aborted) {
-          // copy_data is the most likely function to be in while execution is being
-          // aborted
+        stream::file file;
+        stream::file_reader::pointer input;
 
-          log_info << "Extraction aborted";
-          abort_zip();
+        uint64_t output_size;
+        for (auto output : outputs) {
+          file = location.first;
 
-          json ret;
-          ret["status"] = "Aborted by user";
-          return ret.dump();
+          wasm_debug("output: " << output->path());
+
+          if (outputs.size() > 1) {
+            if (output == outputs[0]) {
+              // Save original file offset in chunk
+              offset_start = offset;
+            } else {
+              // Reload chunk containing the duplicated file and its offset
+              chunk_source = stream::chunk_reader::get(*slice_reader, chunk.first, "");
+              offset = offset_start;
+            }
+          }
+
+          wasm_debug("pre-copy chunk=" << chunk.first.first_slice << " " << chunk.first.last_slice
+                                       << " " << chunk.first.offset << " " << chunk.first.size
+                                       << " " << chunk.first.sort_offset);
+          wasm_debug("pre-copy file:" << file.checksum << " " << file.filter << " " << file.offset
+                                      << " " << file.size);
+          wasm_debug("pre-copy offset=" << offset);
+
+          offset = seek_input_stream(chunk_source.get(), file, offset);
+          input = stream::file_reader::get(*chunk_source, file, &checksum);
+          output_size = copy_data(file, input, output);
+
+          if (aborted) {
+            // copy_data is the most likely function to be in while execution is being
+            // aborted
+
+            log_info << "Extraction aborted";
+            abort_zip();
+
+            json ret;
+            ret["status"] = "Aborted by user";
+            return ret.dump();
+          }
         }
 
         const setup::data_entry& data = installer_info_.data_entries[location.second];

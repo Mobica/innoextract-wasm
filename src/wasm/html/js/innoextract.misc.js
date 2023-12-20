@@ -56,6 +56,10 @@ $(function () {
 })
 
 function innoLog(msg, level = 'info') {
+    if (msg.length == 0) {
+        return;
+    }
+
     if (logsToFileOpt.checked) {
         logOut += level + ": " + msg + "\n";
         logLines++;
