@@ -125,4 +125,3 @@ Verify Output log to a file option
     Click Element    ${DownloadLogsButton}
     Switch Window    new
     Wait Until Element Is Visible    ${OpeningFileText}
-    
