@@ -9,6 +9,8 @@ Resource            src/page_objects/keywords/home_page.robot
 Resource            src/page_objects/keywords/ubuntu.robot
 Resource            src/test_files/test_files.resource
 Library             src/page_objects/libraries/browser_lib.py
+Variables           src/test_files/test_files.yaml
+Variables           variables.py
 
 Test Teardown       Clean After Test
 
@@ -17,26 +19,35 @@ Test Teardown       Clean After Test
 ${extraction_timeout}       60s
 
 
-*** Test Cases ***
+*** Keywords ***
 Extract test file
-    [Documentation]    Extract smoke file successfully
-    [Tags]    smoke
+    [Arguments]    ${test_file}
     # TODO: Move some steps to TEST SETUP or SUITE SETUP
-    ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${file_4mb}[archive_name].zip
-
+    ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${test_file}[archive_name].zip
+    ${path}    Set Variable    ${input_test_files_path}${test_file}[name]
     Click Add Files Button
-    Ubuntu Upload Test File    ${file_4mb}[path]
+    Upload Test File    ${path}
     Click Load Button
-    Check If Log Console Contains    Opening "${file_4mb}[name]"
-    Validate Output Description    ${file_4mb}[archive_name]
-    Validate Output Archive File Size    ${file_4mb}[archive_size_bytes]
-    Validate Output Archive Files Number    ${file_4mb}[files_in_archive]
+    Check If Log Console Contains    Opening "${test_file}[name]"
+    Validate Output Description    ${test_file}[archive_name]
+    Validate Output Archive File Size    ${test_file}[archive_size_bytes]
+    Validate Output Archive Files Number    ${test_file}[files_in_archive]
     Wait Until Page Does Not Contain Element    ${ExtractAndSaveDisabledButton}
 
     Click Extract And Save Button    ${extraction_timeout}
     Wait Until Created    ${downloaded_file_path}
 
     Validate and Unzip Test File    ${downloaded_file_path}
-    Validate File Details In Log Console    ${file_4mb}
+    Validate File Details In Log Console    ${test_file}
     Check If Log Console Does Not Contain Errors
     Check If JS Console Does Not Contain Errors
+
+
+*** Test Cases ***
+Extract multiple files
+    [Documentation]    Extract smoke file successfully
+    [Tags]    smoke
+    [Template]    Extract test file
+    FOR    ${file}    IN    @{TestFiles}
+        ${file}
+    END

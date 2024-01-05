@@ -24,12 +24,12 @@ Ubuntu Upload Test File
     OperatingSystem.Run    xdotool --window %1
     Wait Until Element Is Enabled   ${StartButton}
 
-File Select Is Visible
+Ubuntu File Select Is Visible
     ${current_window_id}    OperatingSystem.Run    xdotool getactivewindow
     ${current_window_title}    OperatingSystem.Run    xdotool getwindowname ${current_window_id}
     Should Be Equal As Strings    ${current_window_title}    File Upload
 
-Browser Is Selected
+Ubuntu Browser Is Selected
     ${current_window_id}    OperatingSystem.Run    xdotool getactivewindow
     ${current_window_title}    OperatingSystem.Run    xdotool getwindowname ${current_window_id}
     ${browser_title_bar}    Get From Dictionary    ${page_name}    ${browser}
