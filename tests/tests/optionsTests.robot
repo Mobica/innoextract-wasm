@@ -7,7 +7,6 @@ Resource            src/page_objects/keywords/common.robot
 Resource            src/page_objects/keywords/home_page.robot
 Resource            src/page_objects/keywords/ubuntu.robot
 Resource            src/test_files/test_files.resource
-Resource            __init__.robot
 Library             src/page_objects/libraries/browser_lib.py
 
 *** Test Cases ***
@@ -86,9 +85,9 @@ Find and open Collision resolution option
 Verify Output log to a file option
     [Documentation]    Verify Output log to a file option
     [Tags]    options
-
     ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${file_4mb}[archive_name].zip
     Click Add Files Button
+
     Ubuntu Upload Test File    ${file_4mb}[path]
     Click Load Button
     Check If Log Console Contains    Opening "${file_4mb}[name]"
@@ -100,4 +99,5 @@ Verify Output log to a file option
     Click Load Button
     Click Element    ${DownloadLogsButton}
     Switch Window    new
-    Wait Until Element Is Visible     //pre[contains(text(),'info: Opening "file_4MB.exe"')]
+    Wait Until Element Is Visible     ${OpeningFileText}
+    # Wait Until Element Is Visible     //pre[contains(text(),'info: Opening "file_4MB.exe"')]
