@@ -97,6 +97,6 @@ Verify Output log to a file option
     Click Element    ${OutputLogsSwitch}
     Wait Until Element Is Visible    ${DownloadLogsButton}
     Click Load Button
-    Click Element    ${DownloadLogsButton}
+    Wait Until Keyword Succeeds  5s  1s  Click Element  ${DownloadLogsButton}
     Switch Window    new
     Wait Until Element Is Visible    ${OpeningFileText}
