@@ -7,7 +7,6 @@ Resource            src/page_objects/keywords/common.robot
 Resource            src/page_objects/keywords/home_page.robot
 Resource            src/page_objects/keywords/ubuntu.robot
 Resource            src/test_files/test_files.resource
-Resource    multiple_files_tests.robot
 Library             src/page_objects/libraries/browser_lib.py
 
 *** Variables ***
@@ -155,5 +154,3 @@ Exclude temporary files functionality test
     Validate and Unzip Test File    ${DOWNLOAD_PATH}${test_setup}[archive_name]2.zip
     ${filesCount}    Count Items In Directory    ${DOWNLOAD_PATH}${test_setup}[archive_name]2.zip
     Should Be Equal As Integers    ${filesCount}    1
-
-    
