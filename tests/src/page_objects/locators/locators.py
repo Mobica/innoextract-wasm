@@ -18,6 +18,8 @@ FileSize = '//*[@id="size"]'
 FileNum = '//*[@id="filesNum"]'
 Description = '//*[@id="title"]'
 ProgressBar = '//div[@id="progress-bar"]'
+LoadedFileName = '//h5[@id="title"]'
+DirectoryTree = '//div[@id="tree"]'
 
 # Logs section
 LogsTitle = '//div[@id="collapseLogs"]'
