@@ -9,6 +9,8 @@ Resource            src/page_objects/keywords/ubuntu.robot
 Resource            src/test_files/test_files.resource
 Library             src/page_objects/libraries/browser_lib.py
 
+*** Variables ***
+${OpeningFileText}    //pre[contains(text(),"file_4MB.exe")]
 
 *** Test Cases ***
 Find and open Enable Debug Output
@@ -87,15 +89,12 @@ Verify Output log to a file option
     [Documentation]    Verify Output log to a file option
     [Tags]    options
     ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${file_4mb}[archive_name].zip
-    Click Add Files Button
-    Ubuntu Upload Test File    ${file_4mb}[path]
-    Click Load Button
-    Check If Log Console Contains    Opening "${file_4mb}[name]"
-    Validate Output Description    ${file_4mb}[archive_name]
     Click Element    ${OptionsButton}
-    Wait Until Element Is Visible    ${LogsButton}
+    Wait Until Element Is Visible    ${OutputLogsSwitch}
     Click Element    ${OutputLogsSwitch}
     Wait Until Element Is Visible    ${DownloadLogsButton}
+    Click Add Files Button
+    Ubuntu Upload Test File    ${file_4mb}[path]
     Click Load Button
     Wait Until Keyword Succeeds  5s  1s  Click Element  ${DownloadLogsButton}
     Switch Window    new
