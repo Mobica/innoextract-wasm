@@ -9,8 +9,10 @@ Resource            src/page_objects/keywords/ubuntu.robot
 Resource            src/test_files/test_files.resource
 Library             src/page_objects/libraries/browser_lib.py
 
+
 *** Variables ***
 ${extraction_timeout}       60s
+
 
 *** Test Cases ***
 Find and open Enable Debug Output
@@ -83,9 +85,9 @@ Find and open Collision resolution option
     Wait Until Element Is Visible    ${ReloadBadge}
     Select From List By Index    collisionResolutionOptions    3
     List Selection Should Be    collisionResolutionOptions    error
-    Wait Until Element Is Visible    ${ReloadBadge}  
+    Wait Until Element Is Visible    ${ReloadBadge}
 
-Enable Debug Output functionality test    
+Enable Debug Output functionality test
     [Documentation]    Enable debug output functionality adds debug logs if selected
     [Tags]    options
 
@@ -131,9 +133,7 @@ Verify Output log to a file option
 Exclude temporary files functionality test
     [Documentation]    Exclude temporary files functionality removes tmp folder from loaded file
     [Tags]    options
-
     ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${test_setup}[archive_name].zip
-
     Click Add Files Button
     Upload Test File    ${test_setup}[path]
     Click Load Button
@@ -143,6 +143,7 @@ Exclude temporary files functionality test
     ${filesCount}    Count Items In Directory    ${DOWNLOAD_PATH}${test_setup}[archive_name]
     Should Be Equal As Integers    ${filesCount}    2
     Remove File    ${downloaded_file_path}
+    Remove Directory    ${DOWNLOAD_PATH}${test_setup}[archive_name]    True
     Click Element    ${FilesList}
     Wait Until Element Is Visible    ${TemporaryFilesFolder}
     Click Element    ${OptionsButton}
@@ -150,7 +151,6 @@ Exclude temporary files functionality test
     Click Load Button
     Click Extract And Save Button    ${extraction_timeout}
     Wait Until Created    ${downloaded_file_path}
-    Move File    ${DOWNLOAD_PATH}${test_setup}[archive_name].zip   ${DOWNLOAD_PATH}${test_setup}[archive_name]2.zip
-    Validate and Unzip Test File    ${DOWNLOAD_PATH}${test_setup}[archive_name]2.zip
-    ${filesCount}    Count Items In Directory    ${DOWNLOAD_PATH}${test_setup}[archive_name]2.zip
+    Validate and Unzip Test File    ${DOWNLOAD_PATH}${test_setup}[archive_name].zip
+    ${filesCount}    Count Items In Directory    ${DOWNLOAD_PATH}${test_setup}[archive_name]
     Should Be Equal As Integers    ${filesCount}    1
