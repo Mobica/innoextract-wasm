@@ -86,7 +86,7 @@ Find and open Collision resolution option
     Wait Until Element Is Visible    ${ReloadBadge}
 
 Verify Output log to a file option
-    [Documentation]    Verify Output log to a file option
+    [Documentation]    Verify Output logs to a file option
     [Tags]    options
     ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${file_4mb}[archive_name].zip
     Click Element    ${OptionsButton}
