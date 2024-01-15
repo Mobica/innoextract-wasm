@@ -113,6 +113,7 @@ Enable Debug Output functionality test
     Wait Until Element Is Visible    ${ReloadBadge}
 
 Exclude temporary files functionality test
+   
     [Documentation]    Exclude temporary files functionality removes tmp folder from loaded file
     [Tags]    options
     ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${test_setup}[archive_name].zip
