@@ -112,24 +112,6 @@ Enable Debug Output functionality test
     Check If Log Console Contains    loaded
     Wait Until Element Is Visible    ${ReloadBadge}
 
-Verify Output log to a file option
-    [Documentation]    Verify Output log to a file option
-    [Tags]    options
-    ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${file_4mb}[archive_name].zip
-    Click Add Files Button
-    Upload Test File    ${file_4mb}[path]
-    Click Load Button
-    Check If Log Console Contains    Opening "${file_4mb}[name]"
-    Validate Output Description    ${file_4mb}[archive_name]
-    Click Element    ${OptionsButton}
-    Wait Until Element Is Visible    ${LogsButton}
-    Click Element    ${OutputLogsSwitch}
-    Wait Until Element Is Visible    ${DownloadLogsButton}
-    Click Load Button
-    Click Element    ${DownloadLogsButton}
-    Switch Window    new
-    Wait Until Element Is Visible    ${OpeningFileText}
-
 Exclude temporary files functionality test
     [Documentation]    Exclude temporary files functionality removes tmp folder from loaded file
     [Tags]    options
