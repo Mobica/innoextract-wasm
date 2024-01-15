@@ -3,7 +3,7 @@ Library  AutoItLibrary
 Library    String
 
 *** Keywords ***
-Upload Test File
+Windows Upload Test File
     [Arguments]  ${file_path}
     ${window_title}  Win Get Title  [CLASS:#32770]  ${EMPTY}
     Control Focus  [CLASS:#32770]  ${EMPTY}  [CLASSNN:Edit1]

@@ -11,6 +11,7 @@ Library             src/page_objects/libraries/browser_lib.py
 
 *** Variables ***
 ${OpeningFileText}    //pre[contains(text(),"file_4MB.exe")]
+${extraction_timeout}    ${60}
 
 *** Test Cases ***
 Find and open Enable Debug Output
@@ -83,6 +84,31 @@ Find and open Collision resolution option
     Wait Until Element Is Visible    ${ReloadBadge}
     Select From List By Index    collisionResolutionOptions    3
     List Selection Should Be    collisionResolutionOptions    error
+    Wait Until Element Is Visible    ${ReloadBadge}  
+
+Enable Debug Output functionality test    
+    [Documentation]    Enable debug output functionality adds debug logs if selected
+    [Tags]    options
+
+    Click Add Files Button
+    Ubuntu Upload Test File    ${file_4mb}[path]
+    Click Load Button
+    Check If Log Console Contains    Opening "${file_4mb}[name]"
+    Validate Output Description    ${file_4mb}[archive_name]
+    Wait Until Page Does Not Contain Element    ${ExtractAndSaveDisabledButton}
+    Click Extract And Save Button    ${extraction_timeout}
+    Validate File Details In Log Console    ${file_4mb}
+    Check If Log Console Does Not Contain    loaded
+    Click Element    ${OptionsButton}
+    Wait Until Element Is Visible    ${OptionsList}
+    Click Element    ${EnableDebugSwitch}
+    Click Load Button
+    Check If Log Console Contains    Opening "${file_4mb}[name]"
+    Validate Output Description    ${file_4mb}[archive_name]
+    Wait Until Page Does Not Contain Element    ${ExtractAndSaveDisabledButton}
+    Click Extract And Save Button    ${extraction_timeout}
+    Validate File Details In Log Console    ${file_4mb}
+    Check If Log Console Contains    loaded
     Wait Until Element Is Visible    ${ReloadBadge}
 
 Verify Output log to a file option

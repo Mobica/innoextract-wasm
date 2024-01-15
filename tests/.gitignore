@@ -16,3 +16,5 @@ testrun/*
 .~lock*
 *.pkl
 tests/*.xml
+*.png
+*.log
