@@ -9,11 +9,8 @@ Resource            src/page_objects/keywords/ubuntu.robot
 Resource            src/test_files/test_files.resource
 Library             src/page_objects/libraries/browser_lib.py
 
-Suite Setup         Prepare Test Environment
-Test Setup          Prepare For Test
-Test Teardown       Clean After Test
-
 *** Variables ***
+${OpeningFileText}    //pre[contains(text(),"file_4MB.exe")]
 ${extraction_timeout}    ${60}
 
 *** Test Cases ***
@@ -114,4 +111,17 @@ Enable Debug Output functionality test
     Check If Log Console Contains    loaded
     Wait Until Element Is Visible    ${ReloadBadge}
 
-
+Verify Output log to a file option
+    [Documentation]    Verify Output logs to a file option
+    [Tags]    options
+    ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${file_4mb}[archive_name].zip
+    Click Element    ${OptionsButton}
+    Wait Until Element Is Visible    ${OutputLogsSwitch}
+    Click Element    ${OutputLogsSwitch}
+    Wait Until Element Is Visible    ${DownloadLogsButton}
+    Click Add Files Button
+    Ubuntu Upload Test File    ${file_4mb}[path]
+    Click Load Button
+    Wait Until Keyword Succeeds  5s  1s  Click Element  ${DownloadLogsButton}
+    Switch Window    new
+    Wait Until Element Is Visible    ${OpeningFileText}
