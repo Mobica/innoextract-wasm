@@ -26,7 +26,9 @@ CollapseLogsButton = '//button[@id="logsButton"]'
 LogsConsole = '//div[@id="collapseLogs"]'
 
 # Popup notifications
-# TODO add scenarios for Popup notifications
+ErrorPopup = 'id:errorModal'
+ErrorPopupMsg = 'id:errorMsg'
+ErrorPopupCloseBtn = 'xpath://button[contains(text(),"Close")]'
 
 # Website footer section
 AboutButton = '//a[contains(text(),"About")]'

@@ -11,8 +11,8 @@ Library             src/page_objects/libraries/browser_lib.py
 
 
 *** Variables ***
-${extraction_timeout}       60s
-
+${OpeningFileText}    //pre[contains(text(),"file_4MB.exe")]
+${extraction_timeout}    ${60}
 
 *** Test Cases ***
 Find and open Enable Debug Output
@@ -137,3 +137,18 @@ Exclude temporary files functionality test
     Validate and Unzip Test File    ${DOWNLOAD_PATH}${test_setup}[archive_name].zip
     ${filesCount}    Count Items In Directory    ${DOWNLOAD_PATH}${test_setup}[archive_name]
     Should Be Equal As Integers    ${filesCount}    1
+
+Verify Output log to a file option
+    [Documentation]    Verify Output logs to a file option
+    [Tags]    options
+    ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${file_4mb}[archive_name].zip
+    Click Element    ${OptionsButton}
+    Wait Until Element Is Visible    ${OutputLogsSwitch}
+    Click Element    ${OutputLogsSwitch}
+    Wait Until Element Is Visible    ${DownloadLogsButton}
+    Click Add Files Button
+    Ubuntu Upload Test File    ${file_4mb}[path]
+    Click Load Button
+    Wait Until Keyword Succeeds  5s  1s  Click Element  ${DownloadLogsButton}
+    Switch Window    new
+    Wait Until Element Is Visible    ${OpeningFileText}
