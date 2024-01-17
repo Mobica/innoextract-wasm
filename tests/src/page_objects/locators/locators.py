@@ -6,7 +6,7 @@ AddFilesButton = '//button[@id="addBtn"]'
 RemoveButton = '//button[@id="removeBtn"]'
 StartButton = '//button[@id="startBtn"]'
 RadioButton = 'firstRadio'
-
+AddedFile = 'xpath://label[contains(text(),{})]'
 EmptyListInfo = '//li[@id="emptyListInfo"]'
 
 # Output section

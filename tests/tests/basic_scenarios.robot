@@ -21,13 +21,11 @@ Select random file
     ${test_file_path}    Set Variable    ${input_test_files_path}${file}[name]
     [return]   ${file}
 
-
 Add file
     [Arguments]    ${test_file}
     Wait Until Keyword Succeeds    5    1    Click Add Files Button
     ${test_file_path}    Set Variable    ${input_test_files_path}${test_file}[name]
     Upload Test File    ${test_file_path}
-
 
 Validate loaded file
     [Arguments]    ${test_file}
@@ -47,9 +45,8 @@ Add single file
     Page Should Not Contain Element    ${RadioButton}
     ${test_file}=    Select random file
     Add file    ${test_file}
-    Wait Until Element Is Visible    xpath://label[contains(text(),"${test_file}[name]")]
+    Wait Until Element Is Visible    ${AddedFile.format("${test_file}[name]")}
     Page Should Contain Element    ${RadioButton}
-
 
 Add multiple files
     Page Should Contain Element    ${EmptyListInfo}
@@ -58,16 +55,15 @@ Add multiple files
     FOR    ${counter}    IN RANGE   ${number_of_files}
             ${test_file}=    Select random file
             Add file    ${test_file}
-            Wait Until Element Is Visible    xpath://label[contains(text(),"${test_file}[name]")]
+            Wait Until Element Is Visible    ${AddedFile.format("${test_file}[name]")}
             ${radio_buttons_amount}    Get Element Count    ${RadioButton}
             Should Be Equal As Numbers    ${radio_buttons_amount}    ${counter+1}
     END
 
-
 Remove single file   
     ${test_file}=   Select random file
     Add file    ${test_file}  
-    Wait Until Element Is Visible    xpath://label[contains(text(),"${test_file}[name]")]
+    Wait Until Element Is Visible    ${AddedFile.format("${test_file}[name]")}
     ${radio_buttons_amount}    Get Element Count    ${RadioButton}
     Should Be Equal As Numbers    1    ${radio_buttons_amount}
 
@@ -75,11 +71,10 @@ Remove single file
     Click Remove Button
     ${radio_buttons_amount}    Get Element Count    ${RadioButton}
     Should Be Equal As Numbers    0    ${radio_buttons_amount}
-    Wait Until Element Is Not Visible    xpath://label[contains(text(),"${test_file}[name]")]
+    Wait Until Element Is Visible    ${AddedFile.format("${test_file}[name]")}
     Page Should Contain Element    ${EmptyListInfo}
 
-
- Add multiple files and remove one   
+Add multiple files and remove one   
     @{test_names}    Create List
     ${number_of_files}=    Evaluate   random.randint(1, 5)
     FOR    ${counter}    IN RANGE   ${number_of_files}
@@ -99,11 +94,10 @@ Remove single file
     ${count_after_removal}    Get Element Count     ${file_to_remove}
     Should Be Equal As Numbers    ${count_after_removal}    ${count_added-1}
 
-
 Load and reload file
     FOR    ${test_file}    IN    @{TestFiles}
         Add file    ${test_file}
-        Wait Until Element Is Visible    xpath://label[contains(text(),"${test_file}[name]")]
+        Wait Until Element Is Visible    ${AddedFile.format("${test_file}[name]")}
         Click Load Button
         Validate loaded file     ${test_file}
     END
