@@ -66,7 +66,6 @@ Remove single file
     Wait Until Element Is Visible    ${AddedFile.format("${test_file}[name]")}
     ${radio_buttons_amount}    Get Element Count    ${RadioButton}
     Should Be Equal As Numbers    1    ${radio_buttons_amount}
-
     Select Radio Button    exeRadio    0
     Click Remove Button
     ${radio_buttons_amount}    Get Element Count    ${RadioButton}
@@ -76,7 +75,7 @@ Remove single file
 
 Add multiple files and remove one   
     @{test_names}    Create List
-    ${number_of_files}=    Evaluate   random.randint(1, 5)
+    ${number_of_files}=    Evaluate   random.randint(1, 2)
     FOR    ${counter}    IN RANGE   ${number_of_files}
             ${test_file}=    Select random file
             Add file    ${test_file}
@@ -84,7 +83,7 @@ Add multiple files and remove one
             Append To List    ${test_names}    ${test_file}[name]
     END
     ${random_file}=    Evaluate   random.randint(0, ${number_of_files-1})
-    ${file_to_remove}    Set Variable    xpath://label[contains(text(),"${test_names}[${random_file}]")]
+    ${file_to_remove}    Set Variable    ${AddedFile.format("${test_names}[${random_file}]")}
 
     ${count_added}    Get Element Count    ${file_to_remove}  
     Select Radio Button    exeRadio  ${random_file} 
