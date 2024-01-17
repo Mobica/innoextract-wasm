@@ -11,7 +11,8 @@ Library             src/page_objects/libraries/browser_lib.py
 
 *** Variables ***
 ${OpeningFileText}    //pre[contains(text(),"file_4MB.exe")]
-
+${extraction_timeout}    ${60}
+${ErrorText}    //p[@id='errorMsg'][contains(text(),"Aborted: Error due to the file collision")]
 *** Test Cases ***
 Find and open Enable Debug Output
     [Documentation]    Click Options, then toggle on/off Enable Debug output button and verify if Reload Badge appears/disappears
@@ -99,3 +100,55 @@ Verify Output log to a file option
     Wait Until Keyword Succeeds  5s  1s  Click Element  ${DownloadLogsButton}
     Switch Window    new
     Wait Until Element Is Visible    ${OpeningFileText}
+
+Verify Collision resolution functionality
+    [Documentation]    Verify Collision resolution functionality
+    [Tags]    options
+    # the test fails as per bug RND201-240
+    ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${collisions}[archive_name].zip
+    Click Add Files Button
+    Ubuntu Upload Test File    ${collisions}[path]
+    Click Load Button
+    Click Element    ${OptionsButton}
+    Wait Until Element Is Visible    ${OptionsList}
+    Select From List By Index    extractionLanguageFilterOptions    1
+    List Selection Should Be    extractionLanguageFilterOptions    all
+    Select From List By Index    collisionResolutionOptions    0
+    List Selection Should Be    collisionResolutionOptions    overwrite
+    Click Load Button
+    Click Extract And Save Button    ${extraction_timeout}
+    Wait Until Created    ${downloaded_file_path}
+    Validate and Unzip Test File    ${downloaded_file_path}
+    ${ListFiles}  List Files In Directory   ${DOWNLOAD_PATH}${collisions}[archive_name]/app
+    Should Be Equal As Strings     ${ListFiles}    ['MyProg.chm', 'MyProg.exe', 'Readme.txt'] 
+    Remove File    ${downloaded_file_path}
+    Remove Directory    ${DOWNLOAD_PATH}${collisions}[archive_name]    True
+    Select From List By Index    extractionLanguageFilterOptions    1
+    List Selection Should Be    extractionLanguageFilterOptions    all
+    Select From List By Index    collisionResolutionOptions    1
+    List Selection Should Be    collisionResolutionOptions    rename
+    Click Load Button
+    Click Extract And Save Button    ${extraction_timeout}
+    Wait Until Created    ${downloaded_file_path}
+    Validate and Unzip Test File    ${downloaded_file_path}
+    ${ListFiles}  List Files In Directory   ${DOWNLOAD_PATH}${collisions}[archive_name]/app
+    Should Be Equal As Strings     ${ListFiles}    ['MyProg.chm', 'MyProg.exe', 'Readme.txt', 'Readme.txt#help@32bit', 'Readme.txt#readme@64bit', 'Readme.txt#readme@de', 'Readme.txt#readme@nl', 'Readme.txt$0readme@64bit']
+    Remove File    ${downloaded_file_path}
+    Remove Directory    ${DOWNLOAD_PATH}${collisions}[archive_name]    True
+    Select From List By Index    extractionLanguageFilterOptions    1
+    List Selection Should Be    extractionLanguageFilterOptions    all
+    Select From List By Index    collisionResolutionOptions    2
+    List Selection Should Be    collisionResolutionOptions    rename-all
+    Click Load Button
+    Click Extract And Save Button    ${extraction_timeout}
+    Wait Until Created    ${downloaded_file_path}
+    Validate and Unzip Test File    ${downloaded_file_path}
+    ${ListFiles}  List Files In Directory   ${DOWNLOAD_PATH}${collisions}[archive_name]/app
+    Should Be Equal As Strings     ${ListFiles}    ['MyProg.chm', 'MyProg.exe', 'Readme.txt#help@32bit', 'Readme.txt#readme@64bit', 'Readme.txt#readme@de', 'Readme.txt#readme@nl', 'Readme.txt$0readme@64bit', 'Readme.txt$1readme@64bit']
+    Remove File    ${downloaded_file_path}
+    Remove Directory    ${DOWNLOAD_PATH}${collisions}[archive_name]    True
+    Select From List By Index    collisionResolutionOptions    3
+    List Selection Should Be    collisionResolutionOptions    error
+    Click Load Button
+    Click Element    ${ExtractAndSaveButton}
+    Wait Until Element Is Visible    ${ErrorText}
