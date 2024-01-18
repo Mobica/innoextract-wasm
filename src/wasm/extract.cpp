@@ -53,13 +53,7 @@ bool file_output::write(char* data, size_t n, size_t size2) {
     zip_entry_ = zs_entrybegin(zip_, path_.c_str(), time(0), ZS_STORE, 0);
     ze = zs_entrydata(zip_, zip_entry_, reinterpret_cast<uint8_t*>(data), n, 0);
     file_open_ = true;
-
-    wasm_debug("open_write: position=" << position_ << " total_written=" << total_written_
-                                       << " fsize=" << file_->entry().size << " size2=" << size2
-                                       << " n=" << n);
   } else {
-    wasm_debug("write: position=" << position_ << ", total_written=" << total_written_ << ", fsize="
-                                  << file_->entry().size << ", size2=" << size2 << ", n=" << n);
     ze = zs_entrydata(zip_, zip_entry_, reinterpret_cast<uint8_t*>(data), n, 0);
   }
 
@@ -70,6 +64,7 @@ bool file_output::write(char* data, size_t n, size_t size2) {
 
   position_ += n;
   total_written_ += n;
+
   if (extractor::get().get_settings().debug_messages_enabled) {
     printf("write: position=%llu, total_written=%llu, fsize=%llu, size2=%zu, n=%zu\n", position_,
            total_written_, file_->entry().size, size2, n);
@@ -589,8 +584,9 @@ extractor::resolve_collisions(const std::vector<const processed_file*>& selected
   }
 
   for (const auto entry : path_to_files_map) {
-
-    wasm_debug("Collision detected for file: " << entry.first);
+    if (extraction_settings_.debug_messages_enabled) {
+      log_info << "Collision detected for file: " << entry.first;
+    }
 
     if (extraction_settings_.collision_resolution_options ==
         CollisionResolutionOptions::RenameAll) {
@@ -703,7 +699,7 @@ void extractor::create_empty_dirs(const nlohmann::ordered_json& input) const {
   // creating empty directories if they were were selected
   for (const std::string& dir : dirs) {
     zs_writeentry(output_zip_stream_, nullptr, 0, dir.c_str(), time(0), ZS_STORE, 0);
-    wasm_debug("Creating empty dir: " << dir);
+    debug("Creating empty dir: %s\n", dir.c_str());
   }
 }
 
@@ -862,11 +858,9 @@ uint64_t extractor::copy_data(const stream::file& file, const stream::file_reade
     char buffer[8192 * 10];
     const auto buffer_size = std::streamsize(boost::size(buffer));
     const auto extracted_n = source->read(buffer, buffer_size).gcount();
-    wasm_debug("copy_data read, extracted_n=" << extracted_n);
 
     if (extracted_n > 0 || (source->eof() && !source->bad())) {
-      bool success = output->write(buffer, extracted_n, file.size);
-      if (!success) {
+      if (!output->write(buffer, extracted_n, file.size)) {
         throw std::runtime_error("Error writing file \"" + output->path().string() + '"');
       }
       bytes_extracted_ += extracted_n;
@@ -936,7 +930,6 @@ std::string extractor::extract(const std::string& list_json) {
         crypto::checksum checksum;
         auto outputs = open_outputs(output_locations, output_dir);
 
-        wasm_debug("n_outputs = " << outputs.size());
         if (outputs.size() > 1) {
           for (auto output : outputs) {
             std::cout << "multi output: " << output->path() << std::endl;
@@ -950,8 +943,6 @@ std::string extractor::extract(const std::string& list_json) {
         for (auto output : outputs) {
           file = location.first;
 
-          wasm_debug("output: " << output->path());
-
           if (outputs.size() > 1) {
             if (output == outputs[0]) {
               // Save original file offset in chunk
@@ -962,13 +953,6 @@ std::string extractor::extract(const std::string& list_json) {
               offset = offset_start;
             }
           }
-
-          wasm_debug("pre-copy chunk=" << chunk.first.first_slice << " " << chunk.first.last_slice
-                                       << " " << chunk.first.offset << " " << chunk.first.size
-                                       << " " << chunk.first.sort_offset);
-          wasm_debug("pre-copy file:" << file.checksum << " " << file.filter << " " << file.offset
-                                      << " " << file.size);
-          wasm_debug("pre-copy offset=" << offset);
 
           offset = seek_input_stream(chunk_source.get(), file, offset);
           input = stream::file_reader::get(*chunk_source, file, &checksum);

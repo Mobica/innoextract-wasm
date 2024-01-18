@@ -20,8 +20,6 @@
 
 #include "wasm/fdzipstream/fdzipstream.h"
 
-#define wasm_debug(X) do { if (extractor::get().get_settings().debug_messages_enabled) log_info << X; } while(0)
-
 namespace fs = boost::filesystem;
 
 namespace wasm {
