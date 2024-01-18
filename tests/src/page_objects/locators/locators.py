@@ -6,7 +6,7 @@ AddFilesButton = '//button[@id="addBtn"]'
 RemoveButton = '//button[@id="removeBtn"]'
 StartButton = '//button[@id="startBtn"]'
 RadioButton = 'firstRadio'
-
+AddedFile = 'xpath://label[contains(text(),{})]'
 EmptyListInfo = '//li[@id="emptyListInfo"]'
 
 # Output section
@@ -18,6 +18,8 @@ FileSize = '//*[@id="size"]'
 FileNum = '//*[@id="filesNum"]'
 Description = '//*[@id="title"]'
 ProgressBar = '//div[@id="progress-bar"]'
+LoadedFileName = '//h5[@id="title"]'
+DirectoryTree = '//div[@id="tree"]'
 
 # Logs section
 LogsTitle = '//div[@id="collapseLogs"]'
