@@ -114,7 +114,8 @@ Enable Debug Output functionality test
 Verify Output log to a file option
     [Documentation]    Verify Output logs to a file option
     [Tags]    options
-    ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${file_4mb}[archive_name].zip
+
+    ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${extraction_filter}[archive_name].zip
     Click Element    ${OptionsButton}
     Wait Until Element Is Visible    ${OutputLogsSwitch}
     Click Element    ${OutputLogsSwitch}
@@ -125,3 +126,62 @@ Verify Output log to a file option
     Wait Until Keyword Succeeds  5s  1s  Click Element  ${DownloadLogsButton}
     Switch Window    new
     Wait Until Element Is Visible    ${OpeningFileText}
+
+Verify Extraction language filter options
+    [Documentation]    Verify Extraction language filter functionalities
+    [Tags]    option
+
+    ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${extraction_filter}[archive_name].zip
+    Click Element    ${OptionsButton}
+    Wait Until Element Is Visible    ${OptionsList}
+    Click Add Files Button
+    Ubuntu Upload Test File    ${extraction_filter}[path]
+    Click Load Button
+    Select From List By Index    extractionLanguageFilterOptions    0
+    List Selection Should Be    extractionLanguageFilterOptions    lang-plus-agn
+    Select From List By Index    collisionResolutionOptions    1
+    List Selection Should Be    collisionResolutionOptions    rename
+    Click Load Button
+    Click Extract And Save Button    ${extraction_timeout}
+    Wait Until Created    ${downloaded_file_path}
+    Validate and Unzip Test File    ${downloaded_file_path}
+    ${ListFiles}  List Files In Directory   ${DOWNLOAD_PATH}${extraction_filter}[archive_name]/app
+    Should Be Equal As Strings     ${ListFiles}    ['MyProg.chm', 'MyProg.exe', 'Readme.txt']
+    Remove File    ${downloaded_file_path}
+    Remove Directory    ${DOWNLOAD_PATH}${extraction_filter}[archive_name]    True
+    Select From List By Index    extractionLanguageFilterOptions    1
+    List Selection Should Be    extractionLanguageFilterOptions    all
+    Select From List By Index    collisionResolutionOptions    1
+    List Selection Should Be    collisionResolutionOptions    rename
+    Click Load Button
+    Click Extract And Save Button    ${extraction_timeout}
+    Wait Until Created    ${downloaded_file_path}
+    Validate and Unzip Test File    ${downloaded_file_path}
+    ${ListFiles}  List Files In Directory   ${DOWNLOAD_PATH}${extraction_filter}[archive_name]/app
+    Should Be Equal As Strings     ${ListFiles}    ['MyProg.chm', 'MyProg.exe', 'Readme.txt', 'Readme.txt@de', 'Readme.txt@nl']
+    Remove File    ${downloaded_file_path}
+    Remove Directory    ${DOWNLOAD_PATH}${extraction_filter}[archive_name]    True
+    Select From List By Index    extractionLanguageFilterOptions    2
+    List Selection Should Be    extractionLanguageFilterOptions    lang
+    Select From List By Index    collisionResolutionOptions    1
+    List Selection Should Be    collisionResolutionOptions    rename
+    Click Load Button
+    Click Extract And Save Button    ${extraction_timeout}
+    Wait Until Created    ${downloaded_file_path}
+    Validate and Unzip Test File    ${downloaded_file_path}
+    ${ListFiles}  List Files In Directory   ${DOWNLOAD_PATH}${extraction_filter}[archive_name]/app
+    Should Be Equal As Strings     ${ListFiles}    ['MyProg.chm', 'Readme.txt']
+    Remove File    ${downloaded_file_path}
+    Remove Directory    ${DOWNLOAD_PATH}${extraction_filter}[archive_name]    True
+    Select From List By Index    extractionLanguageFilterOptions    3
+    List Selection Should Be    extractionLanguageFilterOptions    lang-agn
+    Select From List By Index    collisionResolutionOptions    1
+    List Selection Should Be    collisionResolutionOptions    rename
+    Click Load Button
+    Click Extract And Save Button    ${extraction_timeout}
+    Wait Until Created    ${downloaded_file_path}
+    Validate and Unzip Test File    ${downloaded_file_path}
+    ${ListFiles}  List Files In Directory   ${DOWNLOAD_PATH}${extraction_filter}[archive_name]/app
+    Should Be Equal As Strings     ${ListFiles}    ['MyProg.exe']
+    Remove File    ${downloaded_file_path}
+    Remove Directory    ${DOWNLOAD_PATH}${extraction_filter}[archive_name]    True
