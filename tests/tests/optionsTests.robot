@@ -110,6 +110,33 @@ Enable Debug Output functionality test
     Validate File Details In Log Console    ${test_file}
     Check If Log Console Contains    loaded
     
+Exclude temporary files functionality 
+    [Documentation]   Exclude temporary files functionality removes tmp folder from loaded file
+    [Tags]    options
+
+    ${extraction_timeout}    Set Variable    60s
+    ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${test_setup}[archive_name].zip
+    Click Add Files Button
+    Upload Test File   ${test_setup}[path]
+    Click Load Button
+    Click Extract And Save Button    ${extraction_timeout}
+    Wait Until Created    ${downloaded_file_path}
+    Validate and Unzip Test File    ${downloaded_file_path}
+    ${filesCount}    Count Items In Directory    ${DOWNLOAD_PATH}${test_setup}[archive_name]
+    Should Be Equal As Integers    ${filesCount}    2
+    Remove File   ${downloaded_file_path}
+    Remove Directory    ${DOWNLOAD_PATH}${test_setup}[archive_name] True
+    Click Element    ${FilesList}
+    Wait Until Element Is Visible    ${TemporaryFilesFolder}
+    Click Element    ${OptionsButton}
+    Click Element    ${ExcludeTemporaryFilesSwitch}
+    Click Load Button
+    Click Extract And Save Button    ${extraction_timeout}
+    Wait Until Created    ${downloaded_file_path}
+    Validate and Unzip Test File    ${DOWNLOAD_PATH}${test_setup}[archive_name].zip
+    ${filesCount} Count Items In Directory    ${DOWNLOAD_PATH}${test_setup}[archive_name]
+    Should Be Equal As Integers    ${filesCount}    1
+
 Verify Output log to a file option
     [Documentation]    Verify Output logs to a file option
     [Tags]    options
