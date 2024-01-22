@@ -9,6 +9,7 @@ Resource        src/page_objects/keywords/ubuntu.robot
 Resource        src/page_objects/keywords/windows.robot
 Variables       src/page_objects/locators/locators.py
 Variables       variables.py
+Variables       src/test_files/test_files.yaml
 
 
 *** Keywords ***
@@ -135,3 +136,9 @@ Browser Is Selected
     ELSE
         Fail    Unknown OS, Aborting test
     END
+
+Select random file
+    ${len}=    Get Length    ${TestFiles}
+    ${random_file}=    Evaluate   random.randint(0, ${len}-1)
+    ${file}   Set To Dictionary  ${TestFiles}[${random_file}]
+    [return]   ${file}

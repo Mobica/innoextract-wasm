@@ -9,9 +9,6 @@ Resource            src/page_objects/keywords/ubuntu.robot
 Resource            src/test_files/test_files.resource
 Library             src/page_objects/libraries/browser_lib.py
 
-*** Variables ***
-${OpeningFileText}    //pre[contains(text(),"file_4MB.exe")]
-${extraction_timeout}    ${60}
 
 *** Test Cases ***
 Find and open Enable Debug Output
@@ -90,38 +87,43 @@ Enable Debug Output functionality test
     [Documentation]    Enable debug output functionality adds debug logs if selected
     [Tags]    options
 
+    ${test_file}=   Select random file
+    ${test_file_path}    Replace Variables     ${test_file}[path]
     Click Add Files Button
-    Ubuntu Upload Test File    ${file_4mb}[path]
+    Upload Test File    ${test_file_path}
     Click Load Button
-    Check If Log Console Contains    Opening "${file_4mb}[name]"
-    Validate Output Description    ${file_4mb}[archive_name]
     Wait Until Page Does Not Contain Element    ${ExtractAndSaveDisabledButton}
-    Click Extract And Save Button    ${extraction_timeout}
-    Validate File Details In Log Console    ${file_4mb}
+    Check If Log Console Contains    Opening "${test_file}[name]"
+    Validate Output Description    ${test_file}[archive_name]
+    Click Extract And Save Button    ${test_file}[extraction_time]
+    Validate File Details In Log Console    ${test_file}
     Check If Log Console Does Not Contain    loaded
     Click Element    ${OptionsButton}
     Wait Until Element Is Visible    ${OptionsList}
     Click Element    ${EnableDebugSwitch}
-    Click Load Button
-    Check If Log Console Contains    Opening "${file_4mb}[name]"
-    Validate Output Description    ${file_4mb}[archive_name]
-    Wait Until Page Does Not Contain Element    ${ExtractAndSaveDisabledButton}
-    Click Extract And Save Button    ${extraction_timeout}
-    Validate File Details In Log Console    ${file_4mb}
-    Check If Log Console Contains    loaded
     Wait Until Element Is Visible    ${ReloadBadge}
-
+    Click Load Button
+    Wait Until Page Does Not Contain Element    ${ExtractAndSaveDisabledButton}
+    Check If Log Console Contains    Opening "${test_file}[name]"
+    Validate Output Description    ${test_file}[archive_name]
+    Click Extract And Save Button    ${test_file}[extraction_time]
+    Validate File Details In Log Console    ${test_file}
+    Check If Log Console Contains    loaded
+    
 Verify Output log to a file option
     [Documentation]    Verify Output logs to a file option
     [Tags]    options
-    ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${file_4mb}[archive_name].zip
+
+    ${test_file}=   Select random file
+    ${test_file_path}    Replace Variables     ${test_file}[path]
+    ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${test_file}[archive_name].zip
     Click Element    ${OptionsButton}
     Wait Until Element Is Visible    ${OutputLogsSwitch}
     Click Element    ${OutputLogsSwitch}
     Wait Until Element Is Visible    ${DownloadLogsButton}
     Click Add Files Button
-    Ubuntu Upload Test File    ${file_4mb}[path]
+    Upload Test File    ${test_file_path}
     Click Load Button
     Wait Until Keyword Succeeds  5s  1s  Click Element  ${DownloadLogsButton}
     Switch Window    new
-    Wait Until Element Is Visible    ${OpeningFileText}
+    Wait Until Element Is Visible    ${DownloadLogsText.format("${test_file}[name]")}

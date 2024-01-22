@@ -24,9 +24,9 @@ Extract test file
     [Arguments]    ${test_file}
     # TODO: Move some steps to TEST SETUP or SUITE SETUP
     ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${test_file}[archive_name].zip
-    ${path}    Set Variable    ${input_test_files_path}${test_file}[name]
+    ${test_file_path}    Replace Variables     ${test_file}[path]
     Click Add Files Button
-    Upload Test File    ${path}
+    Upload Test File    ${test_file_path}
     Click Load Button
     Check If Log Console Contains    Opening "${test_file}[name]"
     Validate Output Description    ${test_file}[archive_name]

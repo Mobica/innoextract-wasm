@@ -27,14 +27,17 @@ Extract two files one by one test
     [Tags]    multiple    performance
 
     # Adding and Extracting First File
-
-    Extract File    ${file_4mb}    ${file_4mb}[path]
-    Check If Zip File Is Not Empty    ${DOWNLOAD_PATH}    ${file_4mb}
+    ${test_file}=    Select random file
+    ${path}    Replace Variables     ${test_file}[path]
+    Extract File    ${test_file}    ${path}
+    Check If Zip File Is Not Empty    ${DOWNLOAD_PATH}    ${test_file}
     # Adding and Extracting Second File
-    Rename Downloaded Zip File Name    ${DOWNLOAD_PATH}    ${file_4mb}
+    Rename Downloaded Zip File Name    ${DOWNLOAD_PATH}    ${test_file}
     Clean Input List
-    Extract File    ${file_4mb}    ${file_4mb}[path]
-    Check If Zip File Is Not Empty    ${DOWNLOAD_PATH}    ${file_4mb}
+    ${test_file}=    Select random file
+    ${path}    Replace Variables     ${test_file}[path]
+    Extract File    ${test_file}    ${test_file}[path]
+    Check If Zip File Is Not Empty    ${DOWNLOAD_PATH}    ${test_file}
 
 Extract multiple files test
     [Documentation]    Extract file consisting of multiple files
@@ -49,8 +52,8 @@ Extract all files test
     [Tags]    multiple    performance    all
     FOR    ${file}    IN    @{TestFiles}
         Log To Console    Extracting ${file}[name]
-        ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${file_4mb}[archive_name].zip
-        ${path}    Set Variable    ${input_test_files_path}${file}[name]
+        ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${file}[archive_name].zip
+        ${path}    Replace Variables     ${file}[path]
         Extract File    ${file}    ${path}    ${file}[extraction_time]
         Wait Until Created    ${downloaded_file_path}
     END
@@ -78,9 +81,10 @@ Extract Multiple Files
 
     FOR    ${file}    IN    @{file_list}
         ${test_file_path}    Catenate    SEPARATOR=    ${test_file}[path]/${file}
+        ${test_file_path}    Replace Variables     ${test_file}[path]
         Wait Until Keyword Succeeds    5    1    Click Add Files Button
         Upload Test File    ${test_file_path}
-        Wait Until Element Is Visible    xpath://label[contains(text(),"${test_file}[name]")]
+        Wait Until Element Is Visible    ${AddedFile.format("${test_file}[name]")}
         Wait Until Keyword Succeeds    5    1    Browser Is Selected
     END
     Click Load Button
