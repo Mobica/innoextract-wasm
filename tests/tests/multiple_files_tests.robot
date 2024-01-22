@@ -81,7 +81,6 @@ Extract Multiple Files
 
     FOR    ${file}    IN    @{file_list}
         ${test_file_path}    Catenate    SEPARATOR=    ${test_file}[path]/${file}
-        ${test_file_path}    Replace Variables     ${test_file}[path]
         Wait Until Keyword Succeeds    5    1    Click Add Files Button
         Upload Test File    ${test_file_path}
         Wait Until Element Is Visible    ${AddedFile.format("${test_file}[name]")}
