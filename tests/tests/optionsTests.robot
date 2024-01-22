@@ -124,8 +124,8 @@ Exclude temporary files functionality
     Validate and Unzip Test File    ${downloaded_file_path}
     ${filesCount}    Count Items In Directory    ${DOWNLOAD_PATH}${test_setup}[archive_name]
     Should Be Equal As Integers    ${filesCount}    2
-    Remove File   ${downloaded_file_path}
-    Remove Directory    ${DOWNLOAD_PATH}${test_setup}[archive_name] True
+    Remove File    ${downloaded_file_path}
+    Remove Directory    ${DOWNLOAD_PATH}${test_setup}[archive_name]    True
     Click Element    ${FilesList}
     Wait Until Element Is Visible    ${TemporaryFilesFolder}
     Click Element    ${OptionsButton}
