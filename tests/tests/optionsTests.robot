@@ -81,9 +81,9 @@ Find and open Collision resolution option
     Wait Until Element Is Visible    ${ReloadBadge}
     Select From List By Index    collisionResolutionOptions    3
     List Selection Should Be    collisionResolutionOptions    error
-    Wait Until Element Is Visible    ${ReloadBadge}  
+    Wait Until Element Is Visible    ${ReloadBadge}
 
-Enable Debug Output functionality test    
+Enable Debug Output functionality test
     [Documentation]    Enable debug output functionality adds debug logs if selected
     [Tags]    options
 
