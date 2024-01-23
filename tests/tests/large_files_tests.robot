@@ -13,11 +13,6 @@ Library             src/page_objects/libraries/browser_lib.py
 Test Teardown       Clean After Test
 
 
-*** Variables ***
-${large_file_15}[extraction_time]           ${large_file_15}[extraction_time]
-${large_file_15}[pattern_path]       ${large_file_15}[pattern_path]
-
-
 *** Test Cases ***
 Extract and validate a large test file
     [Documentation]    Extract and validate a large test file
