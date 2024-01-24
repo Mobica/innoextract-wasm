@@ -55,14 +55,16 @@ Extract multiple files
 Corrupted File Test
     [Documentation]    Test to check if file with corrupted header/non inno setup file shows error popup
     [Tags]    smoke    negative
+    ${test_file}    Set Variable    ${Corrupted_file}[0]
+    ${path}    Replace Variables     ${test_file}[path]
     Click Add Files Button
-    Upload Test File    ${file_4mb_corrupt}[path]
+    Upload Test File    ${path}
     Click Load Button
 
     Element Should Be Visible    ${ErrorPopup}
     Element Text Should Be    ${ErrorPopupMsg}    Not a supported Inno Setup installer!
     Click Button    ${ErrorPopupCloseBtn}
 
-    Check If Log Console Contains    Opening "${file_4mb_corrupt}[name]"
+    Check If Log Console Contains    Opening "${test_file}[name]"
     Check If Log Console Contains    Not a supported Inno Setup installer!
     [Teardown]    NONE

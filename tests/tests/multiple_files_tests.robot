@@ -43,8 +43,9 @@ Extract multiple files test
     [Documentation]    Extract file consisting of multiple files
     [Tags]    multiple    performance
     Log To Console    Extracting file consisting of multiple files
-    Extract Multiple Files    ${multi_part_4mb}    ${DOWNLOAD_PATH}
-    Check If Zip File Is Not Empty    ${DOWNLOAD_PATH}    ${multi_part_4mb}
+    ${test_file}    Set Variable    ${Multi_part_4MB}[0]
+    Extract Multiple Files    ${test_file}    ${DOWNLOAD_PATH}
+    Check If Zip File Is Not Empty    ${DOWNLOAD_PATH}    ${test_file}
     Clean Input List
 
 Extract all files test
@@ -80,7 +81,7 @@ Extract Multiple Files
     Log To Console    ${file_list}
 
     FOR    ${file}    IN    @{file_list}
-        ${test_file_path}    Catenate    SEPARATOR=    ${test_file}[path]/${file}
+        ${test_file_path}    Replace Variables     ${test_file}[path]/${file}
         Wait Until Keyword Succeeds    5    1    Click Add Files Button
         Upload Test File    ${test_file_path}
         Wait Until Element Is Visible    ${AddedFile.format("${test_file}[name]")}

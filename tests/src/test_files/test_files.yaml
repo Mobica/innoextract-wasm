@@ -23,3 +23,18 @@ TestFiles:
     files_in_archive: 8
     extraction_time: 60s
     path: ${input_test_files_path}test_file_4.exe
+Corrupted_file:
+  - name: file_4MB_corrupt.exe
+    archive_size_bytes: 4722512
+    archive_name: smol11
+    files_in_archive: 2
+    extraction_time: 60s
+    path: ${input_test_files_path}file_4MB_corrupt.exe
+Multi_part_4MB:
+  - name: multi_part_4MB
+    archive_size_bytes: 4722512
+    archive_name: smol2
+    files_in_archive: 2
+    parts: 4
+    extraction_time: 60s
+    path: ${input_test_files_path}multi_part_4MB
