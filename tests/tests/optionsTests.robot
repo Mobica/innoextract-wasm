@@ -127,20 +127,19 @@ Verify Output log to a file option
     Switch Window    new
     Wait Until Element Is Visible    ${OpeningFileText}
 
-Verify Extraction language filter options
-    [Documentation]    Verify Extraction language filter functionalities
-    [Tags]    option
+Verify Extraction filter set to 'Chosen language and language agnostic files'
+    [Documentation]    Chosen language and language agnostic files extraction filter option
+    [Tags]    option    extraction filter
 
     ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${extraction_filter}[archive_name].zip
     Click Element    ${OptionsButton}
     Wait Until Element Is Visible    ${OptionsList}
     Click Add Files Button
-    Ubuntu Upload Test File    ${extraction_filter}[path]
-    Click Load Button
-    Select From List By Index    extractionLanguageFilterOptions    0
-    List Selection Should Be    extractionLanguageFilterOptions    lang-plus-agn
-    Select From List By Index    collisionResolutionOptions    1
-    List Selection Should Be    collisionResolutionOptions    rename
+    Upload Test File    ${extraction_filter}[path]
+    Select From List By Index    ${ExtractionLangFilterOption}    0
+    List Selection Should Be     ${ExtractionLangFilterOption}    lang-plus-agn
+    Select From List By Index    ${CollisionResolutionOption}    1
+    List Selection Should Be     ${CollisionResolutionOption}    rename
     Click Load Button
     Click Extract And Save Button    ${extraction_timeout}
     Wait Until Created    ${downloaded_file_path}
@@ -149,22 +148,44 @@ Verify Extraction language filter options
     Should Be Equal As Strings     ${ListFiles}    ['MyProg.chm', 'MyProg.exe', 'Readme.txt']
     Remove File    ${downloaded_file_path}
     Remove Directory    ${DOWNLOAD_PATH}${extraction_filter}[archive_name]    True
-    Select From List By Index    extractionLanguageFilterOptions    1
-    List Selection Should Be    extractionLanguageFilterOptions    all
-    Select From List By Index    collisionResolutionOptions    1
-    List Selection Should Be    collisionResolutionOptions    rename
+
+Verify Extraction filter set to 'Everything'
+    [Documentation]    'Everything' extraction filter option
+    [Tags]    option    extraction filter
+
+    ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${extraction_filter}[archive_name].zip
+    Click Element    ${OptionsButton}
+    Wait Until Element Is Visible    ${OptionsList}
+    Click Add Files Button
+    Upload Test File    ${extraction_filter}[path]
+    Select From List By Index    ${ExtractionLangFilterOption}    1
+    List Selection Should Be     ${ExtractionLangFilterOption}    all
+    Select From List By Index    ${CollisionResolutionOption}    1
+    List Selection Should Be     ${CollisionResolutionOption}    rename
     Click Load Button
+    Wait Until Element Is Visible    ${LanguageSelection} 
+    Select From List By Value    ${LanguageSelection}    de
     Click Extract And Save Button    ${extraction_timeout}
     Wait Until Created    ${downloaded_file_path}
     Validate and Unzip Test File    ${downloaded_file_path}
     ${ListFiles}  List Files In Directory   ${DOWNLOAD_PATH}${extraction_filter}[archive_name]/app
-    Should Be Equal As Strings     ${ListFiles}    ['MyProg.chm', 'MyProg.exe', 'Readme.txt', 'Readme.txt@de', 'Readme.txt@nl']
+    Should Be Equal As Strings     ${ListFiles}    ['MyProg.chm', 'MyProg.exe', 'Readme.txt', 'Readme.txt@en', 'Readme.txt@nl']
     Remove File    ${downloaded_file_path}
     Remove Directory    ${DOWNLOAD_PATH}${extraction_filter}[archive_name]    True
-    Select From List By Index    extractionLanguageFilterOptions    2
-    List Selection Should Be    extractionLanguageFilterOptions    lang
-    Select From List By Index    collisionResolutionOptions    1
-    List Selection Should Be    collisionResolutionOptions    rename
+
+Verify Extraction filter set to 'Only chosen language files'
+    [Documentation]    'Only chosen language files' extraction filter option
+    [Tags]    option    extraction filter
+
+    ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${extraction_filter}[archive_name].zip
+    Click Element    ${OptionsButton}
+    Wait Until Element Is Visible    ${OptionsList}
+    Click Add Files Button
+    Upload Test File    ${extraction_filter}[path]
+    Select From List By Index    ${ExtractionLangFilterOption}    2
+    List Selection Should Be     ${ExtractionLangFilterOption}    lang
+    Select From List By Index    ${CollisionResolutionOption}    1
+    List Selection Should Be     ${CollisionResolutionOption}    rename
     Click Load Button
     Click Extract And Save Button    ${extraction_timeout}
     Wait Until Created    ${downloaded_file_path}
@@ -173,11 +194,23 @@ Verify Extraction language filter options
     Should Be Equal As Strings     ${ListFiles}    ['MyProg.chm', 'Readme.txt']
     Remove File    ${downloaded_file_path}
     Remove Directory    ${DOWNLOAD_PATH}${extraction_filter}[archive_name]    True
-    Select From List By Index    extractionLanguageFilterOptions    3
-    List Selection Should Be    extractionLanguageFilterOptions    lang-agn
-    Select From List By Index    collisionResolutionOptions    1
-    List Selection Should Be    collisionResolutionOptions    rename
+
+Verify Extraction filter set to 'Only language-agnostic files'
+    [Documentation]    'Only language-agnostic files' extraction filter option
+    [Tags]    option    extraction filter
+
+    ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${extraction_filter}[archive_name].zip
+    Click Element    ${OptionsButton}
+    Wait Until Element Is Visible    ${OptionsList}
+    Click Add Files Button
+    Upload Test File    ${extraction_filter}[path]
+    Select From List By Index    ${ExtractionLangFilterOption}    3
+    List Selection Should Be     ${ExtractionLangFilterOption}    lang-agn
+    Select From List By Index    ${CollisionResolutionOption}    1
+    List Selection Should Be     ${CollisionResolutionOption}    rename
     Click Load Button
+    Wait Until Element Is Visible    ${LanguageSelection} 
+    Select From List By Value    ${LanguageSelection}    de
     Click Extract And Save Button    ${extraction_timeout}
     Wait Until Created    ${downloaded_file_path}
     Validate and Unzip Test File    ${downloaded_file_path}

@@ -18,6 +18,7 @@ FileSize = '//*[@id="size"]'
 FileNum = '//*[@id="filesNum"]'
 Description = '//*[@id="title"]'
 ProgressBar = '//div[@id="progress-bar"]'
+LanguageSelection = 'langSelect'
 
 # Logs section
 LogsTitle = '//div[@id="collapseLogs"]'
