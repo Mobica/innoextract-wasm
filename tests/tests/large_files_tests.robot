@@ -6,7 +6,6 @@ Library             SeleniumLibrary
 Library             String
 Resource            src/page_objects/keywords/common.robot
 Resource            src/page_objects/keywords/home_page.robot
-Resource            src/page_objects/keywords/ubuntu.robot
 Resource            src/test_files/test_files.resource
 Library             src/page_objects/libraries/browser_lib.py
 
@@ -18,9 +17,9 @@ Extract and validate a large test file
     [Documentation]    Extract and validate a large test file
     [Tags]    daily    regression    large
     ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${large_file_15}[archive_name].zip
-    # Add a file for extraxtion
+    # Add a file for extraction
     Click Add Files Button
-    Upload Test File    ${input_test_files_path}${large_file_15}[name]
+    Upload Test File    ${large_file_15}[path]
     # Load the file
     Click Load Button
     Check If Log Console Contains    Opening "${large_file_15}[name]"
@@ -46,9 +45,9 @@ Extract and compare directory and files tree
     # TODO: This test fails because of bug. One empty folder and 1one empty file are not in ZIP folder.
     # Either pattern folder will be adjusted or bug will be fixed
     ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${large_file_15}[archive_name].zip
-    # Add a file for extraxtion
+    # Add a file for extraction
     Click Add Files Button
-    Upload Test File    ${input_test_files_path}${large_file_15}[name]
+    Upload Test File    ${large_file_15}[path]
     # Load the file
     Click Load Button
     Check If Log Console Contains    Opening "${large_file_15}[name]"
@@ -69,9 +68,9 @@ Extract and compare files checksum
     # TODO: This test fails because of bug. One empty folder and 1one empty file are not in ZIP folder.
     # Either pattern folder will be adjusted or bug will be fixed
     ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${large_file_15}[archive_name].zip
-    # Add a file for extraxtion
+    # Add a file for extraction
     Click Add Files Button
-    Upload Test File    ${input_test_files_path}${large_file_15}[name]
+    Upload Test File    ${large_file_15}[path]
     # Load the file
     Click Load Button
     Check If Log Console Contains    Opening "${large_file_15}[name]"
