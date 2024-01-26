@@ -9,9 +9,18 @@ Resource            src/page_objects/keywords/ubuntu.robot
 Resource            src/test_files/test_files.resource
 Library             src/page_objects/libraries/browser_lib.py
 
+Test Teardown       Clean After Test
+
 *** Variables ***
 ${OpeningFileText}    //pre[contains(text(),"file_4MB.exe")]
 ${extraction_timeout}    ${60}
+
+*** Keywords ***
+Test_teardown
+    [Arguments]    ${downloaded_file_path}
+    Log To Console    EWAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+    Remove File    ${downloaded_file_path}
+    Remove Directory    ${DOWNLOAD_PATH}${extraction_filter}[archive_name]    True
 
 *** Test Cases ***
 Find and open Enable Debug Output
@@ -121,7 +130,7 @@ Verify Output log to a file option
     Click Element    ${OutputLogsSwitch}
     Wait Until Element Is Visible    ${DownloadLogsButton}
     Click Add Files Button
-    Ubuntu Upload Test File    ${file_4mb}[path]
+    Upload Test File    ${extraction_filter}[path]
     Click Load Button
     Wait Until Keyword Succeeds  5s  1s  Click Element  ${DownloadLogsButton}
     Switch Window    new
@@ -146,8 +155,7 @@ Verify Extraction filter set to 'Chosen language and language agnostic files'
     Validate and Unzip Test File    ${downloaded_file_path}
     ${ListFiles}  List Files In Directory   ${DOWNLOAD_PATH}${extraction_filter}[archive_name]/app
     Should Be Equal As Strings     ${ListFiles}    ['MyProg.chm', 'MyProg.exe', 'Readme.txt']
-    Remove File    ${downloaded_file_path}
-    Remove Directory    ${DOWNLOAD_PATH}${extraction_filter}[archive_name]    True
+    [Teardown]    Test_teardown    ${downloaded_file_path}
 
 Verify Extraction filter set to 'Everything'
     [Documentation]    'Everything' extraction filter option
@@ -170,8 +178,7 @@ Verify Extraction filter set to 'Everything'
     Validate and Unzip Test File    ${downloaded_file_path}
     ${ListFiles}  List Files In Directory   ${DOWNLOAD_PATH}${extraction_filter}[archive_name]/app
     Should Be Equal As Strings     ${ListFiles}    ['MyProg.chm', 'MyProg.exe', 'Readme.txt', 'Readme.txt@en', 'Readme.txt@nl']
-    Remove File    ${downloaded_file_path}
-    Remove Directory    ${DOWNLOAD_PATH}${extraction_filter}[archive_name]    True
+    [Teardown]    Test_teardown    ${downloaded_file_path}
 
 Verify Extraction filter set to 'Only chosen language files'
     [Documentation]    'Only chosen language files' extraction filter option
@@ -192,8 +199,7 @@ Verify Extraction filter set to 'Only chosen language files'
     Validate and Unzip Test File    ${downloaded_file_path}
     ${ListFiles}  List Files In Directory   ${DOWNLOAD_PATH}${extraction_filter}[archive_name]/app
     Should Be Equal As Strings     ${ListFiles}    ['MyProg.chm', 'Readme.txt']
-    Remove File    ${downloaded_file_path}
-    Remove Directory    ${DOWNLOAD_PATH}${extraction_filter}[archive_name]    True
+    [Teardown]    Test_teardown    ${downloaded_file_path}
 
 Verify Extraction filter set to 'Only language-agnostic files'
     [Documentation]    'Only language-agnostic files' extraction filter option
@@ -210,11 +216,10 @@ Verify Extraction filter set to 'Only language-agnostic files'
     List Selection Should Be     ${CollisionResolutionOption}    rename
     Click Load Button
     Wait Until Element Is Visible    ${LanguageSelection} 
-    Select From List By Value    ${LanguageSelection}    de
+    Select From List By Value    ${LanguageSelection}    nl
     Click Extract And Save Button    ${extraction_timeout}
     Wait Until Created    ${downloaded_file_path}
     Validate and Unzip Test File    ${downloaded_file_path}
     ${ListFiles}  List Files In Directory   ${DOWNLOAD_PATH}${extraction_filter}[archive_name]/app
     Should Be Equal As Strings     ${ListFiles}    ['MyProg.exe']
-    Remove File    ${downloaded_file_path}
-    Remove Directory    ${DOWNLOAD_PATH}${extraction_filter}[archive_name]    True
+    [Teardown]    Test_teardown    ${downloaded_file_path}
