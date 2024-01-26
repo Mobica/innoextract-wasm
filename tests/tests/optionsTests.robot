@@ -18,7 +18,6 @@ ${extraction_timeout}    ${60}
 *** Keywords ***
 Test_teardown
     [Arguments]    ${downloaded_file_path}
-    Log To Console    EWAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
     Remove File    ${downloaded_file_path}
     Remove Directory    ${DOWNLOAD_PATH}${extraction_filter}[archive_name]    True
 
