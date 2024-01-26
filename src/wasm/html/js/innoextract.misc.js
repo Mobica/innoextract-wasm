@@ -508,13 +508,14 @@ function uncollapse(id, button) {
     hideOverflow();
 }
 
-function openOptsIfChecked() {
+function clearOpts() {
     var opts = document.getElementsByClassName("form-check-input");
     var collapsible = document.getElementById("collapseOpts");
 
     Array.from(opts).forEach((opt) => {
         if (opt.checked) {
-            collapsible.classList.add("show");
+            opt.checked = false;
+            collapsible.classList.remove("show");
         }
     });
 }
@@ -633,7 +634,7 @@ function dragHandler(event) {
 
 setThemeText();
 mutateLogsButton();
-openOptsIfChecked();
+clearOpts();
 updateFooter();
 if (!window.isSecureContext) {
     nonSecure.style.display = "unset";
