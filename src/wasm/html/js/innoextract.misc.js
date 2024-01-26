@@ -110,9 +110,11 @@ function refreshLogLines(single = false) {
 
 addBtn.addEventListener("click", (e) => {
     if (fileBrowser) {
+        resetUI();
         fileBrowser.click();
     }
 }, false);
+
 removeBtn.addEventListener("click", (e) => {
     let checked = document.querySelector('input[name="exeRadio"]:checked');
     if (checked) {
