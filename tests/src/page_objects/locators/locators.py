@@ -6,7 +6,7 @@ AddFilesButton = '//button[@id="addBtn"]'
 RemoveButton = '//button[@id="removeBtn"]'
 StartButton = '//button[@id="startBtn"]'
 RadioButton = 'firstRadio'
-
+AddedFile = 'xpath://label[contains(text(),{})]'
 EmptyListInfo = '//li[@id="emptyListInfo"]'
 
 # Output section
@@ -18,7 +18,8 @@ FileSize = '//*[@id="size"]'
 FileNum = '//*[@id="filesNum"]'
 Description = '//*[@id="title"]'
 ProgressBar = '//div[@id="progress-bar"]'
-LanguageSelection = 'langSelect'
+LoadedFileName = '//h5[@id="title"]'
+DirectoryTree = '//div[@id="tree"]'
 
 # Logs section
 LogsTitle = '//div[@id="collapseLogs"]'
@@ -56,3 +57,5 @@ LogsButton = '//span[contains(text(),"Logs")]'
 DownloadLogsButton = '//span[contains(text(),"Download log")]'
 ExtractionLangFilterOption = '//*[@id="extractionLanguageFilterOptions"]'
 CollisionResolutionOption = 'collisionResolutionOptions'
+FilesList = '//div[@class="w-100"]'
+TemporaryFilesFolder = '//div[@class="w-100"][contains(text(),"tmp")]' 
