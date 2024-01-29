@@ -6,12 +6,10 @@ Library             SeleniumLibrary
 Library             String
 Resource            src/page_objects/keywords/common.robot
 Resource            src/page_objects/keywords/home_page.robot
-Resource            src/test_files/test_files.resource
 Resource            src/page_objects/keywords/ubuntu.robot
 Library             src/page_objects/libraries/browser_lib.py
 Library             Collections
 Variables           src/page_objects/locators/locators.py
-Variables           src/test_files/test_files.yaml
 Variables           variables.py
 
 Test Teardown    Clean After Test
@@ -28,14 +26,12 @@ Extract two files one by one test
 
     # Adding and Extracting First File
     ${test_file}=    Select random file
-    ${path}    Replace Variables     ${test_file}[path]
-    Extract File    ${test_file}    ${path}
+    Extract File    ${test_file}    ${test_file}[path]
     Check If Zip File Is Not Empty    ${DOWNLOAD_PATH}    ${test_file}
     # Adding and Extracting Second File
     Rename Downloaded Zip File Name    ${DOWNLOAD_PATH}    ${test_file}
     Clean Input List
     ${test_file}=    Select random file
-    ${path}    Replace Variables     ${test_file}[path]
     Extract File    ${test_file}    ${test_file}[path]
     Check If Zip File Is Not Empty    ${DOWNLOAD_PATH}    ${test_file}
 
@@ -43,7 +39,7 @@ Extract multiple files test
     [Documentation]    Extract file consisting of multiple files
     [Tags]    multiple    performance
     Log To Console    Extracting file consisting of multiple files
-    ${test_file}    Set Variable    ${Multi_part_4MB}[0]
+    ${test_file}    Set Variable    ${Multi_part_4MB}
     Extract Multiple Files    ${test_file}    ${DOWNLOAD_PATH}
     Check If Zip File Is Not Empty    ${DOWNLOAD_PATH}    ${test_file}
     Clean Input List
@@ -52,11 +48,11 @@ Extract all files test
     [Documentation]    Extract all test files
     [Tags]    multiple    performance    all
     FOR    ${file}    IN    @{TestFiles}
-        Log To Console    Extracting ${file}[name]
-        ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${file}[archive_name].zip
-        ${path}    Replace Variables     ${file}[path]
-        Extract File    ${file}    ${path}    ${file}[extraction_time]
-        Wait Until Created    ${downloaded_file_path}
+        ${test_file}    Set Variable   ${TestFiles}[${file}]
+        Log To Console    Extracting ${test_file}[name]
+        ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${test_file}[archive_name].zip
+        Extract File    ${test_file}    ${test_file}[path]    ${test_file}[extraction_time]
+        Wait Until Created    ${downloaded_file_path}    ${test_file}[extraction_time]
     END
     Close Browser
 
@@ -81,7 +77,7 @@ Extract Multiple Files
     Log To Console    ${file_list}
 
     FOR    ${file}    IN    @{file_list}
-        ${test_file_path}    Replace Variables     ${test_file}[path]/${file}
+        ${test_file_path}    Set Variable     ${test_file}[path]/${file}
         Wait Until Keyword Succeeds    5    1    Click Add Files Button
         Upload Test File    ${test_file_path}
         Wait Until Element Is Visible    ${AddedFile.format("${test_file}[name]")}

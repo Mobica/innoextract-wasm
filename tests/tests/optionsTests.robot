@@ -6,8 +6,8 @@ Library             String
 Resource            src/page_objects/keywords/common.robot
 Resource            src/page_objects/keywords/home_page.robot
 Resource            src/page_objects/keywords/ubuntu.robot
-Resource            src/test_files/test_files.resource
 Library             src/page_objects/libraries/browser_lib.py
+Variables           variables.py
 
 
 *** Test Cases ***
@@ -88,9 +88,8 @@ Enable Debug Output functionality test
     [Tags]    options
 
     ${test_file}=   Select random file
-    ${test_file_path}    Replace Variables     ${test_file}[path]
     Click Add Files Button
-    Upload Test File    ${test_file_path}
+    Upload Test File    ${test_file}[path]
     Click Load Button
     Wait Until Page Does Not Contain Element    ${ExtractAndSaveDisabledButton}
     Check If Log Console Contains    Opening "${test_file}[name]"
@@ -142,14 +141,13 @@ Verify Output log to a file option
     [Tags]    options
 
     ${test_file}=   Select random file
-    ${test_file_path}    Replace Variables     ${test_file}[path]
     ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${test_file}[archive_name].zip
     Click Element    ${OptionsButton}
     Wait Until Element Is Visible    ${OutputLogsSwitch}
     Click Element    ${OutputLogsSwitch}
     Wait Until Element Is Visible    ${DownloadLogsButton}
     Click Add Files Button
-    Upload Test File    ${test_file_path}
+    Upload Test File    ${test_file}[path]
     Click Load Button
     Wait Until Keyword Succeeds  5s  1s  Click Element  ${DownloadLogsButton}
     Switch Window    new

@@ -7,9 +7,7 @@ Library             String
 Resource            src/page_objects/keywords/common.robot
 Resource            src/page_objects/keywords/home_page.robot
 Resource            src/page_objects/keywords/ubuntu.robot
-Resource            src/test_files/test_files.resource
 Library             src/page_objects/libraries/browser_lib.py
-Variables           src/test_files/test_files.yaml
 Variables           variables.py
 
 Test Teardown       Clean After Test
@@ -24,9 +22,9 @@ Extract test file
     [Arguments]    ${test_file}
     # TODO: Move some steps to TEST SETUP or SUITE SETUP
     ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${test_file}[archive_name].zip
-    ${test_file_path}    Replace Variables     ${test_file}[path]
     Click Add Files Button
-    Upload Test File    ${test_file_path}
+    Upload Test File    ${test_file}[path]
+    Sleep  10s
     Click Load Button
     Check If Log Console Contains    Opening "${test_file}[name]"
     Validate Output Description    ${test_file}[archive_name]
@@ -49,16 +47,15 @@ Extract multiple files
     [Tags]    smoke
     [Template]    Extract test file
     FOR    ${file}    IN    @{TestFiles}
-        ${file}
+        ${TestFiles}[${file}]
     END
 
 Corrupted File Test
     [Documentation]    Test to check if file with corrupted header/non inno setup file shows error popup
     [Tags]    smoke    negative
-    ${test_file}    Set Variable    ${Corrupted_file}[0]
-    ${path}    Replace Variables     ${test_file}[path]
+    ${test_file}    Set Variable    ${Corrupted_file}
     Click Add Files Button
-    Upload Test File    ${path}
+    Upload Test File    ${test_file}[path]
     Click Load Button
 
     Element Should Be Visible    ${ErrorPopup}
