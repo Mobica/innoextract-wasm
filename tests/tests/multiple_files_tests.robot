@@ -6,7 +6,6 @@ Library             SeleniumLibrary
 Library             String
 Resource            src/page_objects/keywords/common.robot
 Resource            src/page_objects/keywords/home_page.robot
-Resource            src/page_objects/keywords/ubuntu.robot
 Library             src/page_objects/libraries/browser_lib.py
 Library             Collections
 Variables           src/page_objects/locators/locators.py
