@@ -68,3 +68,12 @@ Multi_Part_4MB = {
     'extraction_time': '60s',
     'path': input_test_files_path + 'multi_part_4MB'
 }
+
+extraction_filter = {
+    'name': 'extraction_filter.exe',
+    'archive_size_bytes': 34338,
+    'archive_name': 'MyAppName',
+    'files_in_archive': 3,
+    'extraction_time': '60s',
+    'path': input_test_files_path + 'extraction_filter.exe'
+}

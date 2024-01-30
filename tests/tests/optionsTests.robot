@@ -9,6 +9,11 @@ Resource            src/page_objects/keywords/ubuntu.robot
 Library             src/page_objects/libraries/browser_lib.py
 Variables           variables.py
 
+*** Keywords ***
+Test_teardown
+    [Arguments]    ${downloaded_file_path}
+    Remove File    ${downloaded_file_path}
+    Remove Directory    ${DOWNLOAD_PATH}${extraction_filter}[archive_name]    True
 
 *** Test Cases ***
 Find and open Enable Debug Output
@@ -140,15 +145,102 @@ Verify Output log to a file option
     [Documentation]    Verify Output logs to a file option
     [Tags]    options
 
-    ${test_file}=   Select random file
-    ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${test_file}[archive_name].zip
+    ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${extraction_filter}[archive_name].zip
     Click Element    ${OptionsButton}
     Wait Until Element Is Visible    ${OutputLogsSwitch}
     Click Element    ${OutputLogsSwitch}
     Wait Until Element Is Visible    ${DownloadLogsButton}
     Click Add Files Button
-    Upload Test File    ${test_file}[path]
+    Upload Test File    ${extraction_filter}[path]
     Click Load Button
     Wait Until Keyword Succeeds  5s  1s  Click Element  ${DownloadLogsButton}
     Switch Window    new
-    Wait Until Element Is Visible    ${DownloadLogsText.format("${test_file}[name]")}
+    Wait Until Element Is Visible    ${DownloadLogsText.format("${extraction_filter}[name]")}
+
+Verify Extraction filter set to 'Chosen language and language agnostic files'
+    [Documentation]    Chosen language and language agnostic files extraction filter option
+    [Tags]    option    extraction filter
+
+    ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${extraction_filter}[archive_name].zip
+    Click Element    ${OptionsButton}
+    Wait Until Element Is Visible    ${OptionsList}
+    Click Add Files Button
+    Upload Test File    ${extraction_filter}[path]
+    Select From List By Index    ${ExtractionLangFilterOption}    0
+    List Selection Should Be     ${ExtractionLangFilterOption}    lang-plus-agn
+    Select From List By Index    ${CollisionResolutionOption}    1
+    List Selection Should Be     ${CollisionResolutionOption}    rename
+    Click Load Button
+    Click Extract And Save Button    ${extraction_filter}[extraction_timeout]
+    Wait Until Created    ${downloaded_file_path}
+    Validate and Unzip Test File    ${downloaded_file_path}
+    ${ListFiles}  List Files In Directory   ${DOWNLOAD_PATH}${extraction_filter}[archive_name]/app
+    Should Be Equal As Strings     ${ListFiles}    ['MyProg.chm', 'MyProg.exe', 'Readme.txt']
+    [Teardown]    Test_teardown    ${downloaded_file_path}
+
+Verify Extraction filter set to 'Everything'
+    [Documentation]    'Everything' extraction filter option
+    [Tags]    option    extraction filter
+
+    ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${extraction_filter}[archive_name].zip
+    Click Element    ${OptionsButton}
+    Wait Until Element Is Visible    ${OptionsList}
+    Click Add Files Button
+    Upload Test File    ${extraction_filter}[path]
+    Select From List By Index    ${ExtractionLangFilterOption}    1
+    List Selection Should Be     ${ExtractionLangFilterOption}    all
+    Select From List By Index    ${CollisionResolutionOption}    1
+    List Selection Should Be     ${CollisionResolutionOption}    rename
+    Click Load Button
+    Wait Until Element Is Visible    ${LanguageSelection} 
+    Select From List By Value    ${LanguageSelection}    de
+    Click Extract And Save Button    ${extraction_filter}[extraction_time]
+    Wait Until Created    ${downloaded_file_path}
+    Validate and Unzip Test File    ${downloaded_file_path}
+    ${ListFiles}  List Files In Directory   ${DOWNLOAD_PATH}${extraction_filter}[archive_name]/app
+    Should Be Equal As Strings     ${ListFiles}    ['MyProg.chm', 'MyProg.exe', 'Readme.txt', 'Readme.txt@en', 'Readme.txt@nl']
+    [Teardown]    Test_teardown    ${downloaded_file_path}
+
+Verify Extraction filter set to 'Only chosen language files'
+    [Documentation]    'Only chosen language files' extraction filter option
+    [Tags]    option    extraction filter
+
+    ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${extraction_filter}[archive_name].zip
+    Click Element    ${OptionsButton}
+    Wait Until Element Is Visible    ${OptionsList}
+    Click Add Files Button
+    Upload Test File    ${extraction_filter}[path]
+    Select From List By Index    ${ExtractionLangFilterOption}    2
+    List Selection Should Be     ${ExtractionLangFilterOption}    lang
+    Select From List By Index    ${CollisionResolutionOption}    1
+    List Selection Should Be     ${CollisionResolutionOption}    rename
+    Click Load Button
+    Click Extract And Save Button    ${extraction_filter}[extraction_time]
+    Wait Until Created    ${downloaded_file_path}
+    Validate and Unzip Test File    ${downloaded_file_path}
+    ${ListFiles}  List Files In Directory   ${DOWNLOAD_PATH}${extraction_filter}[archive_name]/app
+    Should Be Equal As Strings     ${ListFiles}    ['MyProg.chm', 'Readme.txt']
+    [Teardown]    Test_teardown    ${downloaded_file_path}
+
+Verify Extraction filter set to 'Only language-agnostic files'
+    [Documentation]    'Only language-agnostic files' extraction filter option
+    [Tags]    option    extraction filter
+
+    ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${extraction_filter}[archive_name].zip
+    Click Element    ${OptionsButton}
+    Wait Until Element Is Visible    ${OptionsList}
+    Click Add Files Button
+    Upload Test File    ${extraction_filter}[path]
+    Select From List By Index    ${ExtractionLangFilterOption}    3
+    List Selection Should Be     ${ExtractionLangFilterOption}    lang-agn
+    Select From List By Index    ${CollisionResolutionOption}    1
+    List Selection Should Be     ${CollisionResolutionOption}    rename
+    Click Load Button
+    Wait Until Element Is Visible    ${LanguageSelection} 
+    Select From List By Value    ${LanguageSelection}    nl
+    Click Extract And Save Button    ${extraction_filter}[extraction_time]
+    Wait Until Created    ${downloaded_file_path}
+    Validate and Unzip Test File    ${downloaded_file_path}
+    ${ListFiles}  List Files In Directory   ${DOWNLOAD_PATH}${extraction_filter}[archive_name]/app
+    Should Be Equal As Strings     ${ListFiles}    ['MyProg.exe']
+    [Teardown]    Test_teardown    ${downloaded_file_path}

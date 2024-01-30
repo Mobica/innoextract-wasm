@@ -24,7 +24,6 @@ Extract test file
     ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${test_file}[archive_name].zip
     Click Add Files Button
     Upload Test File    ${test_file}[path]
-    Sleep  10s
     Click Load Button
     Check If Log Console Contains    Opening "${test_file}[name]"
     Validate Output Description    ${test_file}[archive_name]

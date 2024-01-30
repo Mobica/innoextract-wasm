@@ -20,6 +20,7 @@ Description = '//*[@id="title"]'
 ProgressBar = '//div[@id="progress-bar"]'
 LoadedFileName = '//h5[@id="title"]'
 DirectoryTree = '//div[@id="tree"]'
+LanguageSelection = 'langSelect'
 DownloadLogsText = '//pre[contains(text(),{})]'
 
 # Logs section

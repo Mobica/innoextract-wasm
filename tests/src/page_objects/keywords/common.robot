@@ -9,7 +9,6 @@ Resource        src/page_objects/keywords/ubuntu.robot
 Resource        src/page_objects/keywords/windows.robot
 Variables       src/page_objects/locators/locators.py
 Variables       variables.py
-#Variables       src/test_files/test_files.yaml
 
 
 *** Keywords ***
