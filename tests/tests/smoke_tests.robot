@@ -6,10 +6,7 @@ Library             SeleniumLibrary
 Library             String
 Resource            src/page_objects/keywords/common.robot
 Resource            src/page_objects/keywords/home_page.robot
-Resource            src/page_objects/keywords/ubuntu.robot
-Resource            src/test_files/test_files.resource
 Library             src/page_objects/libraries/browser_lib.py
-Variables           src/test_files/test_files.yaml
 Variables           variables.py
 
 Test Teardown       Clean After Test
@@ -24,9 +21,8 @@ Extract test file
     [Arguments]    ${test_file}
     # TODO: Move some steps to TEST SETUP or SUITE SETUP
     ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${test_file}[archive_name].zip
-    ${path}    Set Variable    ${input_test_files_path}${test_file}[name]
     Click Add Files Button
-    Upload Test File    ${path}
+    Upload Test File    ${test_file}[path]
     Click Load Button
     Check If Log Console Contains    Opening "${test_file}[name]"
     Validate Output Description    ${test_file}[archive_name]
@@ -34,7 +30,7 @@ Extract test file
     Validate Output Archive Files Number    ${test_file}[files_in_archive]
     Wait Until Page Does Not Contain Element    ${ExtractAndSaveDisabledButton}
 
-    Click Extract And Save Button    ${extraction_timeout}
+    Click Extract And Save Button    ${test_file}[extraction_time]
     Wait Until Created    ${downloaded_file_path}
 
     Validate and Unzip Test File    ${downloaded_file_path}
@@ -49,20 +45,21 @@ Extract multiple files
     [Tags]    smoke
     [Template]    Extract test file
     FOR    ${file}    IN    @{TestFiles}
-        ${file}
+        ${TestFiles}[${file}]
     END
 
 Corrupted File Test
     [Documentation]    Test to check if file with corrupted header/non inno setup file shows error popup
     [Tags]    smoke    negative
+    ${test_file}    Set Variable    ${Corrupted_file}
     Click Add Files Button
-    Upload Test File    ${file_4mb_corrupt}[path]
+    Upload Test File    ${test_file}[path]
     Click Load Button
 
     Element Should Be Visible    ${ErrorPopup}
     Element Text Should Be    ${ErrorPopupMsg}    Not a supported Inno Setup installer!
     Click Button    ${ErrorPopupCloseBtn}
 
-    Check If Log Console Contains    Opening "${file_4mb_corrupt}[name]"
+    Check If Log Console Contains    Opening "${test_file}[name]"
     Check If Log Console Contains    Not a supported Inno Setup installer!
     [Teardown]    NONE

@@ -6,18 +6,12 @@ Library             SeleniumLibrary
 Library             String
 Resource            src/page_objects/keywords/common.robot
 Resource            src/page_objects/keywords/home_page.robot
-Resource            src/test_files/test_files.resource
-Resource            src/page_objects/keywords/ubuntu.robot
 Library             src/page_objects/libraries/browser_lib.py
 Library             Collections
 Variables           src/page_objects/locators/locators.py
-Variables           src/test_files/test_files.yaml
 Variables           variables.py
 
 Test Teardown    Clean After Test
-
-*** Variables ***
-${extraction_timeout}       60s
 
 
 *** Test Cases ***
@@ -27,43 +21,45 @@ Extract two files one by one test
     [Tags]    multiple    performance
 
     # Adding and Extracting First File
-
-    Extract File    ${file_4mb}    ${file_4mb}[path]
-    Check If Zip File Is Not Empty    ${DOWNLOAD_PATH}    ${file_4mb}
+    ${test_file}=    Select random file
+    Extract File    ${test_file}
+    Check If Zip File Is Not Empty    ${DOWNLOAD_PATH}    ${test_file}
     # Adding and Extracting Second File
-    Rename Downloaded Zip File Name    ${DOWNLOAD_PATH}    ${file_4mb}
+    Rename Downloaded Zip File Name    ${DOWNLOAD_PATH}    ${test_file}
     Clean Input List
-    Extract File    ${file_4mb}    ${file_4mb}[path]
-    Check If Zip File Is Not Empty    ${DOWNLOAD_PATH}    ${file_4mb}
+    ${test_file}=    Select random file
+    Extract File    ${test_file}
+    Check If Zip File Is Not Empty    ${DOWNLOAD_PATH}    ${test_file}
 
 Extract multiple files test
     [Documentation]    Extract file consisting of multiple files
     [Tags]    multiple    performance
     Log To Console    Extracting file consisting of multiple files
-    Extract Multiple Files    ${multi_part_4mb}    ${DOWNLOAD_PATH}
-    Check If Zip File Is Not Empty    ${DOWNLOAD_PATH}    ${multi_part_4mb}
+    ${test_file}    Set Variable    ${Multi_part_4MB}
+    Extract Multiple Files    ${test_file}    ${DOWNLOAD_PATH}
+    Check If Zip File Is Not Empty    ${DOWNLOAD_PATH}    ${test_file}
     Clean Input List
 
 Extract all files test
     [Documentation]    Extract all test files
     [Tags]    multiple    performance    all
     FOR    ${file}    IN    @{TestFiles}
-        Log To Console    Extracting ${file}[name]
-        ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${file_4mb}[archive_name].zip
-        ${path}    Set Variable    ${input_test_files_path}${file}[name]
-        Extract File    ${file}    ${path}    ${file}[extraction_time]
-        Wait Until Created    ${downloaded_file_path}
+        ${test_file}    Set Variable   ${TestFiles}[${file}]
+        Log To Console    Extracting ${test_file}[name]
+        ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${test_file}[archive_name].zip
+        Extract File    ${test_file}
+        Wait Until Created    ${downloaded_file_path}    ${test_file}[extraction_time]
     END
     Close Browser
 
 
 *** Keywords ***
 Extract File
-    [Arguments]    ${test_file}    ${test_file_path}    ${extraction_timeout}=30s
+    [Arguments]    ${test_file}
     Wait Until Keyword Succeeds    5    1    Click Add Files Button
-    Upload Test File    ${test_file_path}
+    Upload Test File    ${test_file}[path]
     Click Load Button
-    Click Extract And Save Button    ${extraction_timeout}
+    Click Extract And Save Button    ${test_file}[extraction_time]
     Wait Until Page Does Not Contain Element    ${ExtractAndSaveDisabledButton}
 
 Extract Multiple Files
@@ -77,14 +73,14 @@ Extract Multiple Files
     Log To Console    ${file_list}
 
     FOR    ${file}    IN    @{file_list}
-        ${test_file_path}    Catenate    SEPARATOR=    ${test_file}[path]/${file}
+        ${test_file_path}    Set Variable     ${test_file}[path]/${file}
         Wait Until Keyword Succeeds    5    1    Click Add Files Button
         Upload Test File    ${test_file_path}
-        Wait Until Element Is Visible    xpath://label[contains(text(),"${test_file}[name]")]
+        Wait Until Element Is Visible    ${AddedFile.format("${test_file}[name]")}
         Wait Until Keyword Succeeds    5    1    Browser Is Selected
     END
     Click Load Button
-    Click Extract And Save Button    ${extraction_timeout}
+    Click Extract And Save Button    ${test_file}[extraction_time]
 
 Clean Input List
     ${radio_buttons_amount}    Get Element Count    ${RadioButton}

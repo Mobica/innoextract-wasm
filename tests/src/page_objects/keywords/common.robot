@@ -135,3 +135,9 @@ Browser Is Selected
     ELSE
         Fail    Unknown OS, Aborting test
     END
+
+Select random file
+    ${test_names}    Get Dictionary Keys    ${TestFiles}
+    ${random_file}=    Evaluate   random.choice(${test_names})
+    ${file}   Set Variable  ${TestFiles}[${random_file}]
+    [return]   ${file}

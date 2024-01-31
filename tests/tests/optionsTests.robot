@@ -5,15 +5,8 @@ Library             SeleniumLibrary
 Library             String
 Resource            src/page_objects/keywords/common.robot
 Resource            src/page_objects/keywords/home_page.robot
-Resource            src/page_objects/keywords/ubuntu.robot
-Resource            src/test_files/test_files.resource
 Library             src/page_objects/libraries/browser_lib.py
-
-Test Teardown       Clean After Test
-
-*** Variables ***
-${OpeningFileText}    //pre[contains(text(),"file_4MB.exe")]
-${extraction_timeout}    ${60}
+Variables           variables.py
 
 *** Keywords ***
 Test_teardown
@@ -98,36 +91,37 @@ Enable Debug Output functionality test
     [Documentation]    Enable debug output functionality adds debug logs if selected
     [Tags]    options
 
+    ${test_file}=   Select random file
     Click Add Files Button
-    Upload Test File    ${file_4mb}[path]
+    Upload Test File    ${test_file}[path]
     Click Load Button
-    Check If Log Console Contains    Opening "${file_4mb}[name]"
-    Validate Output Description    ${file_4mb}[archive_name]
     Wait Until Page Does Not Contain Element    ${ExtractAndSaveDisabledButton}
-    Click Extract And Save Button    ${extraction_timeout}
-    Validate File Details In Log Console    ${file_4mb}
+    Check If Log Console Contains    Opening "${test_file}[name]"
+    Validate Output Description    ${test_file}[archive_name]
+    Click Extract And Save Button    ${test_file}[extraction_time]
+    Validate File Details In Log Console    ${test_file}
     Check If Log Console Does Not Contain    loaded
     Click Element    ${OptionsButton}
     Wait Until Element Is Visible    ${OptionsList}
     Click Element    ${EnableDebugSwitch}
-    Click Load Button
-    Check If Log Console Contains    Opening "${file_4mb}[name]"
-    Validate Output Description    ${file_4mb}[archive_name]
-    Wait Until Page Does Not Contain Element    ${ExtractAndSaveDisabledButton}
-    Click Extract And Save Button    ${extraction_timeout}
-    Validate File Details In Log Console    ${file_4mb}
-    Check If Log Console Contains    loaded
     Wait Until Element Is Visible    ${ReloadBadge}
-
+    Click Load Button
+    Wait Until Page Does Not Contain Element    ${ExtractAndSaveDisabledButton}
+    Check If Log Console Contains    Opening "${test_file}[name]"
+    Validate Output Description    ${test_file}[archive_name]
+    Click Extract And Save Button    ${test_file}[extraction_time]
+    Validate File Details In Log Console    ${test_file}
+    Check If Log Console Contains    loaded
+    
 Exclude temporary files functionality test
-   
-    [Documentation]    Exclude temporary files functionality removes tmp folder from loaded file
+    [Documentation]   Exclude temporary files functionality removes tmp folder from loaded file
     [Tags]    options
+
     ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${test_setup}[archive_name].zip
     Click Add Files Button
     Upload Test File    ${test_setup}[path]
     Click Load Button
-    Click Extract And Save Button    ${extraction_timeout}
+    Click Extract And Save Button    ${test_setup}[extraction_time]
     Wait Until Created    ${downloaded_file_path}
     Validate and Unzip Test File    ${downloaded_file_path}
     ${filesCount}    Count Items In Directory    ${DOWNLOAD_PATH}${test_setup}[archive_name]
@@ -139,7 +133,7 @@ Exclude temporary files functionality test
     Click Element    ${OptionsButton}
     Click Element    ${ExcludeTemporaryFilesSwitch}
     Click Load Button
-    Click Extract And Save Button    ${extraction_timeout}
+    Click Extract And Save Button    ${test_setup}[extraction_time]
     Wait Until Created    ${downloaded_file_path}
     Validate and Unzip Test File    ${DOWNLOAD_PATH}${test_setup}[archive_name].zip
     ${filesCount}    Count Items In Directory    ${DOWNLOAD_PATH}${test_setup}[archive_name]
@@ -159,7 +153,7 @@ Verify Output log to a file option
     Click Load Button
     Wait Until Keyword Succeeds  5s  1s  Click Element  ${DownloadLogsButton}
     Switch Window    new
-    Wait Until Element Is Visible    ${OpeningFileText}
+    Wait Until Element Is Visible    ${DownloadLogsText.format("${extraction_filter}[name]")}
 
 Verify Extraction filter set to 'Chosen language and language agnostic files'
     [Documentation]    Chosen language and language agnostic files extraction filter option
@@ -175,7 +169,7 @@ Verify Extraction filter set to 'Chosen language and language agnostic files'
     Select From List By Index    ${CollisionResolutionOption}    1
     List Selection Should Be     ${CollisionResolutionOption}    rename
     Click Load Button
-    Click Extract And Save Button    ${extraction_timeout}
+    Click Extract And Save Button    ${extraction_filter}[extraction_time]
     Wait Until Created    ${downloaded_file_path}
     Validate and Unzip Test File    ${downloaded_file_path}
     ${ListFiles}  List Files In Directory   ${DOWNLOAD_PATH}${extraction_filter}[archive_name]/app
@@ -198,7 +192,7 @@ Verify Extraction filter set to 'Everything'
     Click Load Button
     Wait Until Element Is Visible    ${LanguageSelection} 
     Select From List By Value    ${LanguageSelection}    de
-    Click Extract And Save Button    ${extraction_timeout}
+    Click Extract And Save Button    ${extraction_filter}[extraction_time]
     Wait Until Created    ${downloaded_file_path}
     Validate and Unzip Test File    ${downloaded_file_path}
     ${ListFiles}  List Files In Directory   ${DOWNLOAD_PATH}${extraction_filter}[archive_name]/app
@@ -219,7 +213,7 @@ Verify Extraction filter set to 'Only chosen language files'
     Select From List By Index    ${CollisionResolutionOption}    1
     List Selection Should Be     ${CollisionResolutionOption}    rename
     Click Load Button
-    Click Extract And Save Button    ${extraction_timeout}
+    Click Extract And Save Button    ${extraction_filter}[extraction_time]
     Wait Until Created    ${downloaded_file_path}
     Validate and Unzip Test File    ${downloaded_file_path}
     ${ListFiles}  List Files In Directory   ${DOWNLOAD_PATH}${extraction_filter}[archive_name]/app
@@ -242,7 +236,7 @@ Verify Extraction filter set to 'Only language-agnostic files'
     Click Load Button
     Wait Until Element Is Visible    ${LanguageSelection} 
     Select From List By Value    ${LanguageSelection}    nl
-    Click Extract And Save Button    ${extraction_timeout}
+    Click Extract And Save Button    ${extraction_filter}[extraction_time]
     Wait Until Created    ${downloaded_file_path}
     Validate and Unzip Test File    ${downloaded_file_path}
     ${ListFiles}  List Files In Directory   ${DOWNLOAD_PATH}${extraction_filter}[archive_name]/app
