@@ -30,7 +30,7 @@ Extract test file
     Validate Output Archive Files Number    ${test_file}[files_in_archive]
     Wait Until Page Does Not Contain Element    ${ExtractAndSaveDisabledButton}
 
-    Click Extract And Save Button    ${extraction_timeout}
+    Click Extract And Save Button    ${test_file}[extraction_time]
     Wait Until Created    ${downloaded_file_path}
 
     Validate and Unzip Test File    ${downloaded_file_path}

@@ -6,8 +6,8 @@ Library             SeleniumLibrary
 Library             String
 Resource            src/page_objects/keywords/common.robot
 Resource            src/page_objects/keywords/home_page.robot
-Resource            src/test_files/test_files.resource
 Library             src/page_objects/libraries/browser_lib.py
+Variables           variables.py
 
 Test Teardown       Clean After Test
 
@@ -16,7 +16,7 @@ Test Teardown       Clean After Test
 Extract and validate a large test file
     [Documentation]    Extract and validate a large test file
     [Tags]    daily    regression    large
-    ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${large_file_15}[archive_name].zip
+    ${downloaded_file_path}    Set Test Variable    ${DOWNLOAD_PATH}${large_file_15}[archive_name].zip
     # Add a file for extraction
     Click Add Files Button
     Upload Test File    ${large_file_15}[path]
@@ -44,7 +44,7 @@ Extract and compare directory and files tree
     [Tags]    daily    regression    large
     # TODO: This test fails because of bug. One empty folder and 1one empty file are not in ZIP folder.
     # Either pattern folder will be adjusted or bug will be fixed
-    ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${large_file_15}[archive_name].zip
+    ${downloaded_file_path}    Set Test Variable    ${DOWNLOAD_PATH}${large_file_15}[archive_name].zip
     # Add a file for extraction
     Click Add Files Button
     Upload Test File    ${large_file_15}[path]

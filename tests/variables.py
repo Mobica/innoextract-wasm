@@ -77,3 +77,13 @@ extraction_filter = {
     'extraction_time': '60s',
     'path': input_test_files_path + 'extraction_filter.exe'
 }
+
+large_file_15 = {
+    'name': 'file_1_5G.exe',
+    'archive_size_bytes': None,
+    'archive_name': 'bin15',
+    'files_in_archive': 4,
+    'extraction_time': '600s',
+    'path': input_test_files_path + 'file_1_5G.exe',
+    'pattern_path': None
+}

@@ -13,9 +13,6 @@ Variables           variables.py
 
 Test Teardown    Clean After Test
 
-*** Variables ***
-${extraction_timeout}       60s
-
 
 *** Test Cases ***
 # TODO: Test is failing because of known issue
@@ -25,13 +22,13 @@ Extract two files one by one test
 
     # Adding and Extracting First File
     ${test_file}=    Select random file
-    Extract File    ${test_file}    ${test_file}[path]
+    Extract File    ${test_file}
     Check If Zip File Is Not Empty    ${DOWNLOAD_PATH}    ${test_file}
     # Adding and Extracting Second File
     Rename Downloaded Zip File Name    ${DOWNLOAD_PATH}    ${test_file}
     Clean Input List
     ${test_file}=    Select random file
-    Extract File    ${test_file}    ${test_file}[path]
+    Extract File    ${test_file}
     Check If Zip File Is Not Empty    ${DOWNLOAD_PATH}    ${test_file}
 
 Extract multiple files test
@@ -50,7 +47,7 @@ Extract all files test
         ${test_file}    Set Variable   ${TestFiles}[${file}]
         Log To Console    Extracting ${test_file}[name]
         ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${test_file}[archive_name].zip
-        Extract File    ${test_file}    ${test_file}[path]    ${test_file}[extraction_time]
+        Extract File    ${test_file}
         Wait Until Created    ${downloaded_file_path}    ${test_file}[extraction_time]
     END
     Close Browser
@@ -58,11 +55,11 @@ Extract all files test
 
 *** Keywords ***
 Extract File
-    [Arguments]    ${test_file}    ${test_file_path}    ${extraction_timeout}=30s
+    [Arguments]    ${test_file}
     Wait Until Keyword Succeeds    5    1    Click Add Files Button
-    Upload Test File    ${test_file_path}
+    Upload Test File    ${test_file}[path]
     Click Load Button
-    Click Extract And Save Button    ${extraction_timeout}
+    Click Extract And Save Button    ${test_file}[extraction_time]
     Wait Until Page Does Not Contain Element    ${ExtractAndSaveDisabledButton}
 
 Extract Multiple Files
@@ -83,7 +80,7 @@ Extract Multiple Files
         Wait Until Keyword Succeeds    5    1    Browser Is Selected
     END
     Click Load Button
-    Click Extract And Save Button    ${extraction_timeout}
+    Click Extract And Save Button    ${test_file}[extraction_time]
 
 Clean Input List
     ${radio_buttons_amount}    Get Element Count    ${RadioButton}
