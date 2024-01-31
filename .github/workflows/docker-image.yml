@@ -5,7 +5,7 @@ on:
     branches: [ "wasm-main" ]
   pull_request:
     branches: [ "wasm-main" ]
-  workflow_dispatch
+  workflow_dispatch:
 
 jobs:
 
