@@ -15,7 +15,6 @@ Test_teardown
     Remove File    ${downloaded_file_path}
     Remove Directory    ${archive_file_name}    ${True} 
 
-
 *** Test Cases ***
 Find and open Enable Debug Output
     [Documentation]    Click Options, then toggle on/off Enable Debug output button and verify if Reload Badge appears/disappears
