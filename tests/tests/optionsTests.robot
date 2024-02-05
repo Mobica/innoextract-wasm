@@ -8,11 +8,12 @@ Resource            src/page_objects/keywords/home_page.robot
 Library             src/page_objects/libraries/browser_lib.py
 Variables           variables.py
 
+
 *** Keywords ***
 Test_teardown
-    [Arguments]    ${downloaded_file_path}
+    [Arguments]    ${downloaded_file_path}    ${archive_file_name}
     Remove File    ${downloaded_file_path}
-    Remove Directory    ${DOWNLOAD_PATH}${extraction_filter}[archive_name]    True
+    Remove Directory    ${archive_file_name}    ${True} 
 
 *** Test Cases ***
 Find and open Enable Debug Output
@@ -174,7 +175,7 @@ Verify Extraction filter set to 'Chosen language and language agnostic files'
     Validate and Unzip Test File    ${downloaded_file_path}
     ${ListFiles}  List Files In Directory   ${DOWNLOAD_PATH}${extraction_filter}[archive_name]/app
     Should Be Equal As Strings     ${ListFiles}    ['MyProg.chm', 'MyProg.exe', 'Readme.txt']
-    [Teardown]    Test_teardown    ${downloaded_file_path}
+    [Teardown]    Test_teardown    ${downloaded_file_path}    ${DOWNLOAD_PATH}${extraction_filter}[archive_name]
 
 Verify Extraction filter set to 'Everything'
     [Documentation]    'Everything' extraction filter option
@@ -197,7 +198,7 @@ Verify Extraction filter set to 'Everything'
     Validate and Unzip Test File    ${downloaded_file_path}
     ${ListFiles}  List Files In Directory   ${DOWNLOAD_PATH}${extraction_filter}[archive_name]/app
     Should Be Equal As Strings     ${ListFiles}    ['MyProg.chm', 'MyProg.exe', 'Readme.txt', 'Readme.txt@en', 'Readme.txt@nl']
-    [Teardown]    Test_teardown    ${downloaded_file_path}
+    [Teardown]    Test_teardown    ${downloaded_file_path}    ${DOWNLOAD_PATH}${extraction_filter}[archive_name]
 
 Verify Extraction filter set to 'Only chosen language files'
     [Documentation]    'Only chosen language files' extraction filter option
@@ -218,7 +219,7 @@ Verify Extraction filter set to 'Only chosen language files'
     Validate and Unzip Test File    ${downloaded_file_path}
     ${ListFiles}  List Files In Directory   ${DOWNLOAD_PATH}${extraction_filter}[archive_name]/app
     Should Be Equal As Strings     ${ListFiles}    ['MyProg.chm', 'Readme.txt']
-    [Teardown]    Test_teardown    ${downloaded_file_path}
+    [Teardown]    Test_teardown    ${downloaded_file_path}    ${DOWNLOAD_PATH}${extraction_filter}[archive_name]
 
 Verify Extraction filter set to 'Only language-agnostic files'
     [Documentation]    'Only language-agnostic files' extraction filter option
@@ -241,4 +242,92 @@ Verify Extraction filter set to 'Only language-agnostic files'
     Validate and Unzip Test File    ${downloaded_file_path}
     ${ListFiles}  List Files In Directory   ${DOWNLOAD_PATH}${extraction_filter}[archive_name]/app
     Should Be Equal As Strings     ${ListFiles}    ['MyProg.exe']
-    [Teardown]    Test_teardown    ${downloaded_file_path}
+    [Teardown]    Test_teardown    ${downloaded_file_path}    ${DOWNLOAD_PATH}${extraction_filter}[archive_name]
+
+Verify Collision resolution 'Overwrite' functionality
+    [Documentation]    Verify Collision resolution 'Overwrite' functionality
+    [Tags]    options
+    ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${collisions}[archive_name].zip
+    Click Add Files Button
+    Upload Test File    ${collisions}[path]
+    Click Load Button
+    Wait Until Element Is Enabled    ${OptionsButton}
+    Click Element    ${OptionsButton}
+    Wait Until Element Is Visible    ${OptionsList}
+    Select From List By Index    extractionLanguageFilterOptions    1
+    List Selection Should Be    extractionLanguageFilterOptions    all
+    Select From List By Index    collisionResolutionOptions    0
+    List Selection Should Be    collisionResolutionOptions    overwrite
+    Click Load Button
+    Click Extract And Save Button    ${collisions}[extraction_time]
+    Wait Until Created    ${downloaded_file_path}    120s
+    Validate and Unzip Test File    ${downloaded_file_path}
+    ${ListFiles}  List Files In Directory   ${DOWNLOAD_PATH}${collisions}[archive_name]/app
+    Should Be Equal As Strings     ${ListFiles}    ['MyProg.chm', 'MyProg.exe', 'Readme.txt'] 
+    [Teardown]    Test_teardown    ${downloaded_file_path}    ${DOWNLOAD_PATH}${collisions}[archive_name]
+
+Verify Collision resolution 'Rename' functionality
+    [Documentation]    Verify Collision resolution 'Rename' functionality
+    [Tags]    options
+    # the test fails as per bug RND201-240
+    ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${collisions}[archive_name].zip
+    Click Add Files Button
+    Upload Test File    ${collisions}[path]
+    Click Load Button
+    Wait Until Element Is Enabled    ${OptionsButton}
+    Click Element    ${OptionsButton}
+    Wait Until Element Is Visible    ${OptionsList}
+    Select From List By Index    extractionLanguageFilterOptions    1
+    List Selection Should Be    extractionLanguageFilterOptions    all
+    Select From List By Index    collisionResolutionOptions    1
+    List Selection Should Be    collisionResolutionOptions    rename
+    Click Load Button
+    Wait Until Element Is Enabled    ${ExtractAndSaveButton}
+    Click Extract And Save Button    ${collisions}[extraction_time]
+    Wait Until Created    ${downloaded_file_path}
+    Validate and Unzip Test File    ${downloaded_file_path}
+    ${ListFiles}  List Files In Directory   ${DOWNLOAD_PATH}${collisions}[archive_name]/app
+    Should Be Equal As Strings     ${ListFiles}    ['MyProg.chm', 'MyProg.exe', 'Readme.txt', 'Readme.txt#help@32bit', 'Readme.txt#readme@64bit', 'Readme.txt#readme@de', 'Readme.txt#readme@nl', 'Readme.txt$0readme@64bit']
+    [Teardown]    Test_teardown    ${downloaded_file_path}    ${DOWNLOAD_PATH}${collisions}[archive_name]
+
+Verify Collision resolution 'Rename-all' functionality
+    [Documentation]    Verify Collision resolution 'Rename-all' functionality
+    [Tags]    options
+    # the test fails as per bug RND201-240
+    ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${collisions}[archive_name].zip
+    Click Add Files Button
+    Upload Test File    ${collisions}[path]
+    Click Load Button
+    Wait Until Element Is Enabled    ${OptionsButton}
+    Click Element    ${OptionsButton}
+    Wait Until Element Is Visible    ${OptionsList}
+    Select From List By Index    extractionLanguageFilterOptions    1
+    List Selection Should Be    extractionLanguageFilterOptions    all
+    Select From List By Index    collisionResolutionOptions    2
+    List Selection Should Be    collisionResolutionOptions    rename-all
+    Click Load Button
+    Wait Until Element Is Enabled    ${ExtractAndSaveButton}
+    Click Extract And Save Button    ${collisions}[extraction_time]
+    Wait Until Created    ${downloaded_file_path}
+    Validate and Unzip Test File    ${downloaded_file_path}
+    ${ListFiles}  List Files In Directory   ${DOWNLOAD_PATH}${collisions}[archive_name]/app
+    Should Be Equal As Strings     ${ListFiles}    ['MyProg.chm', 'MyProg.exe', 'Readme.txt#help@32bit', 'Readme.txt#readme@64bit', 'Readme.txt#readme@de', 'Readme.txt#readme@nl', 'Readme.txt$0readme@64bit', 'Readme.txt$1readme@64bit']
+    [Teardown]    Test_teardown    ${downloaded_file_path}    ${DOWNLOAD_PATH}${collisions}[archive_name]
+
+Verify Collision resolution 'Error' functionality
+    [Documentation]    Verify Collision resolution 'Error' functionality
+    [Tags]    options
+    ${downloaded_file_path}    Set Variable    ${DOWNLOAD_PATH}${collisions}[archive_name].zip
+    Click Add Files Button
+    Upload Test File    ${collisions}[path]
+    Click Load Button
+    Wait Until Element Is Enabled    ${OptionsButton}
+    Click Element    ${OptionsButton}
+    Wait Until Element Is Visible    ${OptionsList}
+    Select From List By Index    collisionResolutionOptions    3
+    List Selection Should Be    collisionResolutionOptions    error
+    Click Load Button
+    Wait Until Element Is Enabled    ${ExtractAndSaveButton}
+    Click Element    ${ExtractAndSaveButton}
+    Element Should Be Visible    ${ErrorPopup}
+    Element Text Should Be    ${ErrorPopupMsg}    Aborted: Error due to the file collision
