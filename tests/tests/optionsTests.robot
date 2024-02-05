@@ -260,7 +260,7 @@ Verify Collision resolution 'Overwrite' functionality
     List Selection Should Be    collisionResolutionOptions    overwrite
     Click Load Button
     Click Extract And Save Button    ${collisions}[extraction_time]
-    Wait Until Created    ${downloaded_file_path}    120s
+    Wait Until Created    ${downloaded_file_path}
     Validate and Unzip Test File    ${downloaded_file_path}
     ${ListFiles}  List Files In Directory   ${DOWNLOAD_PATH}${collisions}[archive_name]/app
     Should Be Equal As Strings     ${ListFiles}    ['MyProg.chm', 'MyProg.exe', 'Readme.txt'] 
