@@ -9,8 +9,6 @@ Resource            src/page_objects/keywords/ubuntu.robot
 Resource            src/test_files/test_files.resource
 Library             src/page_objects/libraries/browser_lib.py
 
-Test Teardown       Clean After Test
-
 
 *** Test Cases ***
 Find and verify header properties

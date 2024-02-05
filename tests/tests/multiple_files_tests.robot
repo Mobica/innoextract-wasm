@@ -50,7 +50,6 @@ Extract all files test
         Extract File    ${test_file}
         Wait Until Created    ${downloaded_file_path}    ${test_file}[extraction_time]
     END
-    Close Browser
 
 
 *** Keywords ***
