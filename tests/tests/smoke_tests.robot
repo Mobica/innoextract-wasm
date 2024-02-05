@@ -12,10 +12,6 @@ Variables           variables.py
 Test Teardown       Clean After Test
 
 
-*** Variables ***
-${extraction_timeout}       60s
-
-
 *** Keywords ***
 Extract test file
     [Arguments]    ${test_file}
@@ -62,4 +58,4 @@ Corrupted File Test
 
     Check If Log Console Contains    Opening "${test_file}[name]"
     Check If Log Console Contains    Not a supported Inno Setup installer!
-    [Teardown]    NONE
+    [Teardown]    Reload Page

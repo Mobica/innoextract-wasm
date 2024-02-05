@@ -7,13 +7,8 @@ Resource            src/page_objects/keywords/common.robot
 Resource            src/page_objects/keywords/home_page.robot
 Library             src/page_objects/libraries/browser_lib.py
 Variables           variables.py
+Test Teardown       Clean After Test
 
-
-*** Keywords ***
-Test_teardown
-    [Arguments]    ${downloaded_file_path}    ${archive_file_name}
-    Remove File    ${downloaded_file_path}
-    Remove Directory    ${archive_file_name}    ${True} 
 
 *** Test Cases ***
 Find and open Enable Debug Output
@@ -26,6 +21,7 @@ Find and open Enable Debug Output
     Wait Until Element Is Visible    ${ReloadBadge}
     Click Element    ${EnableDebugSwitch}
     Wait Until Element Is Not Visible    ${ReloadBadge}
+    [Teardown]    Reload Page
 
 Find and open Exclude temporary files
     [Documentation]    Click Options, then toggle on/off Exclude temporary files switch button and verify if Reload Badge appears/disappears
@@ -37,6 +33,7 @@ Find and open Exclude temporary files
     Wait Until Element Is Visible    ${ReloadBadge}
     Click Element    ${ExcludeTemporaryFilesSwitch}
     Wait Until Element Is Not Visible    ${ReloadBadge}
+    [Teardown]    Reload Page
 
 Find and open Output logs to a file
     [Documentation]    Click Options, then toggle on/off Output logs to a file button and verify if Reload Badge appears/disappears
@@ -48,6 +45,7 @@ Find and open Output logs to a file
     Click Element    ${OutputLogsSwitch}
     Wait Until Element Is Visible    ${DownloadLogsButton}
     Wait Until Element Is Not Visible    ${ReloadBadge}
+    [Teardown]    Reload Page
 
 Find and open Extraction language filter
     [Documentation]    Click Options, then Extraction language filter option, select every option and verify if Reload Badge appears/disappears
@@ -68,6 +66,7 @@ Find and open Extraction language filter
     Select From List By Index    extractionLanguageFilterOptions    3
     List Selection Should Be    extractionLanguageFilterOptions    lang-agn
     Wait Until Element Is Visible    ${ReloadBadge}
+    [Teardown]    Reload Page
 
 Find and open Collision resolution option
     [Documentation]    Click Option, then Collision resolution, select every option and verify if Reload Badge appears/disappears
@@ -87,6 +86,7 @@ Find and open Collision resolution option
     Select From List By Index    collisionResolutionOptions    3
     List Selection Should Be    collisionResolutionOptions    error
     Wait Until Element Is Visible    ${ReloadBadge}
+    [Teardown]    Reload Page
 
 Enable Debug Output functionality test
     [Documentation]    Enable debug output functionality adds debug logs if selected
@@ -155,6 +155,7 @@ Verify Output log to a file option
     Wait Until Keyword Succeeds  5s  1s  Click Element  ${DownloadLogsButton}
     Switch Window    new
     Wait Until Element Is Visible    ${DownloadLogsText.format("${extraction_filter}[name]")}
+    [Teardown]    Reload Page
 
 Verify Extraction filter set to 'Chosen language and language agnostic files'
     [Documentation]    Chosen language and language agnostic files extraction filter option
@@ -175,7 +176,6 @@ Verify Extraction filter set to 'Chosen language and language agnostic files'
     Validate and Unzip Test File    ${downloaded_file_path}
     ${ListFiles}  List Files In Directory   ${DOWNLOAD_PATH}${extraction_filter}[archive_name]/app
     Should Be Equal As Strings     ${ListFiles}    ['MyProg.chm', 'MyProg.exe', 'Readme.txt']
-    [Teardown]    Test_teardown    ${downloaded_file_path}    ${DOWNLOAD_PATH}${extraction_filter}[archive_name]
 
 Verify Extraction filter set to 'Everything'
     [Documentation]    'Everything' extraction filter option
@@ -198,7 +198,6 @@ Verify Extraction filter set to 'Everything'
     Validate and Unzip Test File    ${downloaded_file_path}
     ${ListFiles}  List Files In Directory   ${DOWNLOAD_PATH}${extraction_filter}[archive_name]/app
     Should Be Equal As Strings     ${ListFiles}    ['MyProg.chm', 'MyProg.exe', 'Readme.txt', 'Readme.txt@en', 'Readme.txt@nl']
-    [Teardown]    Test_teardown    ${downloaded_file_path}    ${DOWNLOAD_PATH}${extraction_filter}[archive_name]
 
 Verify Extraction filter set to 'Only chosen language files'
     [Documentation]    'Only chosen language files' extraction filter option
@@ -219,7 +218,6 @@ Verify Extraction filter set to 'Only chosen language files'
     Validate and Unzip Test File    ${downloaded_file_path}
     ${ListFiles}  List Files In Directory   ${DOWNLOAD_PATH}${extraction_filter}[archive_name]/app
     Should Be Equal As Strings     ${ListFiles}    ['MyProg.chm', 'Readme.txt']
-    [Teardown]    Test_teardown    ${downloaded_file_path}    ${DOWNLOAD_PATH}${extraction_filter}[archive_name]
 
 Verify Extraction filter set to 'Only language-agnostic files'
     [Documentation]    'Only language-agnostic files' extraction filter option
@@ -242,7 +240,6 @@ Verify Extraction filter set to 'Only language-agnostic files'
     Validate and Unzip Test File    ${downloaded_file_path}
     ${ListFiles}  List Files In Directory   ${DOWNLOAD_PATH}${extraction_filter}[archive_name]/app
     Should Be Equal As Strings     ${ListFiles}    ['MyProg.exe']
-    [Teardown]    Test_teardown    ${downloaded_file_path}    ${DOWNLOAD_PATH}${extraction_filter}[archive_name]
 
 Verify Collision resolution 'Overwrite' functionality
     [Documentation]    Verify Collision resolution 'Overwrite' functionality
@@ -264,7 +261,6 @@ Verify Collision resolution 'Overwrite' functionality
     Validate and Unzip Test File    ${downloaded_file_path}
     ${ListFiles}  List Files In Directory   ${DOWNLOAD_PATH}${collisions}[archive_name]/app
     Should Be Equal As Strings     ${ListFiles}    ['MyProg.chm', 'MyProg.exe', 'Readme.txt'] 
-    [Teardown]    Test_teardown    ${downloaded_file_path}    ${DOWNLOAD_PATH}${collisions}[archive_name]
 
 Verify Collision resolution 'Rename' functionality
     [Documentation]    Verify Collision resolution 'Rename' functionality
@@ -288,7 +284,6 @@ Verify Collision resolution 'Rename' functionality
     Validate and Unzip Test File    ${downloaded_file_path}
     ${ListFiles}  List Files In Directory   ${DOWNLOAD_PATH}${collisions}[archive_name]/app
     Should Be Equal As Strings     ${ListFiles}    ['MyProg.chm', 'MyProg.exe', 'Readme.txt', 'Readme.txt#help@32bit', 'Readme.txt#readme@64bit', 'Readme.txt#readme@de', 'Readme.txt#readme@nl', 'Readme.txt$0readme@64bit']
-    [Teardown]    Test_teardown    ${downloaded_file_path}    ${DOWNLOAD_PATH}${collisions}[archive_name]
 
 Verify Collision resolution 'Rename-all' functionality
     [Documentation]    Verify Collision resolution 'Rename-all' functionality
@@ -312,7 +307,6 @@ Verify Collision resolution 'Rename-all' functionality
     Validate and Unzip Test File    ${downloaded_file_path}
     ${ListFiles}  List Files In Directory   ${DOWNLOAD_PATH}${collisions}[archive_name]/app
     Should Be Equal As Strings     ${ListFiles}    ['MyProg.chm', 'MyProg.exe', 'Readme.txt#help@32bit', 'Readme.txt#readme@64bit', 'Readme.txt#readme@de', 'Readme.txt#readme@nl', 'Readme.txt$0readme@64bit', 'Readme.txt$1readme@64bit']
-    [Teardown]    Test_teardown    ${downloaded_file_path}    ${DOWNLOAD_PATH}${collisions}[archive_name]
 
 Verify Collision resolution 'Error' functionality
     [Documentation]    Verify Collision resolution 'Error' functionality

@@ -93,7 +93,6 @@ collisions = {
     'archive_size_bytes': 33824,
     'archive_name': 'MyAppName',
     'files_in_archive': 1,
-    'parts': 4,
     'extraction_time': '60s',
     'path': input_test_files_path + 'collisions.exe'
 }
