@@ -14,7 +14,8 @@ Variables       variables.py
 *** Keywords ***
 Clean After Test
     Empty Directory    ${DOWNLOAD_PATH}
-
+    Reload Page
+    
 Rename Downloaded Zip File Name
     [Arguments]    ${path}    ${test_file}    ${new_name}=innout    ${postfix}=0    ${new_file_extenion}=.zip
     ${file_name}    Catenate    SEPARATOR=    ${new_name}    ${postfix}    ${new_file_extenion}

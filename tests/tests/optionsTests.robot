@@ -7,12 +7,8 @@ Resource            src/page_objects/keywords/common.robot
 Resource            src/page_objects/keywords/home_page.robot
 Library             src/page_objects/libraries/browser_lib.py
 Variables           variables.py
+Test Teardown       Clean After Test
 
-*** Keywords ***
-Test_teardown
-    [Arguments]    ${downloaded_file_path}
-    Remove File    ${downloaded_file_path}
-    Remove Directory    ${DOWNLOAD_PATH}${extraction_filter}[archive_name]    True
 
 *** Test Cases ***
 Find and open Enable Debug Output
@@ -25,6 +21,7 @@ Find and open Enable Debug Output
     Wait Until Element Is Visible    ${ReloadBadge}
     Click Element    ${EnableDebugSwitch}
     Wait Until Element Is Not Visible    ${ReloadBadge}
+    [Teardown]    Reload Page
 
 Find and open Exclude temporary files
     [Documentation]    Click Options, then toggle on/off Exclude temporary files switch button and verify if Reload Badge appears/disappears
@@ -36,6 +33,7 @@ Find and open Exclude temporary files
     Wait Until Element Is Visible    ${ReloadBadge}
     Click Element    ${ExcludeTemporaryFilesSwitch}
     Wait Until Element Is Not Visible    ${ReloadBadge}
+    [Teardown]    Reload Page
 
 Find and open Output logs to a file
     [Documentation]    Click Options, then toggle on/off Output logs to a file button and verify if Reload Badge appears/disappears
@@ -47,6 +45,7 @@ Find and open Output logs to a file
     Click Element    ${OutputLogsSwitch}
     Wait Until Element Is Visible    ${DownloadLogsButton}
     Wait Until Element Is Not Visible    ${ReloadBadge}
+    [Teardown]    Reload Page
 
 Find and open Extraction language filter
     [Documentation]    Click Options, then Extraction language filter option, select every option and verify if Reload Badge appears/disappears
@@ -67,6 +66,7 @@ Find and open Extraction language filter
     Select From List By Index    extractionLanguageFilterOptions    3
     List Selection Should Be    extractionLanguageFilterOptions    lang-agn
     Wait Until Element Is Visible    ${ReloadBadge}
+    [Teardown]    Reload Page
 
 Find and open Collision resolution option
     [Documentation]    Click Option, then Collision resolution, select every option and verify if Reload Badge appears/disappears
@@ -86,6 +86,7 @@ Find and open Collision resolution option
     Select From List By Index    collisionResolutionOptions    3
     List Selection Should Be    collisionResolutionOptions    error
     Wait Until Element Is Visible    ${ReloadBadge}
+    [Teardown]    Reload Page
 
 Enable Debug Output functionality test
     [Documentation]    Enable debug output functionality adds debug logs if selected
@@ -154,6 +155,7 @@ Verify Output log to a file option
     Wait Until Keyword Succeeds  5s  1s  Click Element  ${DownloadLogsButton}
     Switch Window    new
     Wait Until Element Is Visible    ${DownloadLogsText.format("${extraction_filter}[name]")}
+    [Teardown]    Reload Page
 
 Verify Extraction filter set to 'Chosen language and language agnostic files'
     [Documentation]    Chosen language and language agnostic files extraction filter option
@@ -174,7 +176,6 @@ Verify Extraction filter set to 'Chosen language and language agnostic files'
     Validate and Unzip Test File    ${downloaded_file_path}
     ${ListFiles}  List Files In Directory   ${DOWNLOAD_PATH}${extraction_filter}[archive_name]/app
     Should Be Equal As Strings     ${ListFiles}    ['MyProg.chm', 'MyProg.exe', 'Readme.txt']
-    [Teardown]    Test_teardown    ${downloaded_file_path}
 
 Verify Extraction filter set to 'Everything'
     [Documentation]    'Everything' extraction filter option
@@ -197,7 +198,6 @@ Verify Extraction filter set to 'Everything'
     Validate and Unzip Test File    ${downloaded_file_path}
     ${ListFiles}  List Files In Directory   ${DOWNLOAD_PATH}${extraction_filter}[archive_name]/app
     Should Be Equal As Strings     ${ListFiles}    ['MyProg.chm', 'MyProg.exe', 'Readme.txt', 'Readme.txt@en', 'Readme.txt@nl']
-    [Teardown]    Test_teardown    ${downloaded_file_path}
 
 Verify Extraction filter set to 'Only chosen language files'
     [Documentation]    'Only chosen language files' extraction filter option
@@ -218,7 +218,6 @@ Verify Extraction filter set to 'Only chosen language files'
     Validate and Unzip Test File    ${downloaded_file_path}
     ${ListFiles}  List Files In Directory   ${DOWNLOAD_PATH}${extraction_filter}[archive_name]/app
     Should Be Equal As Strings     ${ListFiles}    ['MyProg.chm', 'Readme.txt']
-    [Teardown]    Test_teardown    ${downloaded_file_path}
 
 Verify Extraction filter set to 'Only language-agnostic files'
     [Documentation]    'Only language-agnostic files' extraction filter option
@@ -241,4 +240,3 @@ Verify Extraction filter set to 'Only language-agnostic files'
     Validate and Unzip Test File    ${downloaded_file_path}
     ${ListFiles}  List Files In Directory   ${DOWNLOAD_PATH}${extraction_filter}[archive_name]/app
     Should Be Equal As Strings     ${ListFiles}    ['MyProg.exe']
-    [Teardown]    Test_teardown    ${downloaded_file_path}

@@ -11,6 +11,7 @@ Library             src/page_objects/libraries/browser_lib.py
 Variables           src/page_objects/locators/locators.py
 Variables           variables.py
 
+Test Teardown       Reload Page
 
 *** Keywords ***
 Add file
