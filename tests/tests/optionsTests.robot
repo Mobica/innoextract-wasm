@@ -325,3 +325,4 @@ Verify Collision resolution 'Error' functionality
     Click Element    ${ExtractAndSaveButton}
     Element Should Be Visible    ${ErrorPopup}
     Element Text Should Be    ${ErrorPopupMsg}    Aborted: Error due to the file collision
+    [Teardown]    Reload Page
