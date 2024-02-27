@@ -48,7 +48,7 @@ class file_output : private boost::noncopyable {
 public:
   file_output(const fs::path& dir, const processed_file* f, bool write, ZIPstream* zip);
 
-  bool write(char* data, size_t n);
+  bool write(char* data, size_t n, size_t size2);
   void seek(boost::uint64_t new_position);
   void close();
   const fs::path& path() const {
@@ -102,6 +102,7 @@ public:
   static extractor& get();
 
   void set_options(const std::string& options_json);
+  const ExtractionSettings& get_settings();
   bool options_differ(const std::string& options_json) const;
 
   std::string load_exe(const std::string& exe_path);
@@ -159,8 +160,8 @@ private:
                                          const std::string& output_dir);
   uint64_t seek_input_stream(stream::chunk_reader::type* chunk_source, const stream::file& file,
                              uint64_t current_offset);
-  uint64_t copy_data(const stream::file_reader::pointer& source,
-                     const std::vector<file_output*>& outputs);
+  uint64_t copy_data(const stream::file & file, const stream::file_reader::pointer& source,
+                     file_output* outputs);
 
   uint64_t get_size() const;
   void verify_close_outputs(const std::vector<file_output*>& outputs,
