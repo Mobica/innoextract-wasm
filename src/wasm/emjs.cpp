@@ -1,5 +1,6 @@
 #include "emjs.h"
 #include "wasm/extract.hpp"
+#include <emscripten/bind.h>
 #include <emscripten/emscripten.h>
 #include <emscripten/val.h>
 #include <iomanip>
@@ -199,43 +200,17 @@ ssize_t emjs_write(void* buf, size_t len) {
 void abort_down(void) {
   abort_int();
 }
-
-EMSCRIPTEN_KEEPALIVE int load_file_return(char const* filename, char const* mime_type, char* buffer,
-                                          size_t buffer_size, upload_handler callback,
-                                          void* callback_data) {
-  /// Load a file - this function is called from javascript when the file upload is activated
-  callback(filename, mime_type, {buffer, buffer_size}, callback_data);
-  return 1;
-}
-
-EMSCRIPTEN_KEEPALIVE char const* load_exe(char const* filename, char const* options_json) {
-  static std::string result;
-  wasm::extractor::get().set_options(options_json);
-  result = wasm::extractor::get().load_exe(filename);
-  return result.c_str();
-}
-
-EMSCRIPTEN_KEEPALIVE char const* list_files() {
-  static std::string result;
-  result = wasm::extractor::get().list_files();
-  return result.c_str();
-}
-
-EMSCRIPTEN_KEEPALIVE char const* extract(char const* list_json) {
-  static std::string result;
-  result = wasm::extractor::get().extract(list_json);
-  return result.c_str();
-}
-
-EMSCRIPTEN_KEEPALIVE void set_abort(void) {
-  wasm::extractor::get().set_abort(true);
-}
-
-EMSCRIPTEN_KEEPALIVE int options_differ(char const * options_json) {
-  return wasm::extractor::get().options_differ(options_json);
-}
 }
 
 } // namespace
 
 } // namespace emjs
+
+EMSCRIPTEN_BINDINGS(my_module) {
+    emscripten::function("set_options", &wasm::handle::set_options);
+    emscripten::function("options_differ", &wasm::handle::options_differ);
+    emscripten::function("load_exe", &wasm::handle::load_exe);
+    emscripten::function("list_files", &wasm::handle::list_files);
+    emscripten::function("extract", &wasm::handle::extract);
+    emscripten::function("set_abort", &wasm::handle::set_abort);
+}
