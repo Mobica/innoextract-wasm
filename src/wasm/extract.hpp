@@ -186,6 +186,16 @@ private:
   ExtractionSettings extraction_settings_{};
 };
 
+namespace handle {
+  void set_options(const std::string& options_json);
+  bool options_differ(const std::string& options_json);
+
+  std::string load_exe(const std::string& exe_path);
+  std::string list_files();
+  std::string extract(const std::string& list_json);
+  void set_abort(bool state);
+} //namespace handle
+
 } // namespace wasm
 
 #endif // INNOEXTRACT_WASM_H

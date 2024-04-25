@@ -1043,4 +1043,31 @@ void extractor::set_abort(bool state) {
   aborted = state;
 }
 
+namespace handle {
+  void set_options(const std::string& options_json) {
+    extractor::get().set_options(options_json);
+  }
+
+  bool options_differ(const std::string& options_json) {
+    return extractor::get().options_differ(options_json);
+  }
+
+  std::string load_exe(const std::string& exe_path) {
+    return extractor::get().load_exe(exe_path);
+  }
+
+  std::string list_files() {
+    return extractor::get().list_files();
+  }
+
+  std::string extract(const std::string& list_json) {
+    return extractor::get().extract(list_json);
+  }
+
+  void set_abort(bool state) {
+    return extractor::get().set_abort(state);
+  }
+
+} // namespace handle
+
 } // namespace wasm
