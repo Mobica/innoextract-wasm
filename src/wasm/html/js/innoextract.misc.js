@@ -226,7 +226,8 @@ collisionResolutionOpt.addEventListener("change", updateReloadBadge, false);
 
 function updateReloadBadge() {
     var optionsJson = createOptionsJson();
-    Module.options_differ(optionsJson).then(result => {
+    new Promise((res, rej) => { return res(Module.options_differ(optionsJson));})
+    .then(result => {
         if (result != 0) {
             reloadBadge.style.display = 'unset';
         } else {
@@ -286,7 +287,8 @@ function startInnoExtract() {
         var file = global_file_list[checked.value];
         var optionsJson = createOptionsJson();
 
-        Module.load_exe(file.name).then(result => {
+        new Promise((res, rej) => { return res(Module.load_exe(file.name));})
+        .then(result => {
             var obj = JSON.parse(result)
             if (parseReturn(obj) != "err") {
                 title.innerHTML = obj.name
@@ -305,7 +307,8 @@ function startInnoExtract() {
                     });
                 }
 
-                Module.list_files().then(result => {
+                new Promise((res, rej) => { return res(Module.list_files());})
+                .then(result => {
                     createTree(JSON.parse(result));
                     extractBtn.disabled = false;
                 });
@@ -351,8 +354,8 @@ function extractFiles() {
     if (document.getElementById("langSelect")) {
         langSelect.disabled = true;
     }
-
-    Module.extract(JSON.stringify(info)).then(result => {
+    new Promise((res, rej) => { return res(Module.extract(JSON.stringify(info)));})
+    .then(result => {
         innoDebug("return: " + result)
         res = JSON.parse(result);
         parseReturn(res);
@@ -479,7 +482,8 @@ window.addEventListener('beforeunload', evt => {
 });
 
 function abortExtraction() {
-    Module.set_abort(true).then(result => {
+    new Promise((res, rej) => { return res(Module.set_abort(true));})
+    .then(result => {
         innoDebug("Abort requested");
     });
 }
